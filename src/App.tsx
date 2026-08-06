@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react'
 import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X } from 'lucide-react'
 import { type Tab, sky } from '@/types'
-import HomePage    from '@/pages/HomePage'
-import KaiwaPage   from '@/pages/KaiwaPage'
+import HomePage from '@/pages/HomePage'
+import KaiwaPage from '@/pages/KaiwaPage'
 import GourmetPage from '@/pages/GourmetPage'
-import SpotsPage   from '@/pages/SpotsPage'
-import ChuiPage    from '@/pages/ChuiPage'
+import SpotsPage from '@/pages/SpotsPage'
+import ChuiPage from '@/pages/ChuiPage'
 import GreenSMPage from '@/pages/GreenSMPage'
 
 const navItems = [
-  { id: 'home'    as Tab, icon: Home,            label: 'ホーム' },
-  { id: 'kaiwa'  as Tab, icon: MessageCircle,   label: '会話' },
-  { id: 'gourmet'as Tab, icon: UtensilsCrossed, label: 'グルメ' },
-  { id: 'spots'  as Tab, icon: Camera,           label: '観光' },
-  { id: 'chui'  as Tab,  icon: AlertTriangle,   label: '注意事項' },
+  { id: 'home' as Tab, icon: Home, label: 'ホーム' },
+  { id: 'kaiwa' as Tab, icon: MessageCircle, label: '会話' },
+  { id: 'gourmet' as Tab, icon: UtensilsCrossed, label: 'グルメ' },
+  { id: 'spots' as Tab, icon: Camera, label: '観光' },
+  { id: 'chui' as Tab, icon: AlertTriangle, label: '注意事項' },
 ]
 
 export default function App() {
@@ -71,9 +71,9 @@ export default function App() {
       <div className="flex items-center gap-3 px-2 py-3 mb-6">
         <div
           className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xl font-bold"
-          style={{ background: `linear-gradient(135deg, ${sky[600]}, ${sky[400]})` }}
+          style={{ background: "url('https://www.freeiconspng.com/uploads/-earth-find-flight-fly-globe-map-travel-icon--icon-search-engine-4.png') no-repeat center center/cover" }}
         >
-          🇻🇳
+
         </div>
         <div>
           <div className="font-bold text-slate-800 text-sm leading-tight">ベトナム</div>
@@ -86,17 +86,20 @@ export default function App() {
       <div className="mt-6 pt-4 border-t border-sky-100">
         <div className="px-4 py-2 text-xs text-slate-400 text-center">ホイアン・ダナン 完全ガイド</div>
       </div>
+      <div className="mt-4 pt-4 border-t border-sky-100">
+        <div className="px-4 py-2 text-xs text-slate-400 text-center">Powered by  セイリュウ</div>
+      </div>
     </div>
   )
 
   const PageContent = () => (
     <>
-      {activeTab === 'home'    && <HomePage onNavigate={handleNavigate} />}
-      {activeTab === 'kaiwa'  && <KaiwaPage />}
-      {activeTab === 'gourmet'&& <GourmetPage />}
-      {activeTab === 'spots'  && <SpotsPage />}
-      {activeTab === 'chui'   && <ChuiPage onNavigate={handleNavigate} />}
-      {activeTab === 'greensm'&& <GreenSMPage onNavigate={handleNavigate} />}
+      {activeTab === 'home' && <HomePage onNavigate={handleNavigate} />}
+      {activeTab === 'kaiwa' && <KaiwaPage />}
+      {activeTab === 'gourmet' && <GourmetPage />}
+      {activeTab === 'spots' && <SpotsPage />}
+      {activeTab === 'chui' && <ChuiPage onNavigate={handleNavigate} />}
+      {activeTab === 'greensm' && <GreenSMPage onNavigate={handleNavigate} />}
     </>
   )
 
@@ -111,10 +114,10 @@ export default function App() {
           <header className="bg-white/70 backdrop-blur-xl border-b border-sky-100 px-8 py-4 flex items-center justify-between sticky top-0 z-10">
             <div>
               <h1 className="font-bold text-slate-800 text-lg">{current.label}</h1>
-              <p className="text-xs text-slate-400 mt-0.5">ベトナム旅行ガイド</p>
+              <p className="text-xs text-slate-400 mt-0.5">ホイアン旅行ガイド</p>
             </div>
             <div className="flex items-center gap-2 text-xs text-slate-400 bg-sky-50 px-3 py-1.5 rounded-full border border-sky-100">
-              <Globe size={12} /> ホイアン・ダナン対応
+              <Globe size={12} /> 日本語対応
             </div>
           </header>
           <main className="flex-1 p-8 max-w-6xl w-full mx-auto">
