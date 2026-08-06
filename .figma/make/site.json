@@ -1,0 +1,10 @@
+{
+  "description": "Provides a clean, Japanese-style mobile travel guide for Vietnamese tourism with essential phrases, cultural tips, local cuisine, and safety advice for travelers.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}
