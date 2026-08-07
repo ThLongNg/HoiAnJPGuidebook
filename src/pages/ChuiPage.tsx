@@ -21,55 +21,55 @@ const tips: {
   border: string
   detail: TipDetail
 }[] = [
-  {
-    icon: <Banknote size={20} className="text-emerald-600" />,
-    title: '両替について',
-    desc: '空港の両替は高め。市内の両替所がお得。',
-    color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0',
-    detail: { body: `空港の両替レートは市内より5〜10%悪いことが多いです。\n\n✅ おすすめは市内の両替所（ホイアン旧市街周辺に多数あり）\n✅ ATMでキャッシュ引き出しも可（手数料に注意）\n\n⚠️ 複数店舗で確認してから両替しましょう。` },
-  },
-  {
-    icon: <Bike size={20} className="text-sky-600" />,
-    title: 'バイクタクシー',
-    desc: 'Grabバイクは安くて便利。ヘルメット着用を忘れずに。',
-    color: '#0284c7', bg: '#f0f9ff', border: '#bae6fd',
-    detail: { body: `Grabバイクはアプリで呼ぶバイクタクシーです。\n\n✅ 料金が事前に確定するので安心\n✅ 市内短距離なら20,000〜40,000 VND程度\n✅ ヘルメットはドライバーが用意してくれます\n\n⚠️ 夜間や雨の日は車（GreenSM / Grab Car）がより安全です。` },
-  },
-  {
-    icon: <Droplets size={20} className="text-cyan-600" />,
-    title: 'お水について',
-    desc: '水道水は飲めません。必ずペットボトルを。',
-    color: '#0891b2', bg: '#ecfeff', border: '#a5f3fc',
-    detail: { body: `ベトナムの水道水は飲料に適していません。\n\n✅ コンビニ・スーパーで500mlボトルが約5,000 VND（約30円）\n✅ おすすめブランド：Aquafina、Dasani、LaVie\n\n⚠️ 氷もお店によっては注意が必要。観光客向けレストランは問題ない場合が多いです。` },
-  },
-  {
-    icon: <Thermometer size={20} className="text-amber-600" />,
-    title: '気候・服装',
-    desc: '暑い！日焼け止めと帽子を持ちましょう。',
-    color: '#d97706', bg: '#fffbeb', border: '#fde68a',
-    detail: { body: `ホイアン・ダナンは年間を通じて暑い気候です。\n\n🌞 乾季（2月〜8月）：晴れが多く観光しやすい。気温30〜35℃\n🌧️ 雨季（9月〜1月）：雨が多く、台風シーズンも。洪水注意\n\n✅ 日焼け止め（SPF50以上）必須\n✅ 軽い羽織りもの（寺院参拝で必要な場合も）\n✅ 水分補給をこまめに！` },
-  },
-  {
-    icon: <Smartphone size={20} className="text-purple-600" />,
-    title: 'SIMカード',
-    desc: '空港で購入可。10日間で約1,000円とお手頃。',
-    color: '#7c3aed', bg: '#faf5ff', border: '#ddd6fe',
-    detail: {
-      body: `ベトナムのSIMカードは非常に安くて高速です（4G/5G）。\n\n✅ 空港到着ホールで購入可能（Viettel / Vinaphone / Mobifone）\n✅ 10日間プラン：約150,000〜200,000 VND（約1,000円）\n✅ 事前にオンラインで購入するとスムーズ！\n\n📦 オンライン購入はこちら：`,
-      links: [
-        { label: 'Klook でSIM購入', icon: <Smartphone size={18} />, url: 'https://s.klook.com/c/my4bVPpgwO', placeholder: true, note: 'Klookアフィリエイトリンクをここに設定' },
-        { label: 'Trip.com でSIM購入', icon: <Plane size={18} />, url: 'https://jp.trip.com/things-to-do/detail/45861197?locale=ja-JP&curr=JPY', placeholder: true, note: 'Trip.comアフィリエイトリンクをここに設定' },
-      ],
+    {
+      icon: <Banknote size={20} className="text-emerald-600" />,
+      title: '両替について',
+      desc: '空港の両替は高め。市内の両替所がお得。',
+      color: '#16a34a', bg: '#f0fdf4', border: '#bbf7d0',
+      detail: { body: `空港の両替レートは市内より5〜10%悪いことが多いです。\n\n✅ おすすめは市内の両替所（ホイアン旧市街周辺に多数あり）\n✅ ATMでキャッシュ引き出しも可（手数料に注意）\n\n⚠️ 複数店舗で確認してから両替しましょう。` },
     },
-  },
-  {
-    icon: <Receipt size={20} className="text-teal-600" />,
-    title: '領収書・レシート',
-    desc: '小さな店では領収書が出ないことも。価格確認を先に。',
-    color: '#0f766e', bg: '#f0fdfa', border: '#99f6e4',
-    detail: { body: `ベトナムでは小規模な飲食店・露店ではレシートが出ない場合があります。\n\n✅ 注文前に料金を確認する習慣をつけましょう\n✅ メニューの値段と請求額が違う場合は、丁寧に確認しましょう\n✅ スーパー・コンビニ・観光施設は基本的にレシートあり\n\n💡 「Bao nhiêu tiền?（バオ ニエウ ティエン）= いくらですか？」を活用しましょう。` },
-  },
-]
+    {
+      icon: <Bike size={20} className="text-sky-600" />,
+      title: 'バイクタクシー',
+      desc: 'Grabバイクは安くて便利。ヘルメット着用を忘れずに。',
+      color: '#0284c7', bg: '#f0f9ff', border: '#bae6fd',
+      detail: { body: `Grabバイクはアプリで呼ぶバイクタクシーです。\n\n✅ 料金が事前に確定するので安心\n✅ 市内短距離なら20,000〜40,000 VND程度\n✅ ヘルメットはドライバーが用意してくれます\n\n⚠️ 夜間や雨の日は車（GreenSM / Grab Car）がより安全です。` },
+    },
+    {
+      icon: <Droplets size={20} className="text-cyan-600" />,
+      title: 'お水について',
+      desc: '水道水は飲めません。必ずペットボトルを。',
+      color: '#0891b2', bg: '#ecfeff', border: '#a5f3fc',
+      detail: { body: `ベトナムの水道水は飲料に適していません。\n\n✅ コンビニ・スーパーで500mlボトルが約5,000 VND（約30円）\n✅ おすすめブランド：Aquafina、Dasani、LaVie\n\n⚠️ 氷もお店によっては注意が必要。観光客向けレストランは問題ない場合が多いです。` },
+    },
+    {
+      icon: <Thermometer size={20} className="text-amber-600" />,
+      title: '気候・服装',
+      desc: '暑い！日焼け止めと帽子を持ちましょう。',
+      color: '#d97706', bg: '#fffbeb', border: '#fde68a',
+      detail: { body: `ホイアン・ダナンは年間を通じて暑い気候です。\n\n🌞 乾季（2月〜8月）：晴れが多く観光しやすい。気温30〜35℃\n🌧️ 雨季（9月〜1月）：雨が多く、台風シーズンも。洪水注意\n\n✅ 日焼け止め（SPF50以上）必須\n✅ 軽い羽織りもの（寺院参拝で必要な場合も）\n✅ 水分補給をこまめに！` },
+    },
+    {
+      icon: <Smartphone size={20} className="text-purple-600" />,
+      title: 'SIMカード',
+      desc: '空港で購入可。10日間で約1,000円とお手頃。',
+      color: '#7c3aed', bg: '#faf5ff', border: '#ddd6fe',
+      detail: {
+        body: `ベトナムのSIMカードは非常に安くて高速です（4G/5G）。\n\n✅ 空港到着ホールで購入可能（Viettel / Vinaphone / Mobifone）\n✅ 10日間プラン：約150,000〜200,000 VND（約1,000円）\n✅ 事前にオンラインで購入するとスムーズ！\n\n📦 オンライン購入はこちら：`,
+        links: [
+          { label: 'Klook でSIM購入', icon: <Smartphone size={18} />, url: 'https://s.klook.com/c/my4bVPpgwO', placeholder: true, note: 'Klookアフィリエイトリンクをここに設定' },
+          { label: 'Trip.com でSIM購入', icon: <Plane size={18} />, url: 'https://jp.trip.com/things-to-do/detail/45861197?locale=ja-JP&curr=JPY', placeholder: true, note: 'Trip.comアフィリエイトリンクをここに設定' },
+        ],
+      },
+    },
+    {
+      icon: <Receipt size={20} className="text-teal-600" />,
+      title: '領収書・レシート',
+      desc: '小さな店では領収書が出ないことも。価格確認を先に。',
+      color: '#0f766e', bg: '#f0fdfa', border: '#99f6e4',
+      detail: { body: `ベトナムでは小規模な飲食店・露店ではレシートが出ない場合があります。\n\n✅ 注文前に料金を確認する習慣をつけましょう\n✅ メニューの値段と請求額が違う場合は、丁寧に確認しましょう\n✅ スーパー・コンビニ・観光施設は基本的にレシートあり\n\n💡 「Bao nhiêu tiền?（バオ ニエウ ティエン）= いくらですか？」を活用しましょう。` },
+    },
+  ]
 
 // ─── Tip Popup Modal ──────────────────────────────────────────
 function TipModal({ tip, onClose }: { tip: typeof tips[0]; onClose: () => void }) {
@@ -314,7 +314,7 @@ export default function ChuiPage({ onNavigate }: { onNavigate: (t: Tab) => void 
           {/* Download buttons */}
           <div className="grid grid-cols-2 gap-3">
             <a
-              href="https://apps.apple.com/jp/app/vnpay/id917023721"
+              href="https://apps.apple.com/jp/app/ứng-dụng-vnpay/id1470378562"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold text-white hover:opacity-90 transition-opacity active:scale-95 bg-[#1c1c1e]"
@@ -326,7 +326,7 @@ export default function ChuiPage({ onNavigate }: { onNavigate: (t: Tab) => void 
               </div>
             </a>
             <a
-              href="https://play.google.com/store/apps/details?id=com.vnpay.hdbank"
+              href="https://play.google.com/store/apps/details?id=vnpay.smartacccount&pcampaignid=web_share"
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 py-3 rounded-2xl text-xs font-bold text-white hover:opacity-90 transition-opacity active:scale-95"
