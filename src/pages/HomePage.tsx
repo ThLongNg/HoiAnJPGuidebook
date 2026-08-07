@@ -1,8 +1,10 @@
 import { ChevronRight, Globe, Car, MessageCircle, UtensilsCrossed, Camera, AlertTriangle, Volume2 } from 'lucide-react'
+import { ArrowsRightLeftIcon, BanknotesIcon } from '@heroicons/react/24/outline'
 import { type Tab, sky, HERO_IMG, MI_QUANG, CAO_LAU, COM_GA } from '@/types'
 import { SectionHeading, TipBox } from '@/components/Atoms'
 import { speak } from '@/utils/tts'
 import GlassSurface from '@/components/GlassSurface'
+import CurrencyConverter from '@/components/CurrencyConverter'
 
 const previewPhrases = [
   { vn: 'Xin chào', reading: 'シン チャオ', jp: 'こんにちは' },
@@ -119,6 +121,14 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
             </button>
           ))}
         </div>
+      </div>
+
+      {/* ── Currency Converter ── */}
+      <div>
+        <SectionHeading sub="日本円 (JPY) ⇄ ベトナムドン (VND) リアルタイム換算">
+          <ArrowsRightLeftIcon className="w-5 h-5 inline mr-2 text-sky-500" />通貨両替ツール
+        </SectionHeading>
+        <CurrencyConverter />
       </div>
 
       {/* Two-column preview */}

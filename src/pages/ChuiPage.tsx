@@ -7,6 +7,7 @@ import {
 } from 'lucide-react'
 import { type Tab, sky } from '@/types'
 import { SectionHeading, Card } from '@/components/Atoms'
+import CurrencyConverter from '@/components/CurrencyConverter'
 
 // ─── Tip data with Lucide Icons ──────────────────────────────
 type TipLink = { label: string; icon: React.ReactNode; url: string; placeholder?: boolean; note?: string }
@@ -96,6 +97,11 @@ function TipModal({ tip, onClose }: { tip: typeof tips[0]; onClose: () => void }
         </div>
         <div className="px-6 py-5">
           <div className="text-sm text-slate-700 leading-relaxed whitespace-pre-line">{tip.detail.body}</div>
+          {tip.title === '両替について' && (
+            <div className="mt-4">
+              <CurrencyConverter />
+            </div>
+          )}
           {tip.detail.links && (
             <div className="mt-5 space-y-3">
               {tip.detail.links.map((link) => (

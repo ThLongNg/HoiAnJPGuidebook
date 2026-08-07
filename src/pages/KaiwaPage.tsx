@@ -1,8 +1,10 @@
 import { useState } from 'react'
 import { AlertTriangle, Lightbulb } from 'lucide-react'
+import { LanguageIcon, SparklesIcon } from '@heroicons/react/24/outline'
 import { sky } from '@/types'
 import { SectionHeading, Card, SpeakButton, TipBox } from '@/components/Atoms'
 import { PhraseCard, AddressCard, OrderCard, ExpressionCard } from '@/components/Cards'
+import TranslatorModal from '@/components/TranslatorModal'
 
 const orderPhrases = [
   { vn: 'Cho em xem menu.', reading: 'チョーエム セム メニュー', jp: 'メニューを見せてください。' },
@@ -38,6 +40,7 @@ const weatherPhrases = [
 
 export default function KaiwaPage() {
   const [section, setSection] = useState<'phrases' | 'address' | 'order' | 'expressions' | 'bargain' | 'emergency'>('phrases')
+  const [showTranslator, setShowTranslator] = useState(false)
 
   const sections = [
     { id: 'phrases', label: '基本フレーズ' },
@@ -50,7 +53,26 @@ export default function KaiwaPage() {
 
   return (
     <div>
-      <SectionHeading sub="ベトナム語の基本フレーズを学びましょう">💬 会話フレーズ</SectionHeading>
+      <SectionHeading sub="ベトナム語の基本フレーズと即時通訳">💬 会話フレーズ</SectionHeading>
+
+      {/* Realtime Translator Banner */}
+      <div className="mb-6 bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-5 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white flex-shrink-0">
+            <LanguageIcon className="w-7 h-7" />
+          </div>
+          <div>
+            <h3 className="font-bold text-base sm:text-lg leading-tight">日越 リアルタイム音声・文字翻訳</h3>
+            <p className="text-xs text-white/80 mt-0.5">日本語を入力/話すとベトナム語に変換 ➔ 店員に全画面表示！</p>
+          </div>
+        </div>
+        <button
+          onClick={() => setShowTranslator(true)}
+          className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-white text-slate-900 font-extrabold text-xs transition-all hover:bg-amber-100 active:scale-95 flex items-center justify-center gap-2 shadow-sm flex-shrink-0"
+        >
+          <SparklesIcon className="w-4 h-4 text-amber-600" /> 翻訳ツールを開く
+        </button>
+      </div>
 
       <div className="flex gap-2 flex-wrap mb-8">
         {sections.map((s) => (
@@ -230,6 +252,9 @@ export default function KaiwaPage() {
           </div>
         )}
       </div>
+
+      {/* Translator Modal */}
+      {showTranslator && <TranslatorModal onClose={() => setShowTranslator(false)} />}
     </div>
   )
 }

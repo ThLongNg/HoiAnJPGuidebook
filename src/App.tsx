@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
-import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X } from 'lucide-react'
+import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X, ArrowRightLeft, Coins } from 'lucide-react'
+import { BanknotesIcon, ArrowsRightLeftIcon, GlobeAsiaAustraliaIcon, LanguageIcon } from '@heroicons/react/24/outline'
 import { type Tab, sky } from '@/types'
 import HomePage from '@/pages/HomePage'
 import KaiwaPage from '@/pages/KaiwaPage'
@@ -7,6 +8,8 @@ import GourmetPage from '@/pages/GourmetPage'
 import SpotsPage from '@/pages/SpotsPage'
 import ChuiPage from '@/pages/ChuiPage'
 import GreenSMPage from '@/pages/GreenSMPage'
+import CurrencyConverter from '@/components/CurrencyConverter'
+import TranslatorModal from '@/components/TranslatorModal'
 
 // ─── Background video config ───────────────────────────────────
 // TODO: Upload bg.mp4 to Cloudinary (free) or any CDN, then paste the URL here.
@@ -72,6 +75,8 @@ const navItems = [
 export default function App() {
   const [activeTab, setActiveTab] = useState<Tab>('home')
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [converterOpen, setConverterOpen] = useState(false)
+  const [translatorOpen, setTranslatorOpen] = useState(false)
 
   // Scroll to top on tab change
   useEffect(() => {
@@ -139,12 +144,33 @@ export default function App() {
       </div>
       <nav className="space-y-1 flex-1">
         {navItems.map((item) => <NavLink key={item.id} item={item} />)}
+        
+        {/* Quick action buttons for Currency & Translator */}
+        <div className="pt-3 mt-2 border-t border-sky-100 space-y-2">
+          <button
+            onClick={() => { setTranslatorOpen(true); if (mobile) setSidebarOpen(false) }}
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs"
+            style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: 'white' }}
+          >
+            <LanguageIcon className="w-4 h-4" />
+            日越 リアルタイム翻訳
+          </button>
+
+          <button
+            onClick={() => { setConverterOpen(true); if (mobile) setSidebarOpen(false) }}
+            className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shadow-xs"
+            style={{ background: 'linear-gradient(135deg, #0ea5e9, #38bdf8)', color: 'white' }}
+          >
+            <BanknotesIcon className="w-4 h-4" />
+            通貨両替計算機
+          </button>
+        </div>
       </nav>
       <div className="mt-6 pt-4 border-t border-sky-100">
         <div className="px-4 py-2 text-xs text-slate-400 text-center">ホイアン・ダナン 完全ガイド</div>
       </div>
       <div className="mt-4 pt-4 border-t border-sky-100">
-        <div className="px-4 py-2 text-xs text-slate-400 text-center">Powered by  セイリュウ</div>
+        <div className="px-4 py-2 text-xs text-slate-400 text-center">Powered by セイリュウ</div>
       </div>
     </div>
   )
@@ -179,8 +205,22 @@ export default function App() {
               <h1 className="font-bold text-slate-800 text-lg">{current.label}</h1>
               <p className="text-xs text-slate-400 mt-0.5">ホイアン旅行ガイド</p>
             </div>
-            <div className="flex items-center gap-2 text-xs text-slate-400 bg-sky-50 px-3 py-1.5 rounded-full border border-sky-100">
-              <Globe size={12} /> 日本語対応
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setTranslatorOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-full border border-amber-300 transition-colors shadow-2xs"
+              >
+                <LanguageIcon className="w-4 h-4 text-amber-600" /> リアルタイム翻訳
+              </button>
+              <button
+                onClick={() => setConverterOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-full border border-sky-200 transition-colors shadow-2xs"
+              >
+                <BanknotesIcon className="w-4 h-4 text-sky-500" /> 通貨両替
+              </button>
+              <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
+                <GlobeAsiaAustraliaIcon className="w-4 h-4 text-sky-500" /> 日本語対応
+              </div>
             </div>
           </header>
           <main className="flex-1 p-8 max-w-6xl w-full mx-auto">
@@ -202,12 +242,23 @@ export default function App() {
               <Menu size={20} className="text-slate-600" />
             </button>
             <div className="flex items-center gap-2">
-              <span className="text-lg">🇻🇳</span>
+              <GlobeAsiaAustraliaIcon className="w-5 h-5 text-sky-600" />
               <span className="font-bold text-slate-800 text-sm">ベトナム旅行ガイド</span>
             </div>
           </div>
-          <div className="text-xs text-slate-400 bg-sky-50 px-2 py-1 rounded-full border border-sky-100 hidden sm:block">
-            ホイアン・ダナン
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setTranslatorOpen(true)}
+              className="flex items-center gap-1 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded-full border border-amber-300 transition-colors"
+            >
+              <LanguageIcon className="w-3.5 h-3.5 text-amber-700" /> 翻訳
+            </button>
+            <button
+              onClick={() => setConverterOpen(true)}
+              className="flex items-center gap-1 text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 px-2.5 py-1 rounded-full border border-sky-200 transition-colors"
+            >
+              <BanknotesIcon className="w-3.5 h-3.5 text-sky-500" /> 両替
+            </button>
           </div>
         </header>
 
@@ -244,7 +295,7 @@ export default function App() {
         </nav>
       </div>
 
-      {/* Mobile drawer */}
+        {/* Mobile drawer */}
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
@@ -259,6 +310,24 @@ export default function App() {
           </div>
         </div>
       )}
+
+      {/* Currency Converter Modal Overlay */}
+      {converterOpen && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm anim-in"
+          onClick={() => setConverterOpen(false)}
+        >
+          <div
+            className="w-full max-w-lg"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <CurrencyConverter onClose={() => setConverterOpen(false)} />
+          </div>
+        </div>
+      )}
+
+      {/* Translator Modal */}
+      {translatorOpen && <TranslatorModal onClose={() => setTranslatorOpen(false)} />}
     </div>
   )
 }
