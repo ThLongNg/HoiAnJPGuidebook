@@ -1,8 +1,7 @@
-import { ChevronRight, Globe, Car } from 'lucide-react'
+import { ChevronRight, Globe, Car, MessageCircle, UtensilsCrossed, Camera, AlertTriangle, Volume2 } from 'lucide-react'
 import { type Tab, sky, HERO_IMG, MI_QUANG, CAO_LAU, COM_GA } from '@/types'
 import { SectionHeading, TipBox } from '@/components/Atoms'
 import { speak } from '@/utils/tts'
-import { Volume2 } from 'lucide-react'
 import GlassSurface from '@/components/GlassSurface'
 
 const previewPhrases = [
@@ -14,7 +13,7 @@ const previewPhrases = [
 
 const categories = [
   {
-    icon: '💬',
+    icon: <MessageCircle size={24} className="text-[#4eabdc]" />,
     label: '通用会話',
     sub: 'フレーズ集',
     tab: 'kaiwa' as Tab,
@@ -22,7 +21,7 @@ const categories = [
     glow: 'rgba(78,171,220,0.25)',
   },
   {
-    icon: '🍜',
+    icon: <UtensilsCrossed size={24} className="text-[#f59e0b]" />,
     label: 'おすすめ料理',
     sub: 'ホイアン名物',
     tab: 'gourmet' as Tab,
@@ -30,7 +29,7 @@ const categories = [
     glow: 'rgba(245,158,11,0.25)',
   },
   {
-    icon: '📍',
+    icon: <Camera size={24} className="text-[#8b5cf6]" />,
     label: '観光スポット',
     sub: 'ホイアン・ダナン',
     tab: 'spots' as Tab,
@@ -38,7 +37,7 @@ const categories = [
     glow: 'rgba(139,92,246,0.25)',
   },
   {
-    icon: '⚠️',
+    icon: <AlertTriangle size={24} className="text-[#ef4444]" />,
     label: '注意事項',
     sub: '安全・交通',
     tab: 'chui' as Tab,
@@ -65,7 +64,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
             <span className="text-white text-sm font-medium">ベトナム旅行ガイド</span>
           </div>
           <h1 className="text-3xl lg:text-4xl font-bold text-white leading-tight">
-            🇻🇳 初めてのベトナム旅行<br />でも安心！
+            初めてのベトナム旅行<br />でも安心！
           </h1>
           <p className="text-white/70 text-sm mt-2 lg:text-base">ホイアン・ダナン完全対応ガイド</p>
         </div>
@@ -99,7 +98,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
                 <div className="flex flex-col justify-between w-full h-full p-5 text-left">
                   {/* Icon badge */}
                   <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl shadow-sm"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm"
                     style={{ backgroundColor: `${item.accent}22`, border: `1.5px solid ${item.accent}44` }}
                   >
                     {item.icon}

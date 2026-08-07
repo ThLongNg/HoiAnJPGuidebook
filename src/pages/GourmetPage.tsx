@@ -1,7 +1,11 @@
 import { useState } from 'react'
-import { MessageCircle, MapPin, Star, Flame, X, ExternalLink, Volume2, Navigation } from 'lucide-react'
+import {
+  MessageCircle, MapPin, Star, Flame, X, ExternalLink, Volume2,
+  Navigation, Utensils, CookingPot, Sandwich, IceCream, Coffee,
+  Lightbulb, Clock, UtensilsCrossed,
+} from 'lucide-react'
 import { sky, MI_QUANG, CAO_LAU, COM_GA, HOI_AN_STREET } from '@/types'
-import { SectionHeading, SpeakButton, Card } from '@/components/Atoms'
+import { SectionHeading, Card } from '@/components/Atoms'
 import { speak } from '@/utils/tts'
 
 // ─── Food data ──────────────────────────────────────────────────
@@ -11,7 +15,7 @@ type Restaurant = { name: string; address: string; hours: string; mapUrl: string
 type Food = {
   vn: string
   name: string
-  emoji: string
+  icon: React.ReactNode
   price: string
   rating: number
   spicy?: boolean
@@ -25,7 +29,7 @@ type Food = {
 
 const foods: Food[] = [
   {
-    vn: 'Mì Quảng', name: 'ミークアン', emoji: '🍜', price: '35,000〜50,000 VND', rating: 4.8,
+    vn: 'Mì Quảng', name: 'ミークアン', icon: <CookingPot size={18} className="text-amber-500" />, price: '35,000〜50,000 VND', rating: 4.8,
     img: MI_QUANG, category: 'main',
     desc: 'ベトナム中部名物の麺料理。幅広の黄色い麺に、豚肉・エビ・ピーナッツをのせた一品。スープが少なく、具材の旨みが凝縮されている。',
     tip: 'ライスペーパーやハーブを一緒に入れて食べるのが現地流',
@@ -40,7 +44,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Cao Lầu', name: 'カオラウ', emoji: '🍝', price: '40,000〜60,000 VND', rating: 4.9,
+    vn: 'Cao Lầu', name: 'カオラウ', icon: <CookingPot size={18} className="text-[#0284c7]" />, price: '40,000〜60,000 VND', rating: 4.9,
     img: CAO_LAU, category: 'main',
     desc: 'ホイアンでしか味わえない伝統麺。独特の歯ごたえある麺は、古都の井戸水で作ると言われている。豚の角煮・もやし・ハーブが絶妙。',
     tip: 'ホイアンを離れると同じ味は食べられない！',
@@ -54,7 +58,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Cơm Gà Hội An', name: 'コムガーホイアン', emoji: '🍚', price: '30,000〜45,000 VND', rating: 4.7,
+    vn: 'Cơm Gà Hội An', name: 'コムガーホイアン', icon: <Utensils size={18} className="text-amber-600" />, price: '30,000〜45,000 VND', rating: 4.7,
     img: COM_GA, category: 'main',
     desc: 'ホイアン名物の鶏ご飯。ショウガ風味のご飯に蒸し鶏をのせ、特製ソースで食べる優しい味わい。地元の人にも観光客にも人気。',
     tip: 'Bà Buội（バ・ブオイ）が有名店。行列ができるほど人気',
@@ -68,7 +72,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Phở', name: 'フォー', emoji: '🍲', price: '40,000〜70,000 VND', rating: 4.5,
+    vn: 'Phở', name: 'フォー', icon: <CookingPot size={18} className="text-[#0ea5e9]" />, price: '40,000〜70,000 VND', rating: 4.5,
     img: 'https://images.unsplash.com/photo-1582878826629-29b7ad1cdc43?w=600&h=400&fit=crop&auto=format',
     category: 'main',
     desc: 'ベトナムを代表するスープ麺。牛骨ベースの澄んだスープに米麺、薄切り牛肉・鶏肉をのせた一品。ライム・もやし・ハーブを入れて食べる。',
@@ -76,7 +80,6 @@ const foods: Food[] = [
     restaurants: [
       { name: 'Phở Thìn', address: '19 Đào Duy Từ, Hội An, Đà Nẵng', hours: '06:00–21:00', mapUrl: 'https://maps.app.goo.gl/psuhQrTPhQPg8mVE6' },
       { name: 'Phở Ngân', address: 'Phở Ngân, 132 Đ. Trần Cao Vân, Hội An, Đà Nẵng', hours: '06:00–21:00', mapUrl: 'https://maps.app.goo.gl/iNd1ULZZPRxPG7Ny8' },
-
     ],
     orderPhrases: [
       { vn: 'Cho tôi một phần phở bò.', reading: 'チョー トイ モット ファン フォー ボー', jp: '牛肉フォーを一人前ください。' },
@@ -84,7 +87,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Bánh Xèo', name: 'バインセオ', emoji: '🥞', price: '50,000〜80,000 VND', rating: 4.6, spicy: true,
+    vn: 'Bánh Xèo', name: 'バインセオ', icon: <Sandwich size={18} className="text-amber-500" />, price: '50,000〜80,000 VND', rating: 4.6, spicy: true,
     img: 'https://img.taste.com.au/hegWu1Xh/taste/2016/11/banh-xeo-crispy-pancakes-77516-1.jpeg',
     category: 'main',
     desc: 'ターメリック風味のパリパリなクレープ。エビ・もやし・ネギを包んで揚げ焼きにしたベトナム風パンケーキ。レタスやハーブで包んで食べる。',
@@ -97,7 +100,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Bánh Mì Phượng', name: 'バインミー・フオン', emoji: '🥖', price: '25,000〜40,000 VND', rating: 4.9,
+    vn: 'Bánh Mì Phượng', name: 'バインミー・フオン', icon: <Sandwich size={18} className="text-amber-600" />, price: '25,000〜40,000 VND', rating: 4.9,
     img: 'https://vnitourist.com/wp-content/uploads/2020/08/vNGW9Cd.jpg',
     category: 'snack',
     desc: 'ホイアンで最も有名なバインミー。フランスパンに自家製ハム・パテ・野菜・ソースを詰めたベトナム風サンドイッチ。Anthony Bourdainが絶賛した一品。',
@@ -111,7 +114,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Bánh Bao Bánh Vạc', name: 'ホワイトローズ餃子', emoji: '🥟', price: '50,000〜80,000 VND', rating: 4.8,
+    vn: 'Bánh Bao Bánh Vạc', name: 'ホワイトローズ餃子', icon: <Utensils size={18} className="text-rose-500" />, price: '50,000〜80,000 VND', rating: 4.8,
     img: 'https://static.vinwonders.com/2023/01/banh-hoa-hong-trang-hoi-an-thumb.png',
     category: 'snack',
     desc: 'ホイアン名物の蒸し餃子。白いライスペーパーで包んだ海老入り餃子で、白いバラの花のような形が特徴。特製スープと揚げエシャロットが添えられる。',
@@ -124,7 +127,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Bánh Đập', name: 'バインダップ', emoji: '🫓', price: '15,000〜25,000 VND', rating: 4.4,
+    vn: 'Bánh Đập', name: 'バインダップ', icon: <Sandwich size={18} className="text-amber-700" />, price: '15,000〜25,000 VND', rating: 4.4,
     img: 'https://tse2.mm.bing.net/th/id/OIP.0a0f0Pvbk2hR9Bz5IwNCrgHaEK?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
     category: 'snack',
     desc: 'パリパリの揚げライスペーパーと柔らかいもちもちライスシートを重ね、エビペーストと一緒に食べるB級グルメ。屋台料理の定番。',
@@ -137,7 +140,7 @@ const foods: Food[] = [
     ],
   },
   {
-    vn: 'Chè', name: 'チェー（ベトナムスイーツ）', emoji: '🍮', price: '25,000〜50,000 VND', rating: 4.5,
+    vn: 'Chè', name: 'チェー（ベトナムスイーツ）', icon: <IceCream size={18} className="text-purple-500" />, price: '25,000〜50,000 VND', rating: 4.5,
     img: 'https://medianews.thieunien.vn/uploads/2024/10/14/simply-recipes-che-ba-mau-lead-2-c6162830ea634fa5ae0fab2d21276378-1728874241.jpg',
     category: 'sweet',
     desc: 'ベトナムの伝統的な甘味。豆・芋・ゼリー・ヤシミルクなど多種多様な具材を組み合わせたスープデザート。暑い日に氷入りがおすすめ。',
@@ -149,11 +152,10 @@ const foods: Food[] = [
       { vn: 'Cho tôi một ly chè này.', reading: 'チョー トイ モット リー チェー ナイ', jp: 'このチェーをひとつください。' },
       { vn: 'Cho tôi hai ly chè này.', reading: 'チョー トイ ハイ リー チェー ナイ', jp: 'このチェーを2つください。' },
       { vn: 'Cho tôi ba ly chè này.', reading: 'チョー トイ バー リー チェー ナイ', jp: 'このチェーを3つください。' },
-
     ],
   },
   {
-    vn: 'Cà Phê', name: 'コーヒー', emoji: '☕', price: '30,000〜50,000 VND', rating: 4.7,
+    vn: 'Cà Phê', name: 'コーヒー', icon: <Coffee size={18} className="text-amber-800" />, price: '30,000〜50,000 VND', rating: 4.7,
     img: 'https://images.unsplash.com/photo-1509042239860-f550ce710b93?w=600&h=400&fit=crop&auto=format',
     category: 'drink',
     desc: 'ベトナム独特のエッグコーヒー。卵黄・砂糖・コンデンスミルクをホイップして、濃いコーヒーの上に乗せた濃厚デザートコーヒー。',
@@ -170,7 +172,7 @@ const foods: Food[] = [
   {
     vn: 'Mót Hội An',
     name: 'Mót Hội An',
-    emoji: '🍹',
+    icon: <Coffee size={18} className="text-emerald-600" />,
     price: '25,000〜40,000 VND',
     rating: 4.6,
     img: 'https://static.vinwonders.com/production/Mot-Hoi-An-banner.jpg',
@@ -179,7 +181,6 @@ const foods: Food[] = [
     tip: 'Mót Hội Anのオーガニックハーブティーは絶品！',
     restaurants: [
       { name: 'Mót Hội An', address: '150 Trần Phú, Hội An', hours: '08:00–22:00', mapUrl: 'https://maps.app.goo.gl/r4QkRzQjRzQjRzQj' },
-
     ],
     orderPhrases: [
       { vn: 'Cho tôi một ly nước mót.', reading: 'チョー トイ モット リー ヌック モット', jp: 'モットを一杯ください。' },
@@ -189,11 +190,11 @@ const foods: Food[] = [
 ]
 
 const categories = [
-  { id: 'all', label: 'すべて', emoji: '🍽️' },
-  { id: 'main', label: '麺・ご飯', emoji: '🍜' },
-  { id: 'snack', label: '軽食・屋台', emoji: '🥖' },
-  { id: 'sweet', label: 'スイーツ', emoji: '🍮' },
-  { id: 'drink', label: 'ドリンク', emoji: '☕' },
+  { id: 'all', label: 'すべて', icon: <Utensils size={15} /> },
+  { id: 'main', label: '麺・ご飯', icon: <CookingPot size={15} /> },
+  { id: 'snack', label: '軽食・屋台', icon: <Sandwich size={15} /> },
+  { id: 'sweet', label: 'スイーツ', icon: <IceCream size={15} /> },
+  { id: 'drink', label: 'ドリンク', icon: <Coffee size={15} /> },
 ] as const
 
 // ─── Food Detail Modal ───────────────────────────────────────────
@@ -239,7 +240,9 @@ function FoodModal({ food, onClose }: { food: Food; onClose: () => void }) {
           {/* Title */}
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-2xl">{food.emoji}</span>
+              <div className="w-9 h-9 rounded-xl bg-sky-50 flex items-center justify-center flex-shrink-0">
+                {food.icon}
+              </div>
               <div>
                 <h2 className="font-bold text-slate-900 text-lg leading-tight">{food.vn}</h2>
                 <div className="text-sm font-medium" style={{ color: sky[500] }}>{food.name}</div>
@@ -247,8 +250,9 @@ function FoodModal({ food, onClose }: { food: Food; onClose: () => void }) {
             </div>
             <p className="text-sm text-slate-600 leading-relaxed mt-3">{food.desc}</p>
             {food.tip && (
-              <div className="mt-3 bg-amber-50 border border-amber-100 rounded-xl p-3">
-                <p className="text-xs text-amber-700 leading-relaxed">💡 {food.tip}</p>
+              <div className="mt-3 bg-amber-50 border border-amber-100 rounded-xl p-3 flex items-start gap-2">
+                <Lightbulb size={15} className="text-amber-500 flex-shrink-0 mt-0.5" />
+                <p className="text-xs text-amber-700 leading-relaxed">{food.tip}</p>
               </div>
             )}
           </div>
@@ -268,7 +272,9 @@ function FoodModal({ food, onClose }: { food: Food; onClose: () => void }) {
                       <div className="text-xs text-slate-500 mt-0.5 flex items-center gap-1">
                         <Navigation size={10} /> {r.address}
                       </div>
-                      <div className="text-xs text-slate-400 mt-0.5">🕐 {r.hours}</div>
+                      <div className="text-xs text-slate-400 mt-0.5 flex items-center gap-1">
+                        <Clock size={10} /> {r.hours}
+                      </div>
                     </div>
                     <a
                       href={r.mapUrl}
@@ -359,7 +365,9 @@ function FoodDetailCard({ food, delay, onClick }: { food: Food; delay: number; o
               <div className="font-bold text-slate-900 text-sm leading-tight">{food.vn}</div>
               <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{food.name}</div>
             </div>
-            <span className="text-xl flex-shrink-0">{food.emoji}</span>
+            <div className="w-7 h-7 rounded-lg bg-sky-50 flex items-center justify-center flex-shrink-0">
+              {food.icon}
+            </div>
           </div>
           <p className="text-xs text-slate-500 leading-relaxed mt-1 line-clamp-2">{food.desc}</p>
           <div className="mt-2 flex items-center gap-1 text-xs" style={{ color: sky[500] }}>
@@ -381,7 +389,9 @@ export default function GourmetPage() {
 
   return (
     <div>
-      <SectionHeading sub="ホイアンでしか味わえない絶品グルメ">🍜 ホイアンおすすめ料理</SectionHeading>
+      <SectionHeading sub="ホイアンでしか味わえない絶品グルメ">
+        <UtensilsCrossed size={22} className="inline mr-2 text-sky-500" />ホイアンおすすめ料理
+      </SectionHeading>
 
       {/* Category filter */}
       <div className="flex gap-2 flex-wrap mb-6">
@@ -396,7 +406,7 @@ export default function GourmetPage() {
                 : { backgroundColor: 'white', color: '#64748b', border: `1px solid ${sky[100]}` }
             }
           >
-            {cat.emoji} {cat.label}
+            {cat.icon} {cat.label}
             <span className="text-xs px-1.5 py-0.5 rounded-full"
               style={{
                 backgroundColor: activeCategory === cat.id ? 'rgba(255,255,255,0.25)' : sky[50],

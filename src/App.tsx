@@ -78,7 +78,11 @@ export default function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }, [activeTab])
 
-  const current = navItems.find((n) => n.id === activeTab)!
+  const current = navItems.find((n) => n.id === activeTab) || {
+    id: activeTab,
+    icon: AlertTriangle,
+    label: activeTab === 'greensm' ? 'GreenSMの使い方' : 'ガイド',
+  }
 
   function handleNavigate(tab: Tab) {
     setActiveTab(tab)
