@@ -12,7 +12,7 @@ export const sky: Record<number, string> = {
   800: '#0f5275',
 }
 
-export const HERO_IMG       = 'https://images.unsplash.com/photo-1596401057633-54a8fe8ef647?w=1200&h=600&fit=crop&auto=format'
+export const HERO_IMG       = 'https://izitour.com/media/blog/hoi-an-itinerary.webp'
 export const MI_QUANG       = 'https://images.unsplash.com/photo-1597345637412-9fd611e758f3?w=600&h=400&fit=crop&auto=format'
 export const CAO_LAU        = 'https://images.unsplash.com/photo-1631709497146-a239ef373cf1?w=600&h=400&fit=crop&auto=format'
 export const COM_GA         = 'https://images.unsplash.com/photo-1602253057119-44d745d9b860?w=600&h=400&fit=crop&auto=format'

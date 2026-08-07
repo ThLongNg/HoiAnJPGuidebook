@@ -22,7 +22,10 @@ export function Card({
   style?: React.CSSProperties
 }) {
   return (
-    <div className={`bg-white rounded-2xl shadow-sm border border-sky-100 ${className}`} style={style}>
+    <div
+      className={`bg-white/90 rounded-2xl shadow-sm border border-sky-100 backdrop-blur-sm ${className}`}
+      style={style}
+    >
       {children}
     </div>
   )

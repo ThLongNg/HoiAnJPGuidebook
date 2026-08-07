@@ -105,8 +105,29 @@ export default function App() {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* Desktop */}
-      <div className="hidden lg:flex min-h-dvh">
+      {/* ── Video background ── */}
+      <video
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+        style={{
+          position: 'fixed',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+          zIndex: 0,
+          pointerEvents: 'none',
+          opacity: 0.3,
+        }}
+      >
+        <source src="/bg.mp4" type="video/mp4" />
+      </video>
+
+      {/* ── Desktop (z-[1] so content is above blobs) ── */}
+      <div className="hidden lg:flex min-h-dvh relative z-[1]">
         <aside className="w-56 flex-shrink-0 bg-white/80 backdrop-blur-xl border-r border-sky-100 sticky top-0 h-dvh overflow-y-auto">
           <Sidebar />
         </aside>
@@ -129,7 +150,7 @@ export default function App() {
       </div>
 
       {/* Mobile / Tablet */}
-      <div className="lg:hidden flex flex-col min-h-dvh">
+      <div className="lg:hidden flex flex-col min-h-dvh relative z-[1]">
         <header className="bg-white/80 backdrop-blur-xl border-b border-sky-100 px-4 py-3 flex items-center justify-between sticky top-0 z-30">
           <div className="flex items-center gap-3">
             <button
