@@ -8,6 +8,59 @@ import SpotsPage from '@/pages/SpotsPage'
 import ChuiPage from '@/pages/ChuiPage'
 import GreenSMPage from '@/pages/GreenSMPage'
 
+// ─── Background video config ───────────────────────────────────
+// TODO: Upload bg.mp4 to Cloudinary (free) or any CDN, then paste the URL here.
+// Leave empty string to use local /bg.mp4 (dev only).
+// Cloudinary example: 'https://res.cloudinary.com/YOUR_CLOUD/video/upload/bg.mp4'
+const BG_VIDEO_URL = ''
+
+// Fallback image shown when video fails or URL is empty
+const BG_FALLBACK_IMG = 'https://izitour.com/media/blog/hoi-an-itinerary.webp'
+
+const BG_STYLE: React.CSSProperties = {
+  position: 'fixed',
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover',
+  zIndex: 0,
+  pointerEvents: 'none',
+  opacity: 0.3,
+}
+
+function BgVideo() {
+  const [videoError, setVideoError] = useState(false)
+  const src = BG_VIDEO_URL || '/bg.mp4'
+
+  if (videoError || !src) {
+    return (
+      <img
+        src={BG_FALLBACK_IMG}
+        alt=""
+        aria-hidden="true"
+        style={BG_STYLE}
+      />
+    )
+  }
+
+  return (
+    <video
+      key={src}
+      autoPlay
+      muted
+      loop
+      playsInline
+      aria-hidden="true"
+      style={BG_STYLE}
+      onError={() => setVideoError(true)}
+    >
+      <source src={src} type="video/mp4" />
+    </video>
+  )
+}
+// ──────────────────────────────────────────────────────────────
+
+
 const navItems = [
   { id: 'home' as Tab, icon: Home, label: 'ホーム' },
   { id: 'kaiwa' as Tab, icon: MessageCircle, label: '会話' },
@@ -105,26 +158,11 @@ export default function App() {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* ── Video background ── */}
-      <video
-        autoPlay
-        muted
-        loop
-        playsInline
-        aria-hidden="true"
-        style={{
-          position: 'fixed',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 0,
-          pointerEvents: 'none',
-          opacity: 0.3,
-        }}
-      >
-        <source src="/bg.mp4" type="video/mp4" />
-      </video>
+      {/* ── Background video / image ──
+          Production: upload bg.mp4 to Cloudinary/S3, paste URL in BG_VIDEO_URL
+          Development: served from /bg.mp4 (public folder)
+      ── */}
+      <BgVideo />
 
       {/* ── Desktop (z-[1] so content is above blobs) ── */}
       <div className="hidden lg:flex min-h-dvh relative z-[1]">

@@ -5,34 +5,34 @@ import { SectionHeading, Card, SpeakButton, TipBox } from '@/components/Atoms'
 import { PhraseCard, AddressCard, OrderCard, ExpressionCard } from '@/components/Cards'
 
 const orderPhrases = [
-  { vn: 'Cho tôi xem thực đơn.', reading: 'チョー トイ セム トゥック ドン', jp: 'メニューを見せてください。' },
-  { vn: 'Tôi muốn gọi món này.',  reading: 'トイ ムオン ゴイ モン ナイ',    jp: 'これを注文したいです。' },
-  { vn: 'Không cay nhé.',         reading: 'コン カイ ニェ',                jp: '辛くしないでください。' },
-  { vn: 'Tính tiền nhé!',         reading: 'ティン ティエン ニェ',          jp: 'お会計お願いします！' },
+  { vn: 'Cho em xem menu.', reading: 'チョーエム セム メニュー', jp: 'メニューを見せてください。' },
+  { vn: 'Em muốn gọi món này.', reading: 'エム ムオン ゴイ モン ナイ', jp: 'これを注文したいです。' },
+  { vn: 'Không cay nhé.', reading: 'コン カイ ニェ', jp: '辛くしないでください。' },
+  { vn: 'Tính tiền cho em ạ!', reading: 'ティン ティエン チョー エム ア', jp: 'お会計お願いします！' },
 ]
 
 const bargainPhrases = [
-  { vn: 'Giảm giá được không?', reading: 'ジャム ジャー ドゥック コン', jp: '値引きできますか？',    delay: 0 },
-  { vn: 'Đắt quá!',             reading: 'ダット クア',               jp: '高すぎます！',           delay: 0.07 },
-  { vn: 'Rẻ hơn được không?',   reading: 'ゼー ホン ドゥック コン',   jp: 'もっと安くなりますか？', delay: 0.14 },
-  { vn: 'Tôi mua hai cái.',     reading: 'トイ ムア ハイ カイ',       jp: '２つ買います。',         delay: 0.21 },
-  { vn: 'Cho tôi xem cái đó.',  reading: 'チョー トイ セム カイ ドー', jp: 'それを見せてください。', delay: 0.28 },
-  { vn: 'Tôi suy nghĩ thêm.',   reading: 'トイ スイ ンギー テム',     jp: 'もう少し考えます。',     delay: 0.35 },
+  { vn: 'Giảm giá được không?', reading: 'ジャム ジャー ドゥック コン', jp: '値引きできますか？', delay: 0 },
+  { vn: 'Đắt quá!', reading: 'ダット クア', jp: '高すぎます！', delay: 0.07 },
+  { vn: 'Rẻ hơn được không?', reading: 'ゼー ホン ドゥック コン', jp: 'もっと安くなりますか？', delay: 0.14 },
+  { vn: 'Tôi mua hai cái.', reading: 'トイ ムア ハイ カイ', jp: '２つ買います。', delay: 0.21 },
+  { vn: 'Cho tôi xem cái đó.', reading: 'チョー トイ セム カイ ドー', jp: 'それを見せてください。', delay: 0.28 },
+  { vn: 'Tôi suy nghĩ thêm.', reading: 'トイ スイ ンギー テム', jp: 'もう少し考えます。', delay: 0.35 },
 ]
 
 const emergencyPhrases = [
-  { vn: 'Cứu tôi với!',       reading: 'クウ トイ ヴォイ',         jp: '助けてください！',         delay: 0 },
-  { vn: 'Gọi cảnh sát!',      reading: 'ゴイ カイン サット',       jp: '警察を呼んでください！',   delay: 0.07 },
-  { vn: 'Gọi cấp cứu!',       reading: 'ゴイ カップ クウ',         jp: '救急車を呼んでください！', delay: 0.14 },
-  { vn: 'Tôi bị lạc đường.',  reading: 'トイ ビー ラック ドゥオン', jp: '道に迷いました。',         delay: 0.21 },
-  { vn: 'Tôi bị mất ví.',     reading: 'トイ ビー マット ヴィ',    jp: '財布をなくしました。',     delay: 0.28 },
-  { vn: 'Bệnh viện ở đâu?',   reading: 'ベン ヴィエン オー ダウ',  jp: '病院はどこですか？',       delay: 0.35 },
+  { vn: 'Cứu tôi với!', reading: 'クウ トイ ヴォイ', jp: '助けてください！', delay: 0 },
+  { vn: 'Gọi cảnh sát!', reading: 'ゴイ カイン サット', jp: '警察を呼んでください！', delay: 0.07 },
+  { vn: 'Gọi cấp cứu!', reading: 'ゴイ カップ クウ', jp: '救急車を呼んでください！', delay: 0.14 },
+  { vn: 'Tôi bị lạc đường.', reading: 'トイ ビー ラック ドゥオン', jp: '道に迷いました。', delay: 0.21 },
+  { vn: 'Tôi bị mất ví.', reading: 'トイ ビー マット ヴィ', jp: '財布をなくしました。', delay: 0.28 },
+  { vn: 'Bệnh viện ở đâu?', reading: 'ベン ヴィエン オー ダウ', jp: '病院はどこですか？', delay: 0.35 },
 ]
 
 const weatherPhrases = [
-  { vn: 'Trời nóng quá!',     reading: 'チョイ ノン クア',        jp: '暑すぎる！' },
-  { vn: 'Trời mưa.',          reading: 'チョイ ムア',             jp: '雨が降っています。' },
-  { vn: 'Mang ô đi nhé.',     reading: 'マン オー ディ ニェ',     jp: '傘を持っていきましょう。' },
+  { vn: 'Trời nóng quá!', reading: 'チョイ ノン クア', jp: '暑すぎる！' },
+  { vn: 'Trời mưa.', reading: 'チョイ ムア', jp: '雨が降っています。' },
+  { vn: 'Mang ô đi nhé.', reading: 'マン オー ディ ニェ', jp: '傘を持っていきましょう。' },
   { vn: 'Thời tiết đẹp quá!', reading: 'トイ ティエット デップ クア', jp: 'いい天気ですね！' },
 ]
 
@@ -40,12 +40,12 @@ export default function KaiwaPage() {
   const [section, setSection] = useState<'phrases' | 'address' | 'order' | 'expressions' | 'bargain' | 'emergency'>('phrases')
 
   const sections = [
-    { id: 'phrases',     label: '基本フレーズ' },
-    { id: 'address',     label: '呼び方' },
-    { id: 'order',       label: '注文するとき' },
+    { id: 'phrases', label: '基本フレーズ' },
+    { id: 'address', label: '呼び方' },
+    { id: 'order', label: '注文するとき' },
     { id: 'expressions', label: 'よく使う表現' },
-    { id: 'bargain',     label: '値切り・買物' },
-    { id: 'emergency',   label: '緊急・その他' },
+    { id: 'bargain', label: '値切り・買物' },
+    { id: 'emergency', label: '緊急・その他' },
   ] as const
 
   return (
@@ -73,12 +73,12 @@ export default function KaiwaPage() {
         {/* ─── 基本フレーズ ─── */}
         {section === 'phrases' && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-            <PhraseCard vn="Xin chào"       reading="シン チャオ"      meanings={['こんにちは', 'おはようございます', 'こんばんは']} delay={0} />
-            <PhraseCard vn="Xin lỗi"        reading="シン ロイ"        meanings={['すみません', 'ごめんなさい']} delay={0.07} />
-            <PhraseCard vn="Cảm ơn"         reading="カム オン"        meanings={['ありがとうございます']} delay={0.14} />
-            <PhraseCard vn="Không có gì"    reading="コン コー ジー"   meanings={['どういたしまして']} delay={0.21} />
-            <PhraseCard vn="Tôi không hiểu" reading="トイ コン ヒエウ" meanings={['わかりません']} delay={0.28} />
-            <PhraseCard vn="Nói chậm thôi"  reading="ノイ チャム トイ" meanings={['ゆっくり話してください']} delay={0.35} />
+            <PhraseCard vn="Xin chào" reading="シン チャオ" meanings={['こんにちは', 'おはようございます', 'こんばんは']} delay={0} />
+            <PhraseCard vn="Xin lỗi" reading="シン ロイ" meanings={['すみません', 'ごめんなさい']} delay={0.07} />
+            <PhraseCard vn="Cảm ơn" reading="カム オン" meanings={['ありがとうございます']} delay={0.14} />
+            <PhraseCard vn="Không có gì" reading="コン コー ジー" meanings={['どういたしまして']} delay={0.21} />
+            <PhraseCard vn="Xin lỗi, tôi không biết tiếng Việt" reading="シン ロイ トイ コン ビエウ ティン ベトナム" meanings={['すみません。ベトナム語わかりません。']} delay={0.28} />
+
             <div className="md:col-span-2 xl:col-span-3"><TipBox /></div>
           </div>
         )}
@@ -88,11 +88,16 @@ export default function KaiwaPage() {
           <>
             <p className="text-sm text-slate-500 mb-5">相手の年齢に合わせて呼び方を変えましょう</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-              <AddressCard emoji="👨"  vn="Anh ơi" reading="アン オイ"  jp="年上くらいの男性"          bg={sky[50]}  delay={0} />
-              <AddressCard emoji="👨‍🦳" vn="Chú ơi" reading="チュ オイ"  jp="父親くらいの男性"          bg="#eef2ff" delay={0.07} />
-              <AddressCard emoji="👩"  vn="Chị ơi" reading="チ オイ"    jp="年上のお姉さんくらいの女性" bg="#fff7ed" delay={0.14} />
-              <AddressCard emoji="👩‍🦰" vn="Cô ơi"  reading="コー オイ"  jp="母親くらいの女性"          bg="#fff1f2" delay={0.21} />
-              <AddressCard emoji="👵"  vn="Bà ơi"  reading="バー オイ"  jp="おばあさんくらいの女性"    bg="#f5f3ff" delay={0.28} />
+              <AddressCard emoji="👨" vn="Anh ơi" reading="アン オイ" jp="年上くらいの男性" bg={sky[50]} delay={0} />
+              <AddressCard emoji="👨‍🦳" vn="Chú ơi" reading="チュ オイ" jp="父親くらいの男性" bg="#eef2ff" delay={0.07} />
+              <AddressCard emoji="👩" vn="Chị ơi" reading="チ オイ" jp="年上のお姉さんくらいの女性" bg="#fff7ed" delay={0.14} />
+              <AddressCard emoji="👩‍🦰" vn="Cô ơi" reading="コー オイ" jp="母親くらいの女性" bg="#fff1f2" delay={0.21} />
+              <AddressCard emoji="👵" vn="Bà ơi" reading="バー オイ" jp="おばあさんくらいの女性" bg="#f5f3ff" delay={0.28} />
+            </div>
+            <div className="mt-6">
+              <TipBox>
+                店員さんを呼んだり注文したいときは、これらの呼び方を使えばOKです！
+              </TipBox>
             </div>
           </>
         )}
@@ -106,11 +111,11 @@ export default function KaiwaPage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
               {[
                 { num: 1, vn: 'Một phần', reading: 'モット ファン', count: '１人前' },
-                { num: 2, vn: 'Hai phần', reading: 'ハイ ファン',   count: '２人前' },
-                { num: 3, vn: 'Ba phần',  reading: 'バー ファン',   count: '３人前' },
-                { num: 4, vn: 'Bốn phần', reading: 'ボン ファン',   count: '４人前' },
-                { num: 5, vn: 'Năm phần', reading: 'ナム ファン',   count: '５人前' },
-                { num: 6, vn: 'Sáu phần', reading: 'サウ ファン',   count: '６人前' },
+                { num: 2, vn: 'Hai phần', reading: 'ハイ ファン', count: '２人前' },
+                { num: 3, vn: 'Ba phần', reading: 'バー ファン', count: '３人前' },
+                { num: 4, vn: 'Bốn phần', reading: 'ボン ファン', count: '４人前' },
+                { num: 5, vn: 'Năm phần', reading: 'ナム ファン', count: '５人前' },
+                { num: 6, vn: 'Sáu phần', reading: 'サウ ファン', count: '６人前' },
               ].map((o, i) => <OrderCard key={o.num} {...o} delay={i * 0.06} />)}
             </div>
             <div className="mt-6 bg-sky-50 border border-sky-200 rounded-2xl p-5">
@@ -134,13 +139,13 @@ export default function KaiwaPage() {
         {/* ─── よく使う表現 ─── */}
         {section === 'expressions' && (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <ExpressionCard vn="Bao nhiêu tiền ạ?"         reading="バオ ニエウ ティエン ア"      jp="いくらですか？"       delay={0} />
-            <ExpressionCard vn="Ở đâu ạ?"                  reading="オー ダウ ア"                 jp="どこですか？"         delay={0.07} />
-            <ExpressionCard vn="Nhà vệ sinh ở đâu ạ?"      reading="ニャー ヴェ シン オー ダウ ア" jp="トイレはどこですか？" delay={0.14} />
-            <ExpressionCard vn="Ngon lắm!"                  reading="ンゴン ラム"                  jp="とても美味しい！"     delay={0.21} />
+            <ExpressionCard vn="Bao nhiêu tiền ạ?" reading="バオ ニエウ ティエン ア" jp="いくらですか？" delay={0} />
+            <ExpressionCard vn="Ở đâu ạ?" reading="オー ダウ ア" jp="どこですか？" delay={0.07} />
+            <ExpressionCard vn="Nhà vệ sinh ở đâu ạ?" reading="ニャー ヴェ シン オー ダウ ア" jp="トイレはどこですか？" delay={0.14} />
+            <ExpressionCard vn="Ngon lắm!" reading="ンゴン ラム" jp="とても美味しい！" delay={0.21} />
             <ExpressionCard vn="Cái này bao nhiêu tiền ạ?" reading="カイ ナイ バオ ニエウ ティエン ア" jp="これはいくらですか？"
               sub={{ vn: 'Cái này', jp: 'これ', example: 'Cái này bao nhiêu tiền ạ?', exJp: 'これはいくらですか？' }} delay={0.28} />
-            <ExpressionCard vn="Cái đó bao nhiêu tiền ạ?"  reading="カイ ドー バオ ニエウ ティエン ア" jp="それはいくらですか？"
+            <ExpressionCard vn="Cái đó bao nhiêu tiền ạ?" reading="カイ ドー バオ ニエウ ティエン ア" jp="それはいくらですか？"
               sub={{ vn: 'Cái đó', jp: 'それ', example: 'Cái đó bao nhiêu tiền ạ?', exJp: 'それはいくらですか？' }} delay={0.35} />
           </div>
         )}
