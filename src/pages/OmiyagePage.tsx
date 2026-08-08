@@ -322,10 +322,10 @@ export default function OmiyagePage() {
       </div>
 
       {/* Hero Banner matching app sky theme */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-sky-600 via-sky-500 to-amber-500 p-6 sm:p-8 text-white shadow-md">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-violet-400 via-violet-300 to-sky-300 p-6 sm:p-8 text-white shadow-md">
         <div className="relative z-10 max-w-2xl">
           <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold mb-3 border border-white/30">
-            <Sparkles className="w-3.5 h-3.5 text-amber-200" /> TRAVEL SOUVENIR GUIDE FOR HER
+            <Sparkles className="w-3.5 h-3.5 text-amber-200" /> TRAVEL SOUVENIR GUIDE
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight">
             センスいいね！って褒められる<br />ベトナム・ホイアンのお土産セレクション
