@@ -29,6 +29,31 @@ const BG_STYLE: React.CSSProperties = {
   opacity: 0.3,
 }
 
+// Global in-memory cache for video blob URL to prevent repeat HTTP Range requests on video loops
+let globalVideoBlobUrl: string | null = null
+let videoFetchPromise: Promise<string | null> | null = null
+
+function fetchVideoBlob(url: string): Promise<string | null> {
+  if (globalVideoBlobUrl) return Promise.resolve(globalVideoBlobUrl)
+  if (videoFetchPromise) return videoFetchPromise
+
+  videoFetchPromise = fetch(url)
+    .then((res) => {
+      if (!res.ok) throw new Error(`Video fetch failed with status ${res.status}`)
+      return res.blob()
+    })
+    .then((blob) => {
+      globalVideoBlobUrl = URL.createObjectURL(blob)
+      return globalVideoBlobUrl
+    })
+    .catch((err) => {
+      console.warn('Could not load video blob, using direct URL / image fallback:', err)
+      return null
+    })
+
+  return videoFetchPromise
+}
+
 function resolveVideoSrc(rawUrl: string): { type: 'mp4' | 'iframe'; src: string } {
   if (!rawUrl) return { type: 'mp4', src: '/bg.mp4' }
 
@@ -59,7 +84,24 @@ function resolveVideoSrc(rawUrl: string): { type: 'mp4' | 'iframe'; src: string 
 
 function BgVideo() {
   const [videoError, setVideoError] = useState(false)
+  const [blobSrc, setBlobSrc] = useState<string | null>(globalVideoBlobUrl)
   const resolved = resolveVideoSrc(BG_VIDEO_URL)
+
+  useEffect(() => {
+    if (resolved.type === 'iframe' || !resolved.src) return
+
+    if (!globalVideoBlobUrl) {
+      let isSubscribed = true
+      fetchVideoBlob(resolved.src).then((url) => {
+        if (isSubscribed && url) {
+          setBlobSrc(url)
+        }
+      })
+      return () => {
+        isSubscribed = false
+      }
+    }
+  }, [resolved.src, resolved.type])
 
   if (videoError || !resolved.src) {
     return (
@@ -87,18 +129,21 @@ function BgVideo() {
     )
   }
 
+  const activeSrc = blobSrc || resolved.src
+
   return (
     <video
-      key={resolved.src}
+      key={activeSrc}
       autoPlay
       muted
       loop
       playsInline
+      preload="auto"
       aria-hidden="true"
       style={BG_STYLE}
       onError={() => setVideoError(true)}
     >
-      <source src={resolved.src} type="video/mp4" />
+      <source src={activeSrc} type="video/mp4" />
     </video>
   )
 }

@@ -12,46 +12,64 @@ export interface ExchangeRateData {
   isLive: boolean
 }
 
-export function fetchExchangeRate(): Promise<ExchangeRateData> {
-  return fetch('https://open.er-api.com/v6/latest/JPY')
-    .then((res) => {
-      if (!res.ok) throw new Error('Network response failed')
-      return res.json()
-    })
-    .then((data) => {
+export async function fetchExchangeRate(): Promise<ExchangeRateData> {
+  const formatTime = () => new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' })
+
+  // 1. Try Primary Open ER API (v6)
+  try {
+    const res = await fetch('https://open.er-api.com/v6/latest/JPY')
+    if (res.ok) {
+      const data = await res.json()
       if (data && data.rates && data.rates.VND) {
         const rate = data.rates.VND
         const result: ExchangeRateData = {
           rate,
-          lastUpdated: new Date().toLocaleTimeString('ja-JP', { hour: '2-digit', minute: '2-digit' }),
+          lastUpdated: formatTime(),
           isLive: true,
         }
-        try {
-          localStorage.setItem(CACHE_KEY, JSON.stringify(result))
-        } catch {
-          // ignore localstorage errors
-        }
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(result)) } catch {}
         return result
       }
-      throw new Error('Invalid rate data')
-    })
-    .catch(() => {
-      // Try local storage cache
-      try {
-        const cached = localStorage.getItem(CACHE_KEY)
-        if (cached) {
-          const parsed = JSON.parse(cached)
-          return { ...parsed, isLive: false }
+    }
+  } catch (err) {
+    console.warn('Primary exchange rate API failed, trying fallback API:', err)
+  }
+
+  // 2. Try Secondary ExchangeRate-API (v4)
+  try {
+    const res = await fetch('https://api.exchangerate-api.com/v4/latest/JPY')
+    if (res.ok) {
+      const data = await res.json()
+      if (data && data.rates && data.rates.VND) {
+        const rate = data.rates.VND
+        const result: ExchangeRateData = {
+          rate,
+          lastUpdated: formatTime(),
+          isLive: true,
         }
-      } catch {
-        // ignore
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(result)) } catch {}
+        return result
       }
-      return {
-        rate: DEFAULT_JPY_TO_VND,
-        lastUpdated: 'デフォルト (1 JPY ≈ 165 VND)',
-        isLive: false,
-      }
-    })
+    }
+  } catch (err) {
+    console.warn('Secondary exchange rate API failed:', err)
+  }
+
+  // 3. Try LocalStorage Cache
+  try {
+    const cached = localStorage.getItem(CACHE_KEY)
+    if (cached) {
+      const parsed = JSON.parse(cached)
+      return { ...parsed, isLive: false }
+    }
+  } catch {}
+
+  // 4. Default Fallback
+  return {
+    rate: DEFAULT_JPY_TO_VND,
+    lastUpdated: 'デフォルト',
+    isLive: false,
+  }
 }
 
 interface CurrencyConverterProps {
@@ -61,7 +79,7 @@ interface CurrencyConverterProps {
 export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
   const [isJpyTop, setIsJpyTop] = useState(true)
   const [topVal, setTopVal] = useState<string>('1,000')
-  const [bottomVal, setBottomVal] = useState<string>('165,000')
+  const [bottomVal, setBottomVal] = useState<string>('')
 
   const [rateData, setRateData] = useState<ExchangeRateData>({
     rate: DEFAULT_JPY_TO_VND,
@@ -76,7 +94,7 @@ export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
     setLoading(true)
     const data = await fetchExchangeRate()
     setRateData(data)
-    setCustomRate(data.rate.toFixed(1))
+    setCustomRate(data.rate.toFixed(2))
     recalculateFromTop(topVal, isJpyTop, data.rate)
     setLoading(false)
   }
@@ -225,11 +243,14 @@ export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
           <button
             onClick={loadRates}
             disabled={loading}
-            className="flex items-center gap-1 text-xs text-slate-500 hover:text-sky-600 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-sky-600 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200 transition-colors shadow-2xs"
             title="レートを更新"
           >
             <RefreshCw size={12} className={loading ? 'animate-spin text-sky-500' : ''} />
-            <span>{rateData.isLive ? 'リアルタイム' : 'キャッシュ'}</span>
+            <span className="flex items-center gap-1">
+              <span className={`w-2 h-2 rounded-full ${rateData.isLive ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`} />
+              {rateData.isLive ? 'リアルタイム' : 'キャッシュ'}
+            </span>
           </button>
         </div>
       </div>
@@ -237,7 +258,7 @@ export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
       {/* Rate notice */}
       <div className="flex items-center justify-between text-xs text-slate-500 bg-sky-50/70 border border-sky-100 px-3 py-2 rounded-2xl mb-4">
         <div className="flex items-center gap-1.5">
-          <span className="font-semibold text-slate-700">1 JPY ≈ {rateData.rate.toFixed(1)} VND</span>
+          <span className="font-semibold text-slate-700">1 JPY ≈ {rateData.rate.toFixed(2)} VND</span>
           <span className="text-[10px] text-slate-400">({rateData.lastUpdated})</span>
         </div>
         <button
