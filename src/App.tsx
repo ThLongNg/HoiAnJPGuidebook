@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X, ArrowRightLeft, Coins } from 'lucide-react'
+import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X, ArrowRightLeft, Coins, Gift } from 'lucide-react'
 import { BanknotesIcon, ArrowsRightLeftIcon, GlobeAsiaAustraliaIcon, LanguageIcon } from '@heroicons/react/24/outline'
 import { type Tab, sky } from '@/types'
 import HomePage from '@/pages/HomePage'
@@ -8,11 +8,12 @@ import GourmetPage from '@/pages/GourmetPage'
 import SpotsPage from '@/pages/SpotsPage'
 import ChuiPage from '@/pages/ChuiPage'
 import GreenSMPage from '@/pages/GreenSMPage'
+import OmiyagePage from '@/pages/OmiyagePage'
 import CurrencyConverter from '@/components/CurrencyConverter'
 import TranslatorModal from '@/components/TranslatorModal'
 
 // ─── Background video config ───────────────────────────────────
-const BG_VIDEO_URL = 'https://res.cloudinary.com/dbjejsbh7/video/upload/PH%E1%BB%90_C%E1%BB%94_H%E1%BB%98I_AN_-_Flycam_4K_Hoi_An_Ancient_Town_in_Quang_Nam_r1aayl.mp4'
+const BG_VIDEO_URL = 'https://res.cloudinary.com/dbjejsbh7/video/upload/v1786176387/0808_1_jxq3gi.mp4'
 
 // Fallback image shown when video fails or URL is empty
 const BG_FALLBACK_IMG = 'https://izitour.com/media/blog/hoi-an-itinerary.webp'
@@ -109,6 +110,7 @@ const navItems = [
   { id: 'kaiwa' as Tab, icon: MessageCircle, label: '会話' },
   { id: 'gourmet' as Tab, icon: UtensilsCrossed, label: 'グルメ' },
   { id: 'spots' as Tab, icon: Camera, label: '観光' },
+  { id: 'omiyage' as Tab, icon: Gift, label: 'お土産' },
   { id: 'chui' as Tab, icon: AlertTriangle, label: '注意事項' },
 ]
 
@@ -221,6 +223,7 @@ export default function App() {
       {activeTab === 'kaiwa' && <KaiwaPage />}
       {activeTab === 'gourmet' && <GourmetPage />}
       {activeTab === 'spots' && <SpotsPage />}
+      {activeTab === 'omiyage' && <OmiyagePage />}
       {activeTab === 'chui' && <ChuiPage onNavigate={handleNavigate} />}
       {activeTab === 'greensm' && <GreenSMPage onNavigate={handleNavigate} />}
     </>
@@ -337,7 +340,7 @@ export default function App() {
 
       {/* Mobile drawer */}
       {sidebarOpen && (
-        <div className="lg:hidden fixed inset-0 z-50 flex">
+        <div className="lg:hidden fixed inset-0 z-[90] flex">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
           <div className="relative w-64 bg-white/95 h-full shadow-2xl">
             <button
@@ -354,7 +357,7 @@ export default function App() {
       {/* Currency Converter Modal Overlay */}
       {converterOpen && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm anim-in"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 bg-black/60 backdrop-blur-md anim-in overscroll-none"
           onClick={() => setConverterOpen(false)}
         >
           <div

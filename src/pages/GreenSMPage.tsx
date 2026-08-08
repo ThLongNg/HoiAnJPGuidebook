@@ -143,7 +143,7 @@ export default function GreenSMPage({ onNavigate }: { onNavigate: (t: Tab) => vo
       {/* Fullscreen Image Preview Modal */}
       {selectedImg && (
         <div
-          className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-4"
+          className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-md flex items-center justify-center p-4 overscroll-none"
           onClick={() => setSelectedImg(null)}
         >
           <button

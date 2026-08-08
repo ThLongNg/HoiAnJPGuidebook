@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Camera, MapPin, Clock, Ticket, X, ChevronRight, Play, Image as ImageIcon } from 'lucide-react'
+import { Camera, MapPin, Clock, Ticket, X, ChevronRight, Play, Image as ImageIcon, Sparkles, Landmark, Home, Building2, Palmtree, Umbrella, Mountain, Flame, Drama, Flower2, Scissors, Brush } from 'lucide-react'
 import { sky } from '@/types'
 import { SectionHeading, Card } from '@/components/Atoms'
 
@@ -7,8 +7,9 @@ import { SectionHeading, Card } from '@/components/Atoms'
 type Spot = {
   name: string
   nameJp: string
-  emoji: string
+  icon: React.ReactNode
   area: 'hoian' | 'danang'
+  category?: 'sightseeing' | 'activity' | 'spa'
   tag: string
   rating: number
   time: string
@@ -25,8 +26,9 @@ const spots: Spot[] = [
   {
     name: 'Chùa Cầu',
     nameJp: '来遠橋（日本橋）',
-    emoji: '🌉',
+    icon: <Landmark size={20} className="text-amber-600" />,
     area: 'hoian',
+    category: 'sightseeing',
     tag: '世界遺産',
     rating: 4.8,
     time: '所要：30〜60分',
@@ -44,8 +46,9 @@ const spots: Spot[] = [
   {
     name: 'Show Ký Ức Hội An',
     nameJp: '「ホイアンの記憶」ショー',
-    emoji: '🎭',
+    icon: <Drama size={20} className="text-purple-600" />,
     area: 'hoian',
+    category: 'activity',
     tag: '文化ショー',
     rating: 4.7,
     time: '1回 約65分、週3回開催',
@@ -64,8 +67,9 @@ const spots: Spot[] = [
   {
     name: 'VinWonders Nam Hội An',
     nameJp: 'ヴィンワンダーズ南ホイアン',
-    emoji: '🎡',
+    icon: <Ticket size={20} className="text-blue-600" />,
     area: 'hoian',
+    category: 'activity',
     tag: 'テーマパーク',
     rating: 4.6,
     time: '所要：半日〜1日',
@@ -82,10 +86,32 @@ const spots: Spot[] = [
     mapUrl: 'https://maps.app.goo.gl/wVCK9GGZcEFjcALf7',
   },
   {
+    name: 'Thả Hoa Đăng',
+    nameJp: '花灯籠流し＆ボート体験',
+    icon: <Flame size={20} className="text-amber-500" />,
+    area: 'hoian',
+    category: 'activity',
+    tag: '体験',
+    rating: 4.9,
+    time: '夕方〜夜（日没直後〜21:00頃）',
+    price: '灯籠 20,000〜30,000 VND / ボート 150,000〜200,000 VND',
+    img: 'https://tse4.mm.bing.net/th/id/OIP.dAqIDTYICeo1GQMbeH2_6AHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
+    videoId: '0m5ErV76zoE',
+    desc: 'ホアイ川に花と灯籠を流す幻想的なベトナムの伝統体験。手漕ぎボートに乗って水面からランタンで彩られた古都の夜景を楽しめます。',
+    tips: [
+      '手漕ぎボート乗船料の公定価格は 150,000〜200,000 VND/舟（約20分、1〜4名乗船可）です',
+      '川沿いの公営チケット乗り場（Vé đi thuyền）で購入するとボッタクリを防げます',
+      '灯籠は1個 20,000〜30,000 VND（川沿いの露店やボート上で購入可能）',
+      '旧暦の14日（満月のランタン祭り）は街の電気が消え最も幻想的です',
+    ],
+    mapUrl: 'https://maps.google.com/?q=Hoai+River+Hoi+An+Lantern',
+  },
+  {
     name: 'Rừng Dừa Bảy Mẫu',
     nameJp: 'バイマウ椰子林（かご舟体験）',
-    emoji: '🌴',
+    icon: <Palmtree size={20} className="text-emerald-600" />,
     area: 'hoian',
+    category: 'activity',
     tag: 'アクティビティ',
     rating: 4.7,
     time: '所要：1〜2時間',
@@ -104,8 +130,9 @@ const spots: Spot[] = [
   {
     name: 'Hội Quán Phước Kiến',
     nameJp: '福建会館',
-    emoji: '🏯',
+    icon: <Landmark size={20} className="text-red-600" />,
     area: 'hoian',
+    category: 'sightseeing',
     tag: '歴史建築',
     rating: 4.7,
     time: '所要：30〜60分',
@@ -122,8 +149,9 @@ const spots: Spot[] = [
   {
     name: 'Nhà Cổ Tấn Ký',
     nameJp: '陳記古民家（タンキー）',
-    emoji: '🏠',
+    icon: <Home size={20} className="text-amber-700" />,
     area: 'hoian',
+    category: 'sightseeing',
     tag: '古民家',
     rating: 4.6,
     time: '所要：30分',
@@ -140,8 +168,9 @@ const spots: Spot[] = [
   {
     name: 'Nhà Cổ Quân Thắng',
     nameJp: '覃勝古民家（クアンタン）',
-    emoji: '🏡',
+    icon: <Building2 size={20} className="text-amber-800" />,
     area: 'hoian',
+    category: 'sightseeing',
     tag: '古民家',
     rating: 4.5,
     time: '所要：20〜30分',
@@ -156,49 +185,91 @@ const spots: Spot[] = [
     mapUrl: 'https://maps.google.com/?q=Quan+Thang+Ancient+House+Hoi+An',
   },
   {
-    name: 'Thả Hoa Đăng',
-    nameJp: '花灯籠流し＆ボート体験',
-    emoji: '🏮',
-    area: 'hoian',
-    tag: '体験',
-    rating: 4.9,
-    time: '夕方〜夜（日没直後〜21:00頃）',
-    price: '灯籠 20,000〜30,000 VND / ボート 150,000〜200,000 VND',
-    img: 'https://tse4.mm.bing.net/th/id/OIP.dAqIDTYICeo1GQMbeH2_6AHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
-    videoId: '0m5ErV76zoE',
-    desc: 'ホアイ川に花と灯籠を流す幻想的なベトナムの伝統体験。手漕ぎボートに乗って水面からランタンで彩られた古都の夜景を楽しめます。',
-    tips: [
-      '手漕ぎボート乗船料の公定価格は 150,000〜200,000 VND/舟（約20分、1〜4名乗船可）です',
-      '川沿いの公営チケット乗り場（Vé đi thuyền）で購入するとボッタクリを防げます',
-      '灯籠は1個 20,000〜30,000 VND（川沿いの露店やボート上で購入可能）',
-      '旧暦の14日（満月のランタン祭り）は街の電気が消え最も幻想的です',
-    ],
-    mapUrl: 'https://maps.google.com/?q=Hoai+River+Hoi+An+Lantern',
-  },
-  {
     name: 'Làng Gốm Thanh Hà',
-    nameJp: 'タインハー陶芸村',
-    emoji: '🏺',
+    nameJp: 'タインハー陶芸村（ろくろ体験・テラコッタパーク）',
+    icon: <Brush size={20} className="text-orange-600" />,
     area: 'hoian',
-    tag: '伝統工芸',
-    rating: 4.5,
-    time: '所要：1〜2時間',
-    price: '35,000 VND（陶芸体験は別途）',
-    img: 'https://static.vinwonders.com/2021/11/lang-gom-thanh-ha-thumb.jpg',
-    desc: '500年以上の歴史を持つ陶芸村。職人の手作り陶器の製作過程を見学したり、実際にろくろ体験ができます。ホイアン旧市街から自転車で約20分。',
+    category: 'activity',
+    tag: '伝統工芸・陶芸ツアー',
+    rating: 4.7,
+    time: '所要：1.5〜2時間',
+    price: '35,000 VND（十二支の土笛お土産付き / ろくろ体験可能）',
+    img: 'https://xtrip.vn/upload/editor/dia-diem-du-lich-o-da-nang-hoi-an-lang-gom-thanh-ha.png',
+    desc: '500年以上の歴史を誇るトゥボン川沿いの伝統陶芸村。職人の足踏みろくろで自分だけの陶器や小皿を作るワークショップ体験が大人気。世界遺産のミニチュア粘土像が並ぶ「テラコッタパーク（Công viên Đất Nung）」の見学ツアーも併せて楽しめます。',
     tips: [
-      '陶芸体験は事前予約なしでも参加可能',
-      '小さなお土産の陶器が人気。手荷物として持ち込める大きさを選ぼう',
-      '自転車でのんびり行くのがおすすめ',
-      '川沿いの景色も美しい',
+      '入場券（35,000 VND）を見せると可愛い十二支の小さな土笛（土人形）が1つもらえます！',
+      '職人さんの指導のもと、実際にろくろを回してお皿や茶碗を作る手作り陶芸体験ができます',
+      '作ったオリジナル作品は乾かしてそのまま旅の思い出にお持ち帰り可能！',
+      '旧市街から自転車で約15〜20分、川沿いの心地よい風を感じながらサイクリングがおすすめ',
     ],
     mapUrl: 'https://maps.google.com/?q=Thanh+Ha+Pottery+Village+Hoi+An',
   },
   {
+    name: 'Làng Lụa Hội An',
+    nameJp: 'ホイアン絹の村（伝統シルク工房ツアー）',
+    icon: <Scissors size={20} className="text-pink-600" />,
+    area: 'hoian',
+    category: 'activity',
+    tag: '伝統工芸・絹織物ツアー',
+    rating: 4.7,
+    time: '所要：1〜2時間',
+    price: '自由見学 50,000 VND / ガイド付き見学ツアー 約100,000〜300,000 VND',
+    img: 'https://statics.vinpearl.com/lang-lua-hoi-an-8_1636712643.jpg',
+    desc: '300年の歴史を持つシルクの伝統工房。桑の葉の栽培から蚕（かいこ）の飼育、糸紡ぎ、昔ながらの機織り機での絹織りまで、シルクができるすべての工程を見学・体験できる見学ツアー。100%天然絹の最高級シルクスカーフやアオザイの仕立ても人気です。',
+    tips: [
+      '生の蚕や繭（まゆ）に触れたり、昔ながらの木製機織り機がカタカタ動く手仕事を間近で見学できます',
+      'ガイド付きツアーではシルクロードの歴史や本物シルクの見分け方を丁寧に説明してもらえます',
+      '敷地内のショップでは最高級の天然シルクスカーフや服を適正価格で購入・オーダーメイド可能',
+      '旧市街から約1km（車で約5分、徒歩15分）とアクセス抜群の穴場スポットです',
+    ],
+    mapUrl: 'https://maps.google.com/?q=Hoi+An+Silk+Village',
+  },
+  {
+    name: 'Gội Đầu Dưỡng Sinh Hội An',
+    nameJp: 'ホイアン 伝統ハーバルヘッドスパ＆ボディケア',
+    icon: <Sparkles size={20} className="text-emerald-500" />,
+    area: 'hoian',
+    category: 'spa',
+    tag: 'スパ・ヘッドスパ',
+    rating: 4.9,
+    time: '所要：60〜90分',
+    price: '150,000〜400,000 VND（約900〜2,400円）',
+    img: 'https://cdn.tgdd.vn/Files/2023/12/23/1558195/goi-dau-duong-sinh-la-gi-loi-ich-va-cach-goi-dau-duong-sinh-chuan-spa-202312230808014982.jpg',
+    desc: 'ベトナム伝統の「Gội đầu dưỡng sinh（ハーバルシャンプーヘッドスパ）」。生姜・レモングラス・柚子皮など天然ハーブの温かいお湯で頭皮を丁寧に洗い流し、首・肩・顔のツボ押しマッサージで長旅の疲労を極上に癒やします。',
+    tips: [
+      '頭皮洗浄・フェイシャルパック・肩首マッサージ付きの60分コース（約200,000 VND〜）が大人気！',
+      '観光での歩き疲れやフライト後の頭痛・肩こり解消に最高の癒やしです',
+      '事前予約（WhatsAppやZalo）またはホテルのフロントで手配すると待ち時間ゼロでスムーズ',
+      '施術後はヘアブロー・乾燥まで丁寧に仕上げてくれます',
+    ],
+    mapUrl: 'https://maps.google.com/?q=Hoi+An+Herbal+Head+Spa'
+    ,
+  },
+  {
+    name: 'White Rose Spa Hội An',
+    nameJp: 'ホワイトローズ スパ（フット＆アロママッサージ）',
+    icon: <Flower2 size={20} className="text-rose-500" />,
+    area: 'hoian',
+    category: 'spa',
+    tag: 'スパ・マッサージ',
+    rating: 4.8,
+    time: '所要：60〜120分',
+    price: '200,000〜500,000 VND（約1,200〜3,000円）',
+    img: 'https://tse2.mm.bing.net/th/id/OIP.M1sfVKaJy5MaeBzmtYY4cAHaE8?r=0&rs=1&pid=ImgDetMain&o=7&rm=3',
+    desc: '旧市街から徒歩数分の落ち着いたプライベートスパ。温かいココナッツオイルやホットストーンを使ったフットマッサージ・アロマボディケアが人気で、女性旅行者に圧倒的支持を得ています。',
+    tips: [
+      '歩き疲れた脚を集中ケアするフットマッサージ（60分約200,000 VND〜）がおすすめ',
+      '冷たいハーブティーとフレッシュフルーツの無料ウェルカムサービス付き',
+      'カップルや友達同士で一緒に施術を受けられるプライベートルーム完備',
+    ],
+    mapUrl: 'https://maps.google.com/?q=White+Rose+Spa+Hoi+An',
+  },
+  {
     name: 'Bãi Biển An Bàng',
     nameJp: 'アンバン ビーチ',
-    emoji: '🏖️',
+    icon: <Umbrella size={20} className="text-sky-500" />,
     area: 'hoian',
+    category: 'sightseeing',
     tag: 'ビーチ',
     rating: 4.6,
     time: '所要：半日〜1日',
@@ -217,8 +288,9 @@ const spots: Spot[] = [
   {
     name: 'Cầu Rồng',
     nameJp: 'ドラゴン橋',
-    emoji: '🐉',
+    icon: <Flame size={20} className="text-orange-500" />,
     area: 'danang',
+    category: 'sightseeing',
     tag: '夜景',
     rating: 4.6,
     time: '所要：30〜60分（夜がおすすめ）',
@@ -236,13 +308,14 @@ const spots: Spot[] = [
   {
     name: 'Ngũ Hành Sơn',
     nameJp: '五行山（大理石山）',
-    emoji: '⛰️',
+    icon: <Mountain size={20} className="text-stone-600" />,
     area: 'danang',
+    category: 'sightseeing',
     tag: '絶景',
     rating: 4.5,
     time: '所要：1〜2時間',
     price: '40,000 VND（エレベーター：15,000 VND）',
-    img: 'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&h=400&fit=crop&auto=format',
+    img: 'https://danangfantasticity.com/wp-content/uploads/2025/08/danh-thang-ngu-hanh-son-da-nang-002.jpg',
     desc: '石灰岩と大理石でできた5つの山。洞窟の中に仏像が祀られており、山頂からダナン市内・海岸を一望できます。大理石の彫刻品のお土産も豊富。',
     tips: [
       'エレベーターあり（別途15,000 VND）',
@@ -250,7 +323,7 @@ const spots: Spot[] = [
       '大理石の彫刻は重いのでお土産選びに注意',
       '洞窟内は薄暗いので懐中電灯があると便利',
     ],
-    mapUrl: 'https://maps.google.com/?q=Marble+Mountains+Da+Nang+Vietnam',
+    mapUrl: 'https://maps.app.goo.gl/dMyb5CYaxzHVnxVz8',
   },
 ]
 
@@ -259,8 +332,8 @@ function SpotModal({ spot, onClose }: { spot: Spot; onClose: () => void }) {
   const [showVideo, setShowVideo] = useState(false)
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/55 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 sm:p-6 overscroll-none" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
       <div
         className="relative bg-white rounded-3xl shadow-2xl w-full max-w-lg max-h-[90vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
@@ -328,8 +401,10 @@ function SpotModal({ spot, onClose }: { spot: Spot; onClose: () => void }) {
         <div className="p-5 space-y-4">
           {/* Title */}
           <div>
-            <div className="flex items-start gap-2">
-              <span className="text-2xl">{spot.emoji}</span>
+            <div className="flex items-start gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 border border-sky-100 flex items-center justify-center flex-shrink-0 shadow-2xs mt-0.5">
+                {spot.icon}
+              </div>
               <div>
                 <div className="flex items-center gap-2 flex-wrap">
                   <h2 className="font-bold text-slate-900 text-lg leading-tight">{spot.name}</h2>
@@ -428,8 +503,10 @@ function SpotCard({ spot, delay, onClick }: { spot: Spot; delay: number; onClick
         </div>
 
         <div className="p-4">
-          <div className="flex items-start gap-2">
-            <span className="text-xl flex-shrink-0">{spot.emoji}</span>
+          <div className="flex items-start gap-2.5">
+            <div className="w-9 h-9 rounded-xl bg-sky-50 border border-sky-100 flex items-center justify-center flex-shrink-0 mt-0.5 shadow-2xs">
+              {spot.icon}
+            </div>
             <div className="flex-1 min-w-0">
               <div className="font-bold text-slate-900 text-sm leading-tight truncate">{spot.name}</div>
               <div className="text-xs font-medium mt-0.5 truncate" style={{ color: sky[500] }}>{spot.nameJp}</div>
@@ -471,7 +548,7 @@ export default function SpotsPage() {
 
   return (
     <div>
-      <SectionHeading sub="ホイアン・ダナンのおすすめ観光地">📍 観光スポット</SectionHeading>
+      <SectionHeading sub="ホイアン・ダナンのおすすめ観光地＆リラクゼーションスパ">📍 観光＆スパガイド</SectionHeading>
 
       {/* Area switcher */}
       <div className="flex gap-3 mb-6">

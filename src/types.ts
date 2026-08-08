@@ -1,4 +1,4 @@
-export type Tab = 'home' | 'kaiwa' | 'gourmet' | 'chui' | 'spots' | 'greensm'
+export type Tab = 'home' | 'kaiwa' | 'gourmet' | 'chui' | 'spots' | 'greensm' | 'omiyage'
 
 export const sky: Record<number, string> = {
   50: '#f7fbff',

@@ -167,7 +167,7 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
       {/* ─── Standard Translator Modal ─── */}
       {!fullScreenMode && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/55 backdrop-blur-sm anim-in"
+          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md anim-in overscroll-none"
           onClick={onClose}
         >
           <div
@@ -305,9 +305,9 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
         </div>
       )}
 
-      {/* ─── 🔍 HUGE FULL-SCREEN MERCHANT SHOWCASE MODE ─── */}
+      {/* ─── Full-Screen Merchant Showcase Mode ─── */}
       {fullScreenMode && (
-        <div className="fixed inset-0 z-50 bg-amber-400 text-slate-950 flex flex-col justify-between p-6 sm:p-10 select-none anim-in">
+        <div className="fixed inset-0 z-[110] bg-amber-400 text-slate-950 flex flex-col justify-between p-6 sm:p-10 select-none anim-in overscroll-none pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
           {/* Top Header */}
           <div className="flex items-center justify-between">
             <button

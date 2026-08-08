@@ -1,4 +1,4 @@
-import { ChevronRight, Globe, Car, MessageCircle, UtensilsCrossed, Camera, AlertTriangle, Volume2 } from 'lucide-react'
+import { ChevronRight, Globe, Car, MessageCircle, UtensilsCrossed, Camera, AlertTriangle, Volume2, Gift } from 'lucide-react'
 import { ArrowsRightLeftIcon, BanknotesIcon } from '@heroicons/react/24/outline'
 import { type Tab, sky, HERO_IMG, MI_QUANG, CAO_LAU, COM_GA } from '@/types'
 import { SectionHeading, TipBox } from '@/components/Atoms'
@@ -28,6 +28,14 @@ const categories = [
     tab: 'gourmet' as Tab,
     accent: '#f59e0b',
     glow: 'rgba(245,158,11,0.25)',
+  },
+  {
+    icon: <Gift size={24} className="text-[#ec4899]" />,
+    label: 'お土産ガイド',
+    sub: '女子旅人気おすすめ',
+    tab: 'omiyage' as Tab,
+    accent: '#ec4899',
+    glow: 'rgba(236,72,153,0.25)',
   },
   {
     icon: <Camera size={24} className="text-[#8b5cf6]" />,
@@ -74,7 +82,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
       {/* ── Category cards ── */}
       <div>
         <SectionHeading sub="気になるカテゴリから始めましょう">カテゴリ</SectionHeading>
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4">
           {categories.map((item, i) => (
             <button
               key={item.label}

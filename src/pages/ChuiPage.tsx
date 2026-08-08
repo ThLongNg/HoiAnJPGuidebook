@@ -89,8 +89,8 @@ const tips: {
 // ─── Tip Popup Modal ──────────────────────────────────────────
 function TipModal({ tip, onClose }: { tip: typeof tips[0]; onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center p-4" onClick={onClose}>
-      <div className="absolute inset-0 bg-black/45 backdrop-blur-sm" />
+    <div className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center p-4 sm:p-6 overscroll-none" onClick={onClose}>
+      <div className="absolute inset-0 bg-black/60 backdrop-blur-md" />
       <div
         className="relative bg-white rounded-3xl shadow-2xl w-full max-w-md max-h-[88vh] overflow-y-auto"
         onClick={(e) => e.stopPropagation()}
