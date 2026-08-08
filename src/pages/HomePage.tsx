@@ -3,7 +3,6 @@ import { ArrowsRightLeftIcon, BanknotesIcon } from '@heroicons/react/24/outline'
 import { type Tab, sky, HERO_IMG, MI_QUANG, CAO_LAU, COM_GA } from '@/types'
 import { SectionHeading, TipBox } from '@/components/Atoms'
 import { speak } from '@/utils/tts'
-import GlassSurface from '@/components/GlassSurface'
 import CurrencyConverter from '@/components/CurrencyConverter'
 
 const previewPhrases = [
@@ -72,7 +71,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
         </div>
       </div>
 
-      {/* ── Category cards with GlassSurface ── */}
+      {/* ── Category cards ── */}
       <div>
         <SectionHeading sub="気になるカテゴリから始めましょう">カテゴリ</SectionHeading>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -80,44 +79,30 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
             <button
               key={item.label}
               onClick={() => onNavigate(item.tab)}
-              className="anim-up text-left active:scale-95 transition-all rounded-2xl"
+              className="anim-up text-left active:scale-95 transition-all rounded-2xl bg-white/80 backdrop-blur-md border border-white/70 p-5 h-[170px] flex flex-col justify-between shadow-xs hover:shadow-md hover:-translate-y-1"
               style={{
                 animationDelay: `${i * 0.07}s`,
-                height: 170,
-                filter: `drop-shadow(0 8px 24px ${item.glow})`,
+                filter: `drop-shadow(0 4px 16px ${item.glow})`,
               } as React.CSSProperties}
             >
-              <GlassSurface
-                width="100%"
-                height="100%"
-                borderRadius={16}
-                backgroundOpacity={0.18}
-                saturation={1.4}
-                brightness={55}
-                distortionScale={-160}
-                className="hover:-translate-y-1 transition-transform duration-300"
+              {/* Icon badge */}
+              <div
+                className="w-12 h-12 rounded-xl flex items-center justify-center shadow-xs"
+                style={{ backgroundColor: `${item.accent}22`, border: `1.5px solid ${item.accent}44` }}
               >
-                <div className="flex flex-col justify-between w-full h-full p-5 text-left">
-                  {/* Icon badge */}
-                  <div
-                    className="w-12 h-12 rounded-xl flex items-center justify-center shadow-sm"
-                    style={{ backgroundColor: `${item.accent}22`, border: `1.5px solid ${item.accent}44` }}
-                  >
-                    {item.icon}
-                  </div>
-                  {/* Text */}
-                  <div>
-                    <div className="font-bold text-slate-800 text-sm leading-tight">{item.label}</div>
-                    <div className="text-slate-500 text-xs mt-1">{item.sub}</div>
-                  </div>
-                  {/* Arrow */}
-                  <ChevronRight
-                    size={14}
-                    className="self-end opacity-40"
-                    style={{ color: item.accent }}
-                  />
-                </div>
-              </GlassSurface>
+                {item.icon}
+              </div>
+              {/* Text */}
+              <div>
+                <div className="font-bold text-slate-800 text-sm leading-tight">{item.label}</div>
+                <div className="text-slate-500 text-xs mt-1">{item.sub}</div>
+              </div>
+              {/* Arrow */}
+              <ChevronRight
+                size={14}
+                className="self-end opacity-40"
+                style={{ color: item.accent }}
+              />
             </button>
           ))}
         </div>
@@ -149,37 +134,25 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
             {previewPhrases.map((item, i) => (
               <div
                 key={item.vn}
-                className="anim-up hover:shadow-md hover:-translate-y-0.5 transition-all group"
+                className="anim-up bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl px-4 py-3 flex items-center justify-between shadow-xs hover:shadow-md hover:-translate-y-0.5 transition-all group"
                 style={{ animationDelay: `${0.1 + i * 0.06}s` } as React.CSSProperties}
               >
-                <GlassSurface
-                  width="100%"
-                  height={72}
-                  borderRadius={14}
-                  backgroundOpacity={0.06}
-                  saturation={1.4}
-                  brightness={55}
-                  distortionScale={-160}
-                >
-                  <div className="flex items-center justify-between w-full px-4 py-0">
-                    <div className="flex items-center gap-4">
-                      <div
-                        className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0"
-                        style={{ background: `linear-gradient(135deg, ${sky[500]}, ${sky[300]})` }}
-                      >
-                        {i + 1}
-                      </div>
-                      <div>
-                        <span className="font-bold text-slate-900 text-sm">{item.vn}</span>
-                        <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{item.reading}</div>
-                        <div className="text-xs text-slate-400">{item.jp}</div>
-                      </div>
-                    </div>
-                    <button onClick={() => speak(item.vn)} className="p-1">
-                      <Volume2 size={14} className="text-slate-300 group-hover:text-sky-400 transition-colors" />
-                    </button>
+                <div className="flex items-center gap-4">
+                  <div
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-xs"
+                    style={{ background: `linear-gradient(135deg, ${sky[500]}, ${sky[300]})` }}
+                  >
+                    {i + 1}
                   </div>
-                </GlassSurface>
+                  <div>
+                    <span className="font-bold text-slate-900 text-sm">{item.vn}</span>
+                    <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{item.reading}</div>
+                    <div className="text-xs text-slate-400">{item.jp}</div>
+                  </div>
+                </div>
+                <button onClick={() => speak(item.vn)} className="p-2 rounded-full hover:bg-sky-50 transition-colors">
+                  <Volume2 size={16} className="text-slate-400 group-hover:text-sky-500 transition-colors" />
+                </button>
               </div>
             ))}
           </div>
@@ -206,7 +179,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
               <button
                 key={f.name}
                 onClick={() => onNavigate('gourmet')}
-                className="rounded-xl overflow-hidden shadow-sm border border-white/40 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all text-left"
+                className="rounded-xl overflow-hidden shadow-xs border border-white/40 hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all text-left"
               >
                 <div className="h-24 bg-sky-50 overflow-hidden">
                   <img
@@ -215,7 +188,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
                     className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
                   />
                 </div>
-                <div className="p-2.5" style={{ background: 'rgba(255,255,255,0.6)', backdropFilter: 'blur(8px)' }}>
+                <div className="p-2.5" style={{ background: 'rgba(255,255,255,0.7)', backdropFilter: 'blur(8px)' }}>
                   <div className="text-xs font-bold text-slate-800 truncate">{f.name}</div>
                 </div>
               </button>
@@ -224,23 +197,19 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
 
           <button
             onClick={() => onNavigate('chui')}
-            className="mt-4 w-full hover:shadow-md hover:-translate-y-0.5 transition-all text-left rounded-2xl overflow-hidden"
+            className="mt-4 w-full bg-white/80 backdrop-blur-md border border-white/80 rounded-2xl p-4 flex items-center gap-3 shadow-xs hover:shadow-md hover:-translate-y-0.5 active:scale-95 transition-all text-left"
           >
-            <GlassSurface width="100%" height={64} borderRadius={16} backgroundOpacity={0.2} saturation={1.2}>
-              <div className="flex items-center gap-3 w-full px-4">
-                <div
-                  className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-white"
-                  style={{ background: `linear-gradient(135deg, ${sky[500]}, ${sky[400]})` }}
-                >
-                  <Car size={18} />
-                </div>
-                <div className="flex-1">
-                  <div className="font-bold text-slate-900 text-sm">タクシーに注意！</div>
-                  <div className="text-xs text-slate-500 mt-0.5">GreenSMアプリがおすすめです →</div>
-                </div>
-                <ChevronRight size={16} className="text-sky-300" />
-              </div>
-            </GlassSurface>
+            <div
+              className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-white shadow-xs"
+              style={{ background: `linear-gradient(135deg, ${sky[500]}, ${sky[400]})` }}
+            >
+              <Car size={18} />
+            </div>
+            <div className="flex-1">
+              <div className="font-bold text-slate-900 text-sm">タクシーに注意！</div>
+              <div className="text-xs text-slate-500 mt-0.5">GreenSMアプリがおすすめです →</div>
+            </div>
+            <ChevronRight size={16} className="text-sky-400" />
           </button>
         </div>
       </div>
