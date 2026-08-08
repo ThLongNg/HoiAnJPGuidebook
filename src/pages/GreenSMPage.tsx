@@ -1,50 +1,35 @@
 import { useState } from 'react'
 import { ChevronLeft, Lightbulb, Smartphone, X, Maximize2 } from 'lucide-react'
 import { type Tab } from '@/types'
-
-// Step 1: Register / Phone number input screen (...111)
-import imgStep1 from '@/img/1786132395111_135979716058253606_839372595691832931_17e9ee008535116c33b486011db3c906.jpg'
-
-// Step 2: OTP code verification screen (...040)
-import imgStep2 from '@/img/1786132395040_135979716058253606_839372595691832931_3b164f78f652e296e4e34de89c137e8d.jpg'
-
-// Step 3: Destination input screen (...936)
-import imgStep3 from '@/img/1786132394936_135979716058253606_839372595691832931_71af258946c05ce14a6a1ec5fc97a101.jpg'
-
-// Step 4: Home screen to choose car/service (...990)
-import imgStep4 from '@/img/1786132394990_135979716058253606_839372595691832931_6850ef9ccf7e14644ded16f90cc77ea0.jpg'
+import { greenSMBase64 } from '@/data/greenSMImages'
 
 const steps = [
   {
     num: 1,
     title: 'アプリを開いて登録',
     desc: '日本の電話番号（+81）を入力して「Continue」をタップします。Googleアカウントでも登録できます。',
-    img: '/img/step1.jpg',
-    fallbackImg: imgStep1,
+    img: greenSMBase64.step1,
     imageLeft: true,
   },
   {
     num: 2,
     title: 'OTPコードを入力',
     desc: 'WhatsAppまたはSMSで届いた4桁のコードを入力します。日本にいる間に登録を済ませておきましょう。',
-    img: '/img/step2.jpg',
-    fallbackImg: imgStep2,
+    img: greenSMBase64.step2,
     imageLeft: false,
   },
   {
     num: 3,
     title: '行き先を入力',
     desc: '「行き先は？」に目的地を入力。現在地から自動でルートが表示されます。住所を保存しておくと便利です。',
-    img: '/img/step3.jpg',
-    fallbackImg: imgStep3,
+    img: greenSMBase64.step3,
     imageLeft: true,
   },
   {
     num: 4,
     title: '車を選んで呼ぶ',
     desc: '「車」を選択すると配車されます。料金は事前に確定するので安心です。食事の注文もできます。',
-    img: '/img/step4.jpg',
-    fallbackImg: imgStep4,
+    img: greenSMBase64.step4,
     imageLeft: false,
   },
 ]
@@ -120,12 +105,6 @@ export default function GreenSMPage({ onNavigate }: { onNavigate: (t: Tab) => vo
                     style={{ imageRendering: 'crisp-edges' }}
                     loading="eager"
                     decoding="async"
-                    onError={(e) => {
-                      const target = e.target as HTMLImageElement
-                      if (target.src !== step.fallbackImg) {
-                        target.src = step.fallbackImg
-                      }
-                    }}
                   />
 
                   {/* Zoom Hint Hover Overlay */}
@@ -172,13 +151,6 @@ export default function GreenSMPage({ onNavigate }: { onNavigate: (t: Tab) => vo
               src={selectedImg}
               alt="Screenshot Preview"
               className="max-w-full max-h-[85vh] object-contain rounded-2xl shadow-2xl"
-              onError={(e) => {
-                const target = e.target as HTMLImageElement
-                const foundStep = steps.find(s => s.img === selectedImg)
-                if (foundStep && target.src !== foundStep.fallbackImg) {
-                  target.src = foundStep.fallbackImg
-                }
-              }}
             />
           </div>
         </div>
