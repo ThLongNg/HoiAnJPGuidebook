@@ -12,10 +12,7 @@ import CurrencyConverter from '@/components/CurrencyConverter'
 import TranslatorModal from '@/components/TranslatorModal'
 
 // ─── Background video config ───────────────────────────────────
-// TODO: Upload bg.mp4 to Cloudinary (free) or any CDN, then paste the URL here.
-// Leave empty string to use local /bg.mp4 (dev only).
-// Cloudinary example: 'https://res.cloudinary.com/YOUR_CLOUD/video/upload/bg.mp4'
-const BG_VIDEO_URL = ''
+const BG_VIDEO_URL = 'https://res.cloudinary.com/dbjejsbh7/video/upload/PH%E1%BB%90_C%E1%BB%94_H%E1%BB%98I_AN_-_Flycam_4K_Hoi_An_Ancient_Town_in_Quang_Nam_r1aayl.mp4'
 
 // Fallback image shown when video fails or URL is empty
 const BG_FALLBACK_IMG = 'https://izitour.com/media/blog/hoi-an-itinerary.webp'
@@ -31,11 +28,39 @@ const BG_STYLE: React.CSSProperties = {
   opacity: 0.3,
 }
 
+function resolveVideoSrc(rawUrl: string): { type: 'mp4' | 'iframe'; src: string } {
+  if (!rawUrl) return { type: 'mp4', src: '/bg.mp4' }
+
+  // Automatically convert Cloudinary Player Embed link to direct .mp4 CDN URL
+  if (rawUrl.includes('player.cloudinary.com/embed')) {
+    try {
+      const parsed = new URL(rawUrl)
+      const cloudName = parsed.searchParams.get('cloud_name')
+      const publicId = parsed.searchParams.get('public_id')
+      if (cloudName && publicId) {
+        return {
+          type: 'mp4',
+          src: `https://res.cloudinary.com/${cloudName}/video/upload/${publicId}.mp4`,
+        }
+      }
+    } catch (e) {
+      console.error(e)
+    }
+  }
+
+  // If iframe embed URL
+  if (rawUrl.includes('/embed/') && !rawUrl.endsWith('.mp4')) {
+    return { type: 'iframe', src: rawUrl }
+  }
+
+  return { type: 'mp4', src: rawUrl }
+}
+
 function BgVideo() {
   const [videoError, setVideoError] = useState(false)
-  const src = BG_VIDEO_URL || '/bg.mp4'
+  const resolved = resolveVideoSrc(BG_VIDEO_URL)
 
-  if (videoError || !src) {
+  if (videoError || !resolved.src) {
     return (
       <img
         src={BG_FALLBACK_IMG}
@@ -46,9 +71,24 @@ function BgVideo() {
     )
   }
 
+  if (resolved.type === 'iframe') {
+    return (
+      <iframe
+        src={resolved.src}
+        title="Background Video"
+        aria-hidden="true"
+        style={{
+          ...BG_STYLE,
+          border: 'none',
+          transform: 'scale(1.3)',
+        }}
+      />
+    )
+  }
+
   return (
     <video
-      key={src}
+      key={resolved.src}
       autoPlay
       muted
       loop
@@ -57,7 +97,7 @@ function BgVideo() {
       style={BG_STYLE}
       onError={() => setVideoError(true)}
     >
-      <source src={src} type="video/mp4" />
+      <source src={resolved.src} type="video/mp4" />
     </video>
   )
 }
@@ -144,7 +184,7 @@ export default function App() {
       </div>
       <nav className="space-y-1 flex-1">
         {navItems.map((item) => <NavLink key={item.id} item={item} />)}
-        
+
         {/* Quick action buttons for Currency & Translator */}
         <div className="pt-3 mt-2 border-t border-sky-100 space-y-2">
           <button
@@ -295,7 +335,7 @@ export default function App() {
         </nav>
       </div>
 
-        {/* Mobile drawer */}
+      {/* Mobile drawer */}
       {sidebarOpen && (
         <div className="lg:hidden fixed inset-0 z-50 flex">
           <div className="absolute inset-0 bg-black/30 backdrop-blur-sm" onClick={() => setSidebarOpen(false)} />
