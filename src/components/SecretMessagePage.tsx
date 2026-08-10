@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import FirefliesOverlay from '@/components/FirefliesOverlay'
-import signatureImg from '@/assets/signature.png'
+import { signatureData } from '@/assets/signatureData'
 
 const CORRECT_NAME = '関戸香乃'
 
@@ -704,12 +704,14 @@ export function SecretCard({ onBack, userName }: { onBack: () => void; userName?
                 }}
               >
                 <img
-                  src={signatureImg}
+                  src={signatureData}
                   alt="Signature"
                   style={{
-                    height: 170,
+                    maxHeight: 170,
+                    maxWidth: '100%',
                     objectFit: 'contain',
                     filter: 'brightness(0) invert(1) drop-shadow(0 2px 12px rgba(255,220,150,0.5))',
+                    WebkitFilter: 'brightness(0) invert(1) drop-shadow(0 2px 12px rgba(255,220,150,0.5))',
                     opacity: 0.95,
                   }}
                 />
