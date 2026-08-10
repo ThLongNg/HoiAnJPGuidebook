@@ -1,5 +1,4 @@
-import { ChevronRight, Globe, Car, MessageCircle, UtensilsCrossed, Camera, AlertTriangle, Volume2, Gift } from 'lucide-react'
-import { ArrowsRightLeftIcon, BanknotesIcon } from '@heroicons/react/24/outline'
+import { ChevronRight, Globe, Car, MessageCircle, UtensilsCrossed, Camera, AlertTriangle, Volume2, Gift, ArrowLeftRight, Banknote } from 'lucide-react'
 import { type Tab, sky, HERO_IMG, MI_QUANG, CAO_LAU, COM_GA } from '@/types'
 import { SectionHeading, TipBox } from '@/components/Atoms'
 import { speak } from '@/utils/tts'
@@ -119,7 +118,7 @@ export default function HomePage({ onNavigate }: { onNavigate: (t: Tab) => void 
       {/* ── Currency Converter ── */}
       <div>
         <SectionHeading sub="日本円 (JPY) ⇄ ベトナムドン (VND) リアルタイム換算">
-          <ArrowsRightLeftIcon className="w-5 h-5 inline mr-2 text-sky-500" />通貨両替ツール
+          <ArrowLeftRight className="w-5 h-5 inline mr-2 text-sky-500" />通貨両替ツール
         </SectionHeading>
         <CurrencyConverter />
       </div>

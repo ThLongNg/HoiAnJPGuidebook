@@ -1,5 +1,18 @@
 export type Tab = 'home' | 'kaiwa' | 'gourmet' | 'chui' | 'spots' | 'greensm' | 'omiyage'
 
+export type FavoriteType = 'gourmet' | 'spots' | 'omiyage'
+
+export interface FavoriteItem {
+  id: string
+  type: FavoriteType
+  title: string
+  titleVi: string
+  categoryTag: string
+  priceOrArea: string
+  img: string
+  mapUrl?: string
+}
+
 export const sky: Record<number, string> = {
   50: '#f7fbff',
   100: '#eaf5fd',

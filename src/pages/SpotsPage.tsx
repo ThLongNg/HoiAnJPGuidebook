@@ -1,6 +1,6 @@
 import { useState } from 'react'
-import { Camera, MapPin, Clock, Ticket, X, ChevronRight, Play, Image as ImageIcon, Sparkles, Landmark, Home, Building2, Palmtree, Umbrella, Mountain, Flame, Drama, Flower2, Scissors, Brush } from 'lucide-react'
-import { sky } from '@/types'
+import { Camera, MapPin, Clock, Ticket, X, ChevronRight, Play, Image as ImageIcon, Sparkles, Landmark, Home, Building2, Palmtree, Umbrella, Mountain, Flame, Drama, Flower2, Scissors, Brush, Heart } from 'lucide-react'
+import { sky, type FavoriteItem } from '@/types'
 import { SectionHeading, Card } from '@/components/Atoms'
 
 // ─── Spot data ──────────────────────────────────────────────────
@@ -465,10 +465,22 @@ function SpotModal({ spot, onClose }: { spot: Spot; onClose: () => void }) {
 }
 
 // ─── Spot thumbnail card ─────────────────────────────────────────
-function SpotCard({ spot, delay, onClick }: { spot: Spot; delay: number; onClick: () => void }) {
+function SpotCard({
+  spot,
+  delay,
+  onClick,
+  isFav,
+  onToggleFav,
+}: {
+  spot: Spot
+  delay: number
+  onClick: () => void
+  isFav?: boolean
+  onToggleFav?: () => void
+}) {
   return (
     <button
-      className="text-left w-full anim-up hover:shadow-md hover:-translate-y-0.5 transition-all rounded-2xl overflow-hidden cursor-pointer focus:outline-none"
+      className="text-left w-full anim-up hover:shadow-md hover:-translate-y-0.5 transition-all rounded-2xl overflow-hidden cursor-pointer focus:outline-none relative group"
       style={{ animationDelay: `${delay}s` } as React.CSSProperties}
       onClick={onClick}
     >
@@ -482,6 +494,19 @@ function SpotCard({ spot, delay, onClick }: { spot: Spot; delay: number; onClick
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
 
+          {/* Heart button */}
+          {onToggleFav && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggleFav()
+              }}
+              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
+            >
+              <Heart size={15} className={isFav ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
+            </button>
+          )}
+
           {/* Tag */}
           <div className="absolute top-2 left-2">
             <span className="bg-white/90 backdrop-blur-sm text-slate-700 text-xs px-2.5 py-0.5 rounded-full font-medium">
@@ -491,7 +516,7 @@ function SpotCard({ spot, delay, onClick }: { spot: Spot; delay: number; onClick
 
           {/* Video badge */}
           {spot.videoId && (
-            <div className="absolute top-2 right-2 bg-red-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
+            <div className={`absolute top-2 ${onToggleFav ? 'right-12' : 'right-2'} bg-red-600 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1`}>
               <Play size={9} fill="white" /> 動画あり
             </div>
           )}
@@ -539,7 +564,12 @@ const danangTips = [
   '🛵 GrabバイクはダナンでもOK。安くて便利',
 ]
 
-export default function SpotsPage() {
+interface SpotsPageProps {
+  isFavorite?: (id: string) => boolean
+  toggleFavorite?: (item: FavoriteItem) => void
+}
+
+export default function SpotsPage({ isFavorite, toggleFavorite }: SpotsPageProps) {
   const [area, setArea] = useState<'hoian' | 'danang'>('hoian')
   const [selectedSpot, setSelectedSpot] = useState<Spot | null>(null)
 
@@ -581,9 +611,34 @@ export default function SpotsPage() {
 
       {/* Spot grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8 anim-in" key={area}>
-        {filtered.map((spot, i) => (
-          <SpotCard key={spot.name} spot={spot} delay={i * 0.07} onClick={() => setSelectedSpot(spot)} />
-        ))}
+        {filtered.map((spot, i) => {
+          const favId = `spot-${spot.name}`
+          const isFav = isFavorite ? isFavorite(favId) : false
+          return (
+            <SpotCard
+              key={spot.name}
+              spot={spot}
+              delay={i * 0.07}
+              onClick={() => setSelectedSpot(spot)}
+              isFav={isFav}
+              onToggleFav={
+                toggleFavorite
+                  ? () =>
+                      toggleFavorite({
+                        id: favId,
+                        type: 'spots',
+                        title: spot.nameJp,
+                        titleVi: spot.name,
+                        categoryTag: spot.tag,
+                        priceOrArea: spot.area === 'hoian' ? 'ホイアン旧市街' : 'ダナンエリア',
+                        img: spot.img,
+                        mapUrl: spot.mapUrl,
+                      })
+                  : undefined
+              }
+            />
+          )
+        })}
       </div>
 
       {/* Tips */}

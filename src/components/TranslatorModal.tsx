@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { Volume2, Maximize2, Mic, MicOff, Copy, Check, X, Send, Sparkles, RefreshCw } from 'lucide-react'
-import { LanguageIcon, SpeakerWaveIcon, MicrophoneIcon } from '@heroicons/react/24/outline'
+import { Volume2, Maximize2, Mic, MicOff, Copy, Check, X, Send, Sparkles, RefreshCw, Languages } from 'lucide-react'
 import { speak } from '@/utils/tts'
 import { sky } from '@/types'
 
@@ -32,7 +31,7 @@ export function softenVietnameseTranslation(rawViText: string, jaText: string): 
     text = text.replace(/tính tiền/i, 'tính tiền giúp em')
   }
 
-  // 3. Add polite particle "ạ" if Japanese sentence has polite form (desu, masu, kudasai, etc.)
+  // 3. Add polite particle "ạ" if Japanese sentence has polite form
   const isPoliteJa = /[です|ます|ください|おねがい|お願いします|ですか]/i.test(jaText)
   const hasAlreadyPoliteVi = /[ạ|ạ\?|nhé ạ|với ạ|hả ạ]$/i.test(text)
 
@@ -47,7 +46,6 @@ export function softenVietnameseTranslation(rawViText: string, jaText: string): 
     }
   }
 
-  // Capitalize first letter
   return text.charAt(0).toUpperCase() + text.slice(1)
 }
 
@@ -71,7 +69,7 @@ export async function translateJaToVi(text: string): Promise<string> {
     console.error('Translation error:', err)
   }
 
-  return 'Dịch tự động (Cần kết nối mạng)'
+  return '自動翻訳エラー (ネット接続を確認してください)'
 }
 
 interface TranslatorModalProps {
@@ -178,7 +176,7 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
             <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100 bg-sky-50/50">
               <div className="flex items-center gap-2.5">
                 <div className="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-md">
-                  <LanguageIcon className="w-6 h-6" />
+                  <Languages className="w-6 h-6" />
                 </div>
                 <div>
                   <h3 className="font-bold text-slate-800 text-lg leading-tight">日越 リアルタイム翻訳</h3>
@@ -246,7 +244,7 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
                       </>
                     ) : (
                       <>
-                        <MicrophoneIcon className="w-4 h-4 text-sky-500" /> 音声で入力
+                        <Mic className="w-4 h-4 text-sky-500" /> 音声で入力
                       </>
                     )}
                   </button>
@@ -277,7 +275,7 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
                       onClick={() => speak(viText)}
                       className="flex items-center gap-1.5 text-xs font-bold bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full transition-colors"
                     >
-                      <SpeakerWaveIcon className="w-4 h-4 text-white" /> 音声で再生
+                      <Volume2 className="w-4 h-4 text-white" /> 音声で再生
                     </button>
 
                     <div className="flex items-center gap-2">
@@ -321,7 +319,7 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
               onClick={() => speak(viText)}
               className="flex items-center gap-2 bg-slate-950 text-white font-bold text-sm px-5 py-2.5 rounded-full shadow-lg hover:bg-slate-800 active:scale-95 transition-all"
             >
-              <SpeakerWaveIcon className="w-5 h-5 text-amber-400" /> 音声再生 🔊
+              <Volume2 className="w-5 h-5 text-amber-400" /> 音声再生 🔊
             </button>
           </div>
 
@@ -330,19 +328,17 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
             <span className="text-sm font-black uppercase tracking-widest text-slate-800 bg-amber-300/80 px-4 py-1 rounded-full mb-6 border border-slate-900/20">
               VUI LÒNG ĐỌC CÂU NÀY
             </span>
-
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold leading-tight tracking-tight text-slate-950 max-w-4xl drop-shadow-xs">
+            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight text-slate-950 drop-shadow-xs max-w-4xl">
               {viText}
             </h1>
-
-            <p className="text-lg sm:text-xl font-medium text-slate-800 mt-8 max-w-2xl border-t border-slate-950/20 pt-4">
-              🇯🇵 {jaText}
+            <p className="text-slate-800 text-lg sm:text-xl font-bold mt-6 opacity-80">
+              {jaText}
             </p>
           </div>
 
-          {/* Bottom Notice */}
-          <div className="text-center text-xs sm:text-sm font-bold text-slate-800/80 bg-amber-300/60 py-3 rounded-2xl border border-slate-900/10">
-            この画面を店員さんやタクシーの運転手さんに見せてあげましょう。
+          {/* Bottom Hint */}
+          <div className="text-center text-xs sm:text-sm font-bold text-slate-800 opacity-70">
+            ベトナム人の店員・ドライバーに見せてください 🏮
           </div>
         </div>
       )}

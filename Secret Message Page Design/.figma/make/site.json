@@ -1,0 +1,10 @@
+{
+  "description": "Unlock a warm, elegant hidden message tailored for Japanese travelers to Hoi An and Da Nang, offering a personal and memorable surprise within the travel guide.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

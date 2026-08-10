@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X, ArrowRightLeft, Coins, Gift } from 'lucide-react'
-import { BanknotesIcon, ArrowsRightLeftIcon, GlobeAsiaAustraliaIcon, LanguageIcon } from '@heroicons/react/24/outline'
+import { Home, MessageCircle, UtensilsCrossed, AlertTriangle, Camera, Globe, Menu, X, ArrowRightLeft, Coins, Gift, Heart, Languages, Banknote } from 'lucide-react'
 import { type Tab, sky } from '@/types'
 import HomePage from '@/pages/HomePage'
 import KaiwaPage from '@/pages/KaiwaPage'
@@ -11,6 +10,9 @@ import GreenSMPage from '@/pages/GreenSMPage'
 import OmiyagePage from '@/pages/OmiyagePage'
 import CurrencyConverter from '@/components/CurrencyConverter'
 import TranslatorModal from '@/components/TranslatorModal'
+import SecretMessagePage from '@/components/SecretMessagePage'
+import FavoritesModal from '@/components/FavoritesModal'
+import { useFavorites } from '@/hooks/useFavorites'
 
 // ─── Background video config ───────────────────────────────────
 const BG_VIDEO_URL = 'https://res.cloudinary.com/dbjejsbh7/video/upload/v1786176387/0808_1_jxq3gi.mp4'
@@ -164,6 +166,10 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [converterOpen, setConverterOpen] = useState(false)
   const [translatorOpen, setTranslatorOpen] = useState(false)
+  const [secretOpen, setSecretOpen] = useState(false)
+  const [favoritesOpen, setFavoritesOpen] = useState(false)
+
+  const { favorites, isFavorite, toggleFavorite, removeFavorite } = useFavorites()
 
   // Scroll to top on tab change
   useEffect(() => {
@@ -219,8 +225,10 @@ export default function App() {
     <div className={`flex flex-col h-full ${mobile ? 'p-4' : 'p-5'}`}>
       <div className="flex items-center gap-3 px-2 py-3 mb-6">
         <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xl font-bold"
+          className="w-10 h-10 rounded-xl flex items-center justify-center text-white text-xl font-bold cursor-pointer hover:scale-105 transition-transform"
           style={{ background: "url('https://www.freeiconspng.com/uploads/-earth-find-flight-fly-globe-map-travel-icon--icon-search-engine-4.png') no-repeat center center/cover" }}
+          onClick={() => setSecretOpen(true)}
+          title="秘密のページを開く"
         >
 
         </div>
@@ -232,14 +240,30 @@ export default function App() {
       <nav className="space-y-1 flex-1">
         {navItems.map((item) => <NavLink key={item.id} item={item} />)}
 
-        {/* Quick action buttons for Currency & Translator */}
+        {/* Quick action buttons for Favorites, Currency & Translator */}
         <div className="pt-3 mt-2 border-t border-sky-100 space-y-2">
+          <button
+            onClick={() => { setFavoritesOpen(true); if (mobile) setSidebarOpen(false) }}
+            className="w-full flex items-center justify-between px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs"
+            style={{ background: 'linear-gradient(135deg, #f43f5e, #e11d48)', color: 'white' }}
+          >
+            <div className="flex items-center gap-2">
+              <Heart size={15} className="fill-white" />
+              お気に入りリスト
+            </div>
+            {favorites.length > 0 && (
+              <span className="bg-white text-rose-600 px-2 py-0.5 rounded-full text-[10px] font-black">
+                {favorites.length}
+              </span>
+            )}
+          </button>
+
           <button
             onClick={() => { setTranslatorOpen(true); if (mobile) setSidebarOpen(false) }}
             className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-bold transition-all shadow-xs"
             style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', color: 'white' }}
           >
-            <LanguageIcon className="w-4 h-4" />
+            <Languages className="w-4 h-4" />
             日越 リアルタイム翻訳
           </button>
 
@@ -248,7 +272,7 @@ export default function App() {
             className="w-full flex items-center gap-2.5 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all shadow-xs"
             style={{ background: 'linear-gradient(135deg, #0ea5e9, #38bdf8)', color: 'white' }}
           >
-            <BanknotesIcon className="w-4 h-4" />
+            <Banknote className="w-4 h-4" />
             通貨両替計算機
           </button>
         </div>
@@ -257,7 +281,12 @@ export default function App() {
         <div className="px-4 py-2 text-xs text-slate-400 text-center">ホイアン・ダナン 完全ガイド</div>
       </div>
       <div className="mt-4 pt-4 border-t border-sky-100">
-        <div className="px-4 py-2 text-xs text-slate-400 text-center">Powered by セイリュウ</div>
+        <button
+          onClick={() => { setSecretOpen(true); if (mobile) setSidebarOpen(false) }}
+          className="w-full px-4 py-2 text-xs text-slate-400 text-center hover:text-sky-600 transition-colors"
+        >
+          Powered by セイリュウ ✦
+        </button>
       </div>
     </div>
   )
@@ -266,9 +295,9 @@ export default function App() {
     <>
       {activeTab === 'home' && <HomePage onNavigate={handleNavigate} />}
       {activeTab === 'kaiwa' && <KaiwaPage />}
-      {activeTab === 'gourmet' && <GourmetPage />}
-      {activeTab === 'spots' && <SpotsPage />}
-      {activeTab === 'omiyage' && <OmiyagePage />}
+      {activeTab === 'gourmet' && <GourmetPage isFavorite={isFavorite} toggleFavorite={toggleFavorite} />}
+      {activeTab === 'spots' && <SpotsPage isFavorite={isFavorite} toggleFavorite={toggleFavorite} />}
+      {activeTab === 'omiyage' && <OmiyagePage isFavorite={isFavorite} toggleFavorite={toggleFavorite} />}
       {activeTab === 'chui' && <ChuiPage onNavigate={handleNavigate} />}
       {activeTab === 'greensm' && <GreenSMPage onNavigate={handleNavigate} />}
     </>
@@ -276,10 +305,7 @@ export default function App() {
 
   return (
     <div className="min-h-dvh flex flex-col">
-      {/* ── Background video / image ──
-          Production: upload bg.mp4 to Cloudinary/S3, paste URL in BG_VIDEO_URL
-          Development: served from /bg.mp4 (public folder)
-      ── */}
+      {/* ── Background video / image ── */}
       <BgVideo />
 
       {/* ── Desktop (z-[1] so content is above blobs) ── */}
@@ -295,19 +321,39 @@ export default function App() {
             </div>
             <div className="flex items-center gap-2">
               <button
+                onClick={() => setSecretOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-50 hover:bg-amber-100 px-3 py-1.5 rounded-full border border-amber-200/80 transition-all hover:scale-105 active:scale-95 shadow-2xs group"
+                title="秘密のメッセージ 🏮"
+              >
+                <span className="text-amber-500 animate-pulse text-sm">🏮</span> 秘密のメッセージ
+              </button>
+              <button
+                onClick={() => setFavoritesOpen(true)}
+                className="flex items-center gap-1.5 text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 px-3 py-1.5 rounded-full border border-rose-200 transition-all hover:scale-105 active:scale-95 shadow-2xs relative"
+                title="お気に入りリストを見る"
+              >
+                <Heart size={14} className="fill-rose-500 text-rose-500" />
+                お気に入り
+                {favorites.length > 0 && (
+                  <span className="bg-rose-500 text-white text-[10px] font-black px-1.5 py-0.2 rounded-full ml-0.5">
+                    {favorites.length}
+                  </span>
+                )}
+              </button>
+              <button
                 onClick={() => setTranslatorOpen(true)}
                 className="flex items-center gap-1.5 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 px-3 py-1.5 rounded-full border border-amber-300 transition-colors shadow-2xs"
               >
-                <LanguageIcon className="w-4 h-4 text-amber-600" /> リアルタイム翻訳
+                <Languages className="w-4 h-4 text-amber-600" /> リアルタイム翻訳
               </button>
               <button
                 onClick={() => setConverterOpen(true)}
                 className="flex items-center gap-1.5 text-xs font-semibold text-sky-700 bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-full border border-sky-200 transition-colors shadow-2xs"
               >
-                <BanknotesIcon className="w-4 h-4 text-sky-500" /> 通貨両替
+                <Banknote className="w-4 h-4 text-sky-500" /> 通貨両替
               </button>
               <div className="flex items-center gap-1.5 text-xs text-slate-500 bg-slate-50 px-3 py-1.5 rounded-full border border-slate-200">
-                <GlobeAsiaAustraliaIcon className="w-4 h-4 text-sky-500" /> 日本語対応
+                <Globe className="w-4 h-4 text-sky-500" /> 日本語対応
               </div>
             </div>
           </header>
@@ -329,23 +375,40 @@ export default function App() {
             >
               <Menu size={20} className="text-slate-600" />
             </button>
-            <div className="flex items-center gap-2">
-              <GlobeAsiaAustraliaIcon className="w-5 h-5 text-sky-600" />
+            <button
+              onClick={() => setSecretOpen(true)}
+              className="flex items-center gap-1.5 text-left group"
+              title="秘密のメッセージ 🏮"
+            >
+              <span className="text-amber-500 animate-pulse text-base group-hover:scale-110 transition-transform">🏮</span>
               <span className="font-bold text-slate-800 text-sm">ベトナム旅行ガイド</span>
-            </div>
+            </button>
           </div>
           <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => setFavoritesOpen(true)}
+              className="flex items-center gap-1 text-xs font-bold text-rose-700 bg-rose-50 hover:bg-rose-100 px-2.5 py-1 rounded-full border border-rose-200 transition-colors relative"
+              title="お気に入りリスト"
+            >
+              <Heart size={13} className="fill-rose-500 text-rose-500" />
+              <span>保存</span>
+              {favorites.length > 0 && (
+                <span className="bg-rose-500 text-white text-[9px] font-black px-1.5 py-0.2 rounded-full">
+                  {favorites.length}
+                </span>
+              )}
+            </button>
             <button
               onClick={() => setTranslatorOpen(true)}
               className="flex items-center gap-1 text-xs font-bold text-amber-900 bg-amber-100 hover:bg-amber-200 px-2.5 py-1 rounded-full border border-amber-300 transition-colors"
             >
-              <LanguageIcon className="w-3.5 h-3.5 text-amber-700" /> 翻訳
+              <Languages className="w-3.5 h-3.5 text-amber-700" /> 翻訳
             </button>
             <button
               onClick={() => setConverterOpen(true)}
               className="flex items-center gap-1 text-xs font-bold text-sky-700 bg-sky-50 hover:bg-sky-100 px-2.5 py-1 rounded-full border border-sky-200 transition-colors"
             >
-              <BanknotesIcon className="w-3.5 h-3.5 text-sky-500" /> 両替
+              <Banknote className="w-3.5 h-3.5 text-sky-500" /> 両替
             </button>
           </div>
         </header>
@@ -399,6 +462,15 @@ export default function App() {
         </div>
       )}
 
+      {/* Favorites Modal Overlay */}
+      <FavoritesModal
+        isOpen={favoritesOpen}
+        onClose={() => setFavoritesOpen(false)}
+        favorites={favorites}
+        onRemoveFavorite={removeFavorite}
+        onNavigate={handleNavigate}
+      />
+
       {/* Currency Converter Modal Overlay */}
       {converterOpen && (
         <div
@@ -416,6 +488,13 @@ export default function App() {
 
       {/* Translator Modal */}
       {translatorOpen && <TranslatorModal onClose={() => setTranslatorOpen(false)} />}
+
+      {/* Secret Message Page Overlay */}
+      {secretOpen && (
+        <SecretMessagePage
+          onBack={() => setSecretOpen(false)}
+        />
+      )}
     </div>
   )
 }

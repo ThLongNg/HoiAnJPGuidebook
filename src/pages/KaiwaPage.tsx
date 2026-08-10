@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { AlertTriangle, Lightbulb } from 'lucide-react'
-import { LanguageIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { AlertTriangle, Lightbulb, Languages, Sparkles } from 'lucide-react'
 import { sky } from '@/types'
 import { SectionHeading, Card, SpeakButton, TipBox } from '@/components/Atoms'
 import { PhraseCard, AddressCard, OrderCard, ExpressionCard } from '@/components/Cards'
@@ -59,7 +58,7 @@ export default function KaiwaPage() {
       <div className="mb-6 bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-5 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white flex-shrink-0">
-            <LanguageIcon className="w-7 h-7" />
+            <Languages className="w-7 h-7" />
           </div>
           <div>
             <h3 className="font-bold text-base sm:text-lg leading-tight">日越 リアルタイム音声・文字翻訳</h3>
@@ -70,7 +69,7 @@ export default function KaiwaPage() {
           onClick={() => setShowTranslator(true)}
           className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-white text-slate-900 font-extrabold text-xs transition-all hover:bg-amber-100 active:scale-95 flex items-center justify-center gap-2 shadow-sm flex-shrink-0"
         >
-          <SparklesIcon className="w-4 h-4 text-amber-600" /> 翻訳ツールを開く
+          <Sparkles className="w-4 h-4 text-amber-600" /> 翻訳ツールを開く
         </button>
       </div>
 

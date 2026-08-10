@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
-import { ArrowRightLeft, RefreshCw, AlertCircle, Check, Edit2, X, Coins } from 'lucide-react'
-import { BanknotesIcon, ArrowsRightLeftIcon, CurrencyYenIcon, SparklesIcon } from '@heroicons/react/24/outline'
+import { ArrowRightLeft, RefreshCw, AlertCircle, Check, Edit2, X, Coins, Banknote, Sparkles } from 'lucide-react'
 import { sky } from '@/types'
 
 const CACHE_KEY = 'hoian_exchange_rate_data'
@@ -198,22 +197,22 @@ export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
   const topCurrencyLabel = isJpyTop ? '日本円 (JPY)' : 'ベトナムドン (VND)'
   const topBadgeIcon = isJpyTop ? (
     <span className="flex items-center gap-1 text-slate-700 font-bold bg-amber-100/70 px-2 py-0.5 rounded-md border border-amber-200">
-      <CurrencyYenIcon className="w-3.5 h-3.5 text-amber-600" /> 円
+      <Coins className="w-3.5 h-3.5 text-amber-600" /> 円
     </span>
   ) : (
     <span className="flex items-center gap-1 text-slate-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded-md border border-emerald-200">
-      <BanknotesIcon className="w-3.5 h-3.5 text-emerald-600" /> ドン
+      <Banknote className="w-3.5 h-3.5 text-emerald-600" /> ドン
     </span>
   )
 
   const bottomCurrencyLabel = isJpyTop ? 'ベトナムドン (VND)' : '日本円 (JPY)'
   const bottomBadgeIcon = isJpyTop ? (
     <span className="flex items-center gap-1 text-slate-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded-md border border-emerald-200">
-      <BanknotesIcon className="w-3.5 h-3.5 text-emerald-600" /> ドン
+      <Banknote className="w-3.5 h-3.5 text-emerald-600" /> ドン
     </span>
   ) : (
     <span className="flex items-center gap-1 text-slate-700 font-bold bg-amber-100/70 px-2 py-0.5 rounded-md border border-amber-200">
-      <CurrencyYenIcon className="w-3.5 h-3.5 text-amber-600" /> 円
+      <Coins className="w-3.5 h-3.5 text-amber-600" /> 円
     </span>
   )
 
@@ -233,7 +232,7 @@ export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
       <div className="flex items-center justify-between mb-4 pr-6">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-sky-100 flex items-center justify-center text-sky-600">
-            <ArrowsRightLeftIcon className="w-5 h-5" />
+            <ArrowRightLeft className="w-5 h-5" />
           </div>
           <h3 className="font-bold text-slate-800 text-lg">通貨両替計算機</h3>
         </div>

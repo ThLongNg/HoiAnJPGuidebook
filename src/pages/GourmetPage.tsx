@@ -2,9 +2,9 @@ import { useState } from 'react'
 import {
   MessageCircle, MapPin, Star, Flame, X, ExternalLink, Volume2,
   Navigation, Utensils, CookingPot, Sandwich, IceCream, Coffee,
-  Lightbulb, Clock, UtensilsCrossed,
+  Lightbulb, Clock, UtensilsCrossed, Heart,
 } from 'lucide-react'
-import { sky, MI_QUANG, CAO_LAU, COM_GA, HOI_AN_STREET } from '@/types'
+import { sky, MI_QUANG, CAO_LAU, COM_GA, HOI_AN_STREET, type FavoriteItem } from '@/types'
 import { SectionHeading, Card } from '@/components/Atoms'
 import { speak } from '@/utils/tts'
 
@@ -34,8 +34,8 @@ const foods: Food[] = [
     desc: 'ベトナム中部名物の麺料理。幅広の黄色い麺に、豚肉・エビ・ピーナッツをのせた一品。スープが少なく、具材の旨みが凝縮されている。',
     tip: 'ライスペーパーやハーブを一緒に入れて食べるのが現地流',
     restaurants: [
-      { name: 'Mì Quảng 1A', address: '1A Hải Phòng, Hội An', hours: '06:00–20:00', mapUrl: 'https://maps.google.com/?q=Mi+Quang+1A+Hoi+An' },
-      { name: 'Quán Bà Vị', address: '6 Trần Phú, Hội An', hours: '07:00–21:00', mapUrl: 'https://maps.google.com/?q=Mi+Quang+Ba+Vi+Hoi+An' },
+      { name: 'Mì Quảng Ông Hai - Mr. Hai Noodles', address: '6A Trương Minh Lượng, Hội An, Đà Nẵng, Việt Nam', hours: '08:00–21:00', mapUrl: 'https://maps.app.goo.gl/YruP9HsMBjPT55PG8' },
+      { name: 'Mì Quảng 92', address: '112A Đ. Trần Cao Vân, Hội An, Đà Nẵng, Việt Nam', hours: '06:30–20:00', mapUrl: 'https://maps.app.goo.gl/9oDqDv3oWUV8TVtY7' },
     ],
     orderPhrases: [
       { vn: 'Cho tôi một tô Mì Quảng.', reading: 'チョー トイ モット トー ミー クアン', jp: 'ミークアンを一杯ください。' },
@@ -49,8 +49,8 @@ const foods: Food[] = [
     desc: 'ホイアンでしか味わえない伝統麺。独特の歯ごたえある麺は、古都の井戸水で作ると言われている。豚の角煮・もやし・ハーブが絶妙。',
     tip: 'ホイアンを離れると同じ味は食べられない！',
     restaurants: [
-      { name: 'Cao Lầu Trung Bắc', address: '87 Trần Phú, Hội An', hours: '08:00–21:00', mapUrl: 'https://maps.google.com/?q=Cao+Lau+Trung+Bac+Hoi+An' },
-      { name: 'Quán Hà', address: '6 Trần Phú, Hội An', hours: '07:00–20:00', mapUrl: 'https://maps.google.com/?q=Quan+Ha+Cao+Lau+Hoi+An' },
+      { name: 'Quán Cao lầu Bá Lễ', address: '49/3 Trần Hưng Đạo, Hội An, Đà Nẵng', hours: '08:00–21:00', mapUrl: 'https://maps.app.goo.gl/ZyjkYtF6a5mJu57U8' },
+      { name: 'Quán Cao Lầu Thanh', address: '26 Thái Phiên, Hội An, Đà Nẵng, Việt Nam', hours: '07:00–19:00', mapUrl: 'https://maps.app.goo.gl/mK6ntNZ5u9MZ85V89' },
     ],
     orderPhrases: [
       { vn: 'Cho tôi một tô Cao Lầu.', reading: 'チョー トイ モット トー カオ ラウ', jp: 'カオラウを一杯ください。' },
@@ -327,10 +327,22 @@ function FoodModal({ food, onClose }: { food: Food; onClose: () => void }) {
 }
 
 // ─── Food card (thumbnail) ───────────────────────────────────────
-function FoodDetailCard({ food, delay, onClick }: { food: Food; delay: number; onClick: () => void }) {
+function FoodDetailCard({
+  food,
+  delay,
+  onClick,
+  isFav,
+  onToggleFav,
+}: {
+  food: Food
+  delay: number
+  onClick: () => void
+  isFav?: boolean
+  onToggleFav?: () => void
+}) {
   return (
     <button
-      className="text-left w-full anim-up hover:shadow-md hover:-translate-y-0.5 transition-all rounded-2xl overflow-hidden cursor-pointer focus:outline-none"
+      className="text-left w-full anim-up hover:shadow-md hover:-translate-y-0.5 transition-all rounded-2xl overflow-hidden cursor-pointer focus:outline-none relative group"
       style={{ animationDelay: `${delay}s` } as React.CSSProperties}
       onClick={onClick}
     >
@@ -343,11 +355,25 @@ function FoodDetailCard({ food, delay, onClick }: { food: Food; delay: number; o
             onError={(e) => { (e.target as HTMLImageElement).src = 'https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=600&h=400&fit=crop' }}
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+          
+          {/* Heart button */}
+          {onToggleFav && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                onToggleFav()
+              }}
+              className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full bg-white/90 backdrop-blur-md flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
+            >
+              <Heart size={15} className={isFav ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
+            </button>
+          )}
+
           <div className="absolute bottom-2 left-3 bg-black/50 backdrop-blur-sm text-white text-xs px-2 py-1 rounded-full">
             {food.price}
           </div>
           {food.spicy && (
-            <div className="absolute top-2 right-2 bg-red-500 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1">
+            <div className={`absolute top-2 ${onToggleFav ? 'right-12' : 'right-2'} bg-red-500 text-white text-xs px-2 py-0.5 rounded-full flex items-center gap-1`}>
               <Flame size={10} /> 辛い
             </div>
           )}
@@ -381,7 +407,12 @@ function FoodDetailCard({ food, delay, onClick }: { food: Food; delay: number; o
 }
 
 // ─── Page ────────────────────────────────────────────────────────
-export default function GourmetPage() {
+interface GourmetPageProps {
+  isFavorite?: (id: string) => boolean
+  toggleFavorite?: (item: FavoriteItem) => void
+}
+
+export default function GourmetPage({ isFavorite, toggleFavorite }: GourmetPageProps) {
   const [activeCategory, setActiveCategory] = useState<'all' | 'main' | 'snack' | 'sweet' | 'drink'>('all')
   const [selectedFood, setSelectedFood] = useState<Food | null>(null)
 
@@ -421,9 +452,34 @@ export default function GourmetPage() {
 
       {/* Food grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-8 anim-in" key={activeCategory}>
-        {filtered.map((food, i) => (
-          <FoodDetailCard key={food.vn} food={food} delay={i * 0.06} onClick={() => setSelectedFood(food)} />
-        ))}
+        {filtered.map((food, i) => {
+          const favId = `gourmet-${food.vn}`
+          const isFav = isFavorite ? isFavorite(favId) : false
+          return (
+            <FoodDetailCard
+              key={food.vn}
+              food={food}
+              delay={i * 0.06}
+              onClick={() => setSelectedFood(food)}
+              isFav={isFav}
+              onToggleFav={
+                toggleFavorite
+                  ? () =>
+                      toggleFavorite({
+                        id: favId,
+                        type: 'gourmet',
+                        title: food.name,
+                        titleVi: food.vn,
+                        categoryTag: food.price,
+                        priceOrArea: food.price,
+                        img: food.img,
+                        mapUrl: food.restaurants[0]?.mapUrl,
+                      })
+                  : undefined
+              }
+            />
+          )
+        })}
       </div>
 
       {/* Banner */}

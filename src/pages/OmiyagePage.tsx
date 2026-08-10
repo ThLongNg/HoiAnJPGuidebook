@@ -1,4 +1,5 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import {
   Heart,
   MapPin,
@@ -19,11 +20,14 @@ import {
   Gem,
   Tag,
   ExternalLink,
+  Moon,
+  X,
+  Layers,
 } from 'lucide-react'
-import { sky } from '@/types'
+import { sky, type FavoriteItem } from '@/types'
 import { SectionHeading } from '@/components/Atoms'
 
-type Category = 'すべて' | 'お菓子・食品' | '美容・コスメ' | '雑貨・工芸' | 'ファッション'
+type Category = 'すべて' | '中秋節月餅' | 'お菓子・食品' | '美容・コスメ' | '雑貨・工芸' | 'ファッション'
 
 interface Item {
   id: number
@@ -36,6 +40,21 @@ interface Item {
   desc: string
   img: string
   alt: string
+  isCollection?: boolean
+}
+
+interface MooncakeItem {
+  id: number
+  code: string
+  name: string
+  nameVi: string
+  priceJpy: string
+  priceVnd: string
+  typeGroup: '高級ギフト' | 'Lava流心' | '伝統焼き月餅' | '伝統モチ白餅' | 'ヘルシー＆キッズ'
+  tag: string
+  ingredients: string
+  desc: string
+  img: string
 }
 
 interface Shop {
@@ -49,7 +68,207 @@ interface Shop {
   mapUrl: string
 }
 
+const KINH_DO_MOONCAKE_IMG = 'https://th.bing.com/th/id/R.f6b0d6f6999a2b50ad299961f70e3833?rik=JgFIpjyrQllGsA&riu=http%3a%2f%2fmedia.vietq.vn%2ffiles%2fsu_that_banh_trung_thu_kinh_do.jpg&ehk=tmLaZh1JJrIITar8hXhQ1id5ef0JfIyX%2bwaFWQjsEWA%3d&risl=&pid=ImgRaw&r=0'
+
+const MOONCAKE_ITEMS: MooncakeItem[] = [
+  {
+    id: 1,
+    code: 'KC',
+    name: '【高級木箱】桂花望月 プレミアム中秋月餅ボックス (6個入)',
+    nameVi: 'Quế Hoa Vọng Nguyệt (Hộp 6 Bánh)',
+    priceJpy: '¥12,000',
+    priceVnd: '2,000,000 VND',
+    typeGroup: '高級ギフト',
+    tag: '中秋高級限定',
+    ingredients: 'キンモクセイ（桂花）エキス、フカヒレ、燕の巣、塩漬け卵黄',
+    desc: 'Kinh Đô最高級の中秋限定ギフト。金箔をあしらった豪華木箱に贅沢な特製餡が詰まった至高のアソート。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 2,
+    code: 'LAVA6',
+    name: 'Lavaとろける塩卵カスタード流心月餅 (6個入)',
+    nameVi: 'Hộp Lava Trứng Chảy (Hộp 6 Bánh)',
+    priceJpy: '¥3,000',
+    priceVnd: '500,000 VND',
+    typeGroup: 'Lava流心',
+    tag: 'SNS話題 No.1',
+    ingredients: '塩漬け卵黄（咸蛋）、バターカスタード、生クリーム',
+    desc: 'カットした瞬間に濃厚な塩卵カスタードのソースがとろ〜り溢れ出る現代風大人気月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 3,
+    code: 'MINI4',
+    name: 'ミニLavaとろけるカスタード月餅 (4個入)',
+    nameVi: 'Hộp Mini Lava Tan Chảy (Hộp 4 Bánh)',
+    priceJpy: '¥900',
+    priceVnd: '150,000 VND',
+    typeGroup: 'Lava流心',
+    tag: '手軽なお試し',
+    ingredients: 'とろけるカスタード餡、塩漬け卵黄',
+    desc: '一口サイズで食べやすいミニ流心月餅。女子旅のおやつや気軽なバラマキお配り用にも重宝。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 4,
+    code: 'T6',
+    name: '日本の雪餅・モチモチスノー月餅 (6個入)',
+    nameVi: 'Hộp Bánh Trung Thu Tuyết (Hộp 6 Bánh)',
+    priceJpy: '¥3,000',
+    priceVnd: '500,000 VND',
+    typeGroup: '伝統モチ白餅',
+    tag: 'ひんやり食感',
+    ingredients: '求肥もち米皮、抹茶餡、柚子ペースト',
+    desc: '和菓子の求肥もちの技術を取り入れたひんやりモチモチした新感覚の和風月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 5,
+    code: 'HQD',
+    name: '【Combo 4個入】富貴満堂 定番中秋月餅ボックス',
+    nameVi: 'Hộp Bánh Phú Quý Mãn Đường (Combo 4 Bánh)',
+    priceJpy: '¥3,318',
+    priceVnd: '553,000 VND',
+    typeGroup: '高級ギフト',
+    tag: '定番人気ギフト',
+    ingredients: '五目五穀、ローストチキン、緑豆餡、ハスの実餡',
+    desc: 'ベトナムで最も親しまれている伝統の焼き月餅4種セット。贈答用に最適。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 6,
+    code: '24',
+    name: '【ずっしり800g!】XOソースチキン＆塩卵4個入り特大焼き月餅',
+    nameVi: 'Bánh Nướng Gà Quay Sốt XO 4 Trứng (800g)',
+    priceJpy: '¥2,628',
+    priceVnd: '438,000 VND',
+    typeGroup: '伝統焼き月餅',
+    tag: '塩卵4個入り豪華版',
+    ingredients: '塩漬け卵黄4個、XOソースローストチキン、スイカの種、ハスの実',
+    desc: '重さ800gの超ビッグサイズ！ご家族で切り分けて楽しむ伝統月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 7,
+    code: 'B',
+    name: '高級アワビ（鮑）＆ローストチキン特製焼き月餅',
+    nameVi: 'Bánh Nướng Bào Ngư (2 Trứng - 210g)',
+    priceJpy: '¥1,128',
+    priceVnd: '188,000 VND',
+    typeGroup: '伝統焼き月餅',
+    tag: '高級アワビ入り',
+    ingredients: 'アワビ（鮑）、ローストチキン、ハスの実、塩漬け卵黄2個',
+    desc: '贅沢な海の幸アワビの旨みと塩卵が引き立つ最高級焼き月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 8,
+    code: '4',
+    name: 'ベトナム伝統風五目サラミ＆ナッツ焼き月餅',
+    nameVi: 'Bánh Nướng Lạp Xưởng Ngũ Hạt (2 Trứng - 210g)',
+    priceJpy: '¥828',
+    priceVnd: '138,000 VND',
+    typeGroup: '伝統焼き月餅',
+    tag: 'ベトナム王道の味',
+    ingredients: 'ベトナムサラミ（Lạp Xưởng）、アーモンド、スイカの種、塩卵2個',
+    desc: '香ばしいナッツと甘塩っぱいサラミのバランスが絶妙な王道伝統餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 9,
+    code: 'T',
+    name: 'ハスの実餡＆宇治抹茶ペースト焼き月餅',
+    nameVi: 'Bánh Nướng Hạt Sen Trà Xanh (210g)',
+    priceJpy: '¥690',
+    priceVnd: '115,000 VND',
+    typeGroup: '伝統焼き月餅',
+    tag: '女子旅一番人気',
+    ingredients: 'ベトナム特産ハスの実ペースト、上品な抹茶風味餡',
+    desc: '自然なやさしい甘みとほのかな苦みが調和した甘さ控えめな人気月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 10,
+    code: 'C1',
+    name: '若もち米（コム）＆シャキシャキココナッツ焼き月餅',
+    nameVi: 'Bánh Nướng Cốm Dừa (0 Trứng - 150g)',
+    priceJpy: '¥444',
+    priceVnd: '74,000 VND',
+    typeGroup: '伝統焼き月餅',
+    tag: '名物コム＆ココナッツ',
+    ingredients: 'ハノイ風若もち米（Cốm）、シャキシャキココナッツ果肉',
+    desc: '爽やかな新米の香りとココナッツの心地よい食感が楽しめる爽やかスイーツ。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 11,
+    code: '82',
+    name: '【伝統白もち】ハスの実＆スイカの種入り バインデオ',
+    nameVi: 'Bánh Dẻo Hạt Sen Hạt Dưa (1 Trứng - 230g)',
+    priceJpy: '¥510',
+    priceVnd: '85,000 VND',
+    typeGroup: '伝統モチ白餅',
+    tag: '伝統白もち（Bánh Dẻo）',
+    ingredients: 'もち米パウダー、ハスの実ペースト、スイカの種、塩卵1個',
+    desc: 'ベトナム伝統のしっとり柔らかい白いお餅皮（バインデオ）でなめらかなハスの実餡を包んだ一品。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 12,
+    code: '99',
+    name: '【伝統白もち】トロピカル芳醇ドリアン白もち月餅',
+    nameVi: 'Bánh Dẻo Sầu Riêng (0 Trứng - 180g)',
+    priceJpy: '¥372',
+    priceVnd: '62,000 VND',
+    typeGroup: '伝統モチ白餅',
+    tag: '南国ドリアン風味',
+    ingredients: '南国フルーツ王ドリアン餡、もち米パウダー',
+    desc: '濃厚な香りとクリーミーな甘みがモチモチの皮からあふれる南国ならではの伝統もち月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 13,
+    code: 'XHS',
+    name: '【精進・ヘルシー】ハスの実＆チアシードのヴィーガン月餅',
+    nameVi: 'Bánh Ăn Chay Hạt Sen Hạt Chia (150g)',
+    priceJpy: '¥480',
+    priceVnd: '80,000 VND',
+    typeGroup: 'ヘルシー＆キッズ',
+    tag: '精進・チアシード入り',
+    ingredients: '有機チアシード、天然ハスの実餡、ひまわり油',
+    desc: '砂糖控えめで動物性食材ゼロ。ヘルシー志向の方や精進料理好きな方に。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+  {
+    id: 14,
+    code: 'LV',
+    name: '【可愛いミニ月餅】金獅子舞デザイン チョコ月餅',
+    nameVi: 'Bánh Trung Thu Thiếu Nhi Lân Vàng (60g)',
+    priceJpy: '¥210',
+    priceVnd: '35,000 VND',
+    typeGroup: 'ヘルシー＆キッズ',
+    tag: '可愛い金獅子型',
+    ingredients: 'チョコレートカスタード、小麦粉',
+    desc: '中秋節の踊り「金獅子舞（Lân Vàng）」をモチーフにしたキュートなお子様・可愛いお土産用ミニ月餅。',
+    img: KINH_DO_MOONCAKE_IMG,
+  },
+]
+
 const ITEMS: Item[] = [
+  {
+    id: 100,
+    name: 'ベトナム伝統中秋節月餅コレクション',
+    nameVi: 'Bánh Trung Thu Kinh Đô (Bộ sưu tập 14 loại)',
+    priceJpy: '¥210〜',
+    priceVnd: '35,000 VND〜',
+    category: '中秋節月餅',
+    tag: '中秋節 限定14選 🥮',
+    desc: '【タップして全14種類を一覧表示 🥮】伝統の焼き月餅（Bánh Nướng）、モチモチ白餅（Bánh Dẻo）、Lava流心卵、高級木箱まで厳選14種類の月餅コレクション。',
+    img: KINH_DO_MOONCAKE_IMG,
+    alt: 'Bánh Trung Thu Collection',
+    isCollection: true,
+  },
   {
     id: 1,
     name: 'Pheva（フェバ）高級チョコレート',
@@ -279,24 +498,71 @@ const TIPS = [
 
 const CATEGORY_ICONS: Record<Category, React.ReactNode> = {
   'すべて': <Filter size={14} />,
+  '中秋節月餅': <Moon size={14} className="text-amber-500 fill-amber-400" />,
   'お菓子・食品': <UtensilsCrossed size={14} />,
   '美容・コスメ': <Sparkles size={14} />,
   '雑貨・工芸': <Gem size={14} />,
   'ファッション': <Shirt size={14} />,
 }
 
-const CATEGORIES: Category[] = ['すべて', 'お菓子・食品', '美容・コスメ', '雑貨・工芸', 'ファッション']
+const CATEGORIES: Category[] = ['すべて', '中秋節月餅', 'お菓子・食品', '美容・コスメ', '雑貨・工芸', 'ファッション']
 
-export default function OmiyagePage() {
+interface OmiyagePageProps {
+  isFavorite?: (id: string) => boolean
+  toggleFavorite?: (item: FavoriteItem) => void
+}
+
+export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageProps) {
   const [activeCategory, setActiveCategory] = useState<Category>('すべて')
-  const [hearts, setHearts] = useState<Record<number, boolean>>({})
+  const [localHearts, setLocalHearts] = useState<Record<number, boolean>>({})
   const [activeTab, setActiveTab] = useState<'items' | 'shops'>('items')
+  const [isMooncakeModalOpen, setIsMooncakeModalOpen] = useState(false)
+  const [mooncakeGroup, setMooncakeGroup] = useState<string>('すべて')
+
+  useEffect(() => {
+    if (isMooncakeModalOpen) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [isMooncakeModalOpen])
 
   const filtered = activeCategory === 'すべて' ? ITEMS : ITEMS.filter((i) => i.category === activeCategory)
-  const wishCount = Object.values(hearts).filter(Boolean).length
+
+  function checkFav(id: number) {
+    if (isFavorite) {
+      return isFavorite(`omiyage-${id}`)
+    }
+    return !!localHearts[id]
+  }
+
+  function handleToggleFav(item: Item) {
+    if (toggleFavorite) {
+      toggleFavorite({
+        id: `omiyage-${item.id}`,
+        type: 'omiyage',
+        title: item.name,
+        titleVi: item.nameVi,
+        categoryTag: item.tag,
+        priceOrArea: item.priceJpy,
+        img: item.img,
+      })
+    } else {
+      setLocalHearts((prev) => ({ ...prev, [item.id]: !prev[item.id] }))
+    }
+  }
+
+  const wishCount = ITEMS.filter((i) => checkFav(i.id)).length
+
+  const filteredMooncakes = mooncakeGroup === 'すべて'
+    ? MOONCAKE_ITEMS
+    : MOONCAKE_ITEMS.filter((m) => m.typeGroup === mooncakeGroup)
 
   function toggleHeart(id: number) {
-    setHearts((prev) => ({ ...prev, [id]: !prev[id] }))
+    setLocalHearts((prev) => ({ ...prev, [id]: !prev[id] }))
   }
 
   return (
@@ -322,9 +588,9 @@ export default function OmiyagePage() {
       </div>
 
       {/* Hero Banner matching app sky theme */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-violet-400 via-violet-300 to-sky-300 p-6 sm:p-8 text-white shadow-md">
+      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-pink-300 via-sky-400 to-sky-500 p-6 sm:p-8 text-white shadow-md">
         <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1 text-xs font-bold mb-3 border border-white/30">
+          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1   text-xs font-bold mb-3 border border-white/30">
             <Sparkles className="w-3.5 h-3.5 text-amber-200" /> TRAVEL SOUVENIR GUIDE
           </div>
           <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight">
@@ -367,7 +633,12 @@ export default function OmiyagePage() {
             {CATEGORIES.map((c) => (
               <button
                 key={c}
-                onClick={() => setActiveCategory(c)}
+                onClick={() => {
+                  setActiveCategory(c)
+                  if (c === '中秋節月餅') {
+                    setIsMooncakeModalOpen(true)
+                  }
+                }}
                 className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === c
                   ? 'bg-slate-900 text-white shadow-xs'
                   : 'bg-white/80 text-slate-600 border border-sky-100 hover:bg-sky-50'
@@ -382,58 +653,214 @@ export default function OmiyagePage() {
           {/* Items Grid */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             {filtered.map((item) => (
-              <div
-                key={item.id}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl border border-sky-100 overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between"
-              >
-                <div>
-                  {/* Image & Badges */}
-                  <div className="relative h-48 bg-slate-100 overflow-hidden">
-                    <img src={item.img} alt={item.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+              item.isCollection ? (
+                <div
+                  key={item.id}
+                  onClick={() => setIsMooncakeModalOpen(true)}
+                  className="bg-white/90 backdrop-blur-sm rounded-3xl border-2 border-amber-400/80 overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between cursor-pointer group relative"
+                >
+                  <div>
+                    {/* Image & Badges */}
+                    <div className="relative h-48 bg-slate-100 overflow-hidden">
+                      <img src={item.img} alt={item.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
 
-                    {/* Tag badge */}
-                    <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-sky-700 shadow-2xs flex items-center gap-1 border border-white/40">
-                      <Star size={11} className="fill-amber-400 text-amber-400" />
-                      {item.tag}
-                    </div>
+                      {/* Tag badge */}
+                      <div className="absolute top-3 left-3 bg-amber-500 text-white font-bold text-[11px] px-2.5 py-1 rounded-full shadow-2xs flex items-center gap-1 border border-white/40">
+                        <Moon size={11} className="fill-amber-200 text-amber-200" />
+                        {item.tag}
+                      </div>
 
-                    {/* Heart button */}
-                    <button
-                      onClick={() => toggleHeart(item.id)}
-                      className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
-                    >
-                      <Heart size={16} className={hearts[item.id] ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
-                    </button>
+                      {/* Heart button */}
+                      <button
+                        onClick={(e) => { e.stopPropagation(); handleToggleFav(item) }}
+                        className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
+                      >
+                        <Heart size={16} className={checkFav(item.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
+                      </button>
 
-                    {/* Category name bottom */}
-                    <div className="absolute bottom-3 left-3 text-[11px] font-semibold text-white bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
-                      {item.category}
-                    </div>
-                  </div>
-
-                  {/* Body Info */}
-                  <div className="p-5">
-                    <div className="flex items-start justify-between gap-2 mb-1">
-                      <h3 className="font-bold text-slate-900 text-sm leading-snug">{item.name}</h3>
-                      <div className="text-right flex-shrink-0">
-                        <span className="font-bold text-sky-600 text-sm">{item.priceJpy}</span>
-                        <div className="text-[10px] text-slate-400 font-semibold">{item.priceVnd}</div>
+                      {/* Category name bottom */}
+                      <div className="absolute bottom-3 left-3 text-[11px] font-semibold text-white bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
+                        {item.category}
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-1 text-[11px] text-sky-500 font-medium italic mb-2.5">
-                      <ChevronRight size={12} />
-                      <span>{item.nameVi}</span>
-                    </div>
+                    {/* Body Info */}
+                    <div className="p-5">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-amber-600 transition-colors">{item.name}</h3>
+                        <div className="text-right flex-shrink-0">
+                          <span className="font-bold text-amber-600 text-sm">{item.priceJpy}</span>
+                          <div className="text-[10px] text-slate-400 font-semibold">{item.priceVnd}</div>
+                        </div>
+                      </div>
 
-                    <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                      <div className="flex items-center gap-1 text-[11px] text-amber-600 font-medium italic mb-2.5">
+                        <ChevronRight size={12} />
+                        <span>{item.nameVi}</span>
+                      </div>
+
+                      <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+
+                  <div className="px-5 pb-5 pt-0">
+                    <div className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+                      <Layers size={15} />
+                      <span>全14種類の月餅コレクションを開く</span>
+                    </div>
                   </div>
                 </div>
-              </div>
+              ) : (
+                <div
+                  key={item.id}
+                  className="bg-white/90 backdrop-blur-sm rounded-3xl border border-sky-100 overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between"
+                >
+                  <div>
+                    {/* Image & Badges */}
+                    <div className="relative h-48 bg-slate-100 overflow-hidden">
+                      <img src={item.img} alt={item.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+
+                      {/* Tag badge */}
+                      <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-sky-700 shadow-2xs flex items-center gap-1 border border-white/40">
+                        <Star size={11} className="fill-amber-400 text-amber-400" />
+                        {item.tag}
+                      </div>
+
+                      {/* Heart button */}
+                      <button
+                        onClick={() => handleToggleFav(item)}
+                        className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
+                      >
+                        <Heart size={16} className={checkFav(item.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
+                      </button>
+
+                      {/* Category name bottom */}
+                      <div className="absolute bottom-3 left-3 text-[11px] font-semibold text-white bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
+                        {item.category}
+                      </div>
+                    </div>
+
+                    {/* Body Info */}
+                    <div className="p-5">
+                      <div className="flex items-start justify-between gap-2 mb-1">
+                        <h3 className="font-bold text-slate-900 text-sm leading-snug">{item.name}</h3>
+                        <div className="text-right flex-shrink-0">
+                          <span className="font-bold text-sky-600 text-sm">{item.priceJpy}</span>
+                          <div className="text-[10px] text-slate-400 font-semibold">{item.priceVnd}</div>
+                        </div>
+                      </div>
+
+                      <div className="flex items-center gap-1 text-[11px] text-sky-500 font-medium italic mb-2.5">
+                        <ChevronRight size={12} />
+                        <span>{item.nameVi}</span>
+                      </div>
+
+                      <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                    </div>
+                  </div>
+                </div>
+              )
             ))}
           </div>
         </div>
+      )}
+
+      {/* Mooncake Full Collection Gallery Modal */}
+      {isMooncakeModalOpen && createPortal(
+        <div className="fixed inset-0 z-[9999] p-3 sm:p-6 bg-slate-900/75 backdrop-blur-md overflow-y-auto flex items-start justify-center">
+          <div className="bg-white/95 backdrop-blur-2xl border border-amber-300/60 rounded-3xl max-w-4xl w-full shadow-2xl overflow-hidden text-slate-800 relative my-4 sm:my-8">
+            {/* Modal Header */}
+            <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 p-4 sm:p-6 flex items-start justify-between relative text-white border-b border-amber-300/40">
+              <div className="pr-4">
+                <div className="inline-flex items-center gap-1.5 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold text-amber-100 mb-2 border border-white/20">
+                  <Moon size={13} className="fill-amber-200 text-amber-200" />
+                  中秋節（Tết Trung Thu）限定月餅
+                </div>
+                <h2 className="text-lg sm:text-2xl font-black text-white leading-snug">
+                  🥮 ベトナム伝統 Kinh Đô 月餅コレクション 14選
+                </h2>
+                <p className="text-[11px] sm:text-xs text-white/90 mt-1 leading-relaxed">
+                  伝統焼き月餅からとろける流心Lava、モチモチ白餅、ヘルシー精進餡まで全種類一覧
+                </p>
+              </div>
+              <button
+                onClick={() => setIsMooncakeModalOpen(false)}
+                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border border-white/20 flex-shrink-0"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* Group Sub-Filter Pills */}
+            <div className="p-3 sm:p-4 bg-amber-50/80 border-b border-amber-100 flex gap-2 overflow-x-auto scrollbar-none sticky top-0 z-20 backdrop-blur-md">
+              {(['すべて', '高級ギフト', 'Lava流心', '伝統焼き月餅', '伝統モチ白餅', 'ヘルシー＆キッズ'] as const).map((group) => (
+                <button
+                  key={group}
+                  onClick={() => setMooncakeGroup(group)}
+                  className={`px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${mooncakeGroup === group
+                    ? 'bg-amber-500 text-white shadow-xs scale-105'
+                    : 'bg-white text-slate-600 border border-amber-200/80 hover:bg-amber-100/60'
+                    }`}
+                >
+                  {group === 'すべて' ? `すべて (14)` : group}
+                </button>
+              ))}
+            </div>
+
+            {/* Modal Items Grid */}
+            <div className="p-3.5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/60">
+              {filteredMooncakes.map((mc) => (
+                <div
+                  key={mc.id}
+                  className="bg-white/95 backdrop-blur-sm rounded-2xl p-3.5 sm:p-4 border border-amber-200/70 flex flex-col gap-3 hover:border-amber-400 hover:shadow-md transition-all shadow-2xs relative overflow-hidden"
+                >
+                  <div className="w-full h-44 sm:h-36 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 relative">
+                    <img src={mc.img} alt={mc.name} className="w-full h-full object-cover" />
+                    <div className="absolute top-2 left-2 bg-amber-500/90 backdrop-blur-xs text-white px-2 py-0.5 rounded text-[10px] font-black shadow-2xs border border-white/30 z-10">
+                      Mã {mc.code}
+                    </div>
+                  </div>
+
+                  <div className="flex-1 flex flex-col justify-between min-w-0">
+                    <div>
+                      <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                        <span className="bg-amber-50 text-amber-700 border border-amber-200/80 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                          {mc.tag}
+                        </span>
+                      </div>
+                      <h4 className="font-bold text-slate-900 text-sm leading-snug break-words">{mc.name}</h4>
+                      <p className="text-[11px] text-amber-600 font-medium italic mt-0.5 break-words">{mc.nameVi}</p>
+                      <p className="text-[11px] text-slate-600 mt-2 leading-relaxed bg-amber-50/60 p-2.5 rounded-xl border border-amber-100/80">
+                        <strong className="text-amber-800 font-semibold">【主な原材料】:</strong> {mc.ingredients}
+                      </p>
+                    </div>
+
+                    <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                      <div>
+                        <span className="text-amber-600 font-extrabold text-sm sm:text-base">{mc.priceJpy}</span>
+                        <span className="text-[10px] sm:text-xs text-slate-400 font-semibold ml-1.5">({mc.priceVnd})</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-3.5 sm:p-4 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span className="truncate pr-2">🥮 Kinh Đô 月餅コレクション</span>
+              <button
+                onClick={() => setIsMooncakeModalOpen(false)}
+                className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2 rounded-full transition-all flex-shrink-0"
+              >
+                閉じる
+              </button>
+            </div>
+          </div>
+        </div>,
+        document.body
       )}
 
       {/* Sub-Tab 2: Souvenir Shops */}
