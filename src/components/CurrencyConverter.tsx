@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { ArrowRightLeft, RefreshCw, AlertCircle, Check, Edit2, X, Coins, Banknote, Sparkles } from 'lucide-react'
-import { sky } from '@/types'
 
 const CACHE_KEY = 'hoian_exchange_rate_data'
 const DEFAULT_JPY_TO_VND = 165 // Fallback: 1 JPY = 165 VND
@@ -102,268 +101,250 @@ export default function CurrencyConverter({ onClose }: CurrencyConverterProps) {
     loadRates()
   }, [])
 
-  // Recalculate bottom value based on top value
-  const recalculateFromTop = (valStr: string, jpyTop: boolean, currentRate: number) => {
-    const clean = valStr.replace(/,/g, '')
-    const num = parseFloat(clean)
-    if (isNaN(num) || num <= 0) {
+  const currentRate = parseFloat(customRate) || rateData.rate
+
+  const parseNum = (str: string): number => {
+    const cleaned = str.replace(/,/g, '').trim()
+    return parseFloat(cleaned) || 0
+  }
+
+  const formatNum = (num: number): string => {
+    if (isNaN(num) || num === 0) return ''
+    return Math.round(num).toLocaleString('en-US')
+  }
+
+  const recalculateFromTop = (valStr: string, jpyIsTop: boolean, rate: number) => {
+    const val = parseNum(valStr)
+    if (val === 0) {
       setBottomVal('')
       return
     }
-    if (jpyTop) {
-      // JPY -> VND
-      const res = Math.round(num * currentRate)
-      setBottomVal(res.toLocaleString('en-US'))
+    if (jpyIsTop) {
+      const vnd = val * rate
+      setBottomVal(formatNum(vnd))
     } else {
-      // VND -> JPY
-      const res = Math.round(num / currentRate)
-      setBottomVal(res.toLocaleString('en-US'))
+      const jpy = val / rate
+      setBottomVal(formatNum(jpy))
     }
   }
 
-  // Recalculate top value based on bottom value
-  const recalculateFromBottom = (valStr: string, jpyTop: boolean, currentRate: number) => {
-    const clean = valStr.replace(/,/g, '')
-    const num = parseFloat(clean)
-    if (isNaN(num) || num <= 0) {
+  const recalculateFromBottom = (valStr: string, jpyIsTop: boolean, rate: number) => {
+    const val = parseNum(valStr)
+    if (val === 0) {
       setTopVal('')
       return
     }
-    if (jpyTop) {
-      // Bottom is VND -> calculate JPY for Top
-      const res = Math.round(num / currentRate)
-      setTopVal(res.toLocaleString('en-US'))
+    if (jpyIsTop) {
+      const jpy = val / rate
+      setTopVal(formatNum(jpy))
     } else {
-      // Bottom is JPY -> calculate VND for Top
-      const res = Math.round(num * currentRate)
-      setTopVal(res.toLocaleString('en-US'))
+      const vnd = val * rate
+      setTopVal(formatNum(vnd))
     }
   }
 
-  const handleTopChange = (val: string) => {
-    const clean = val.replace(/,/g, '')
-    if (clean === '') {
-      setTopVal('')
-      setBottomVal('')
-      return
-    }
-    const formatted = parseFloat(clean).toLocaleString('en-US')
+  const handleTopChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value
+    const parsed = parseNum(raw)
+    const formatted = raw === '' ? '' : parsed.toLocaleString('en-US')
     setTopVal(formatted)
-    recalculateFromTop(clean, isJpyTop, rateData.rate)
+    recalculateFromTop(raw, isJpyTop, currentRate)
   }
 
-  const handleBottomChange = (val: string) => {
-    const clean = val.replace(/,/g, '')
-    if (clean === '') {
-      setBottomVal('')
-      setTopVal('')
-      return
-    }
-    const formatted = parseFloat(clean).toLocaleString('en-US')
+  const handleBottomChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const raw = e.target.value
+    const parsed = parseNum(raw)
+    const formatted = raw === '' ? '' : parsed.toLocaleString('en-US')
     setBottomVal(formatted)
-    recalculateFromBottom(clean, isJpyTop, rateData.rate)
+    recalculateFromBottom(raw, isJpyTop, currentRate)
   }
 
-  // 🔄 Swap button handler: Swaps top/bottom currencies and their values!
   const handleSwap = () => {
-    setIsJpyTop((prev) => !prev)
+    const nextJpyTop = !isJpyTop
+    setIsJpyTop(nextJpyTop)
     const oldTop = topVal
-    const oldBottom = bottomVal
-    setTopVal(oldBottom)
+    setTopVal(bottomVal)
     setBottomVal(oldTop)
   }
 
-  const handleApplyCustomRate = () => {
-    const parsed = parseFloat(customRate)
-    if (!isNaN(parsed) && parsed > 0) {
-      const newRateData = {
-        rate: parsed,
-        lastUpdated: '手動設定',
-        isLive: false,
-      }
-      setRateData(newRateData)
-      setIsEditingRate(false)
-      recalculateFromTop(topVal, isJpyTop, parsed)
+  const handlePresetJpy = (amount: number) => {
+    const formatted = amount.toLocaleString('en-US')
+    if (isJpyTop) {
+      setTopVal(formatted)
+      recalculateFromTop(formatted, true, currentRate)
+    } else {
+      setBottomVal(formatted)
+      recalculateFromBottom(formatted, false, currentRate)
     }
   }
 
-  const quickAmounts = [
-    { label: '20,000 đ', vnd: 20000, note: '灯籠 / 飲料' },
-    { label: '40,000 đ', vnd: 40000, note: 'カオラウ' },
-    { label: '120,000 đ', vnd: 120000, note: '旧市街チケット' },
-    { label: '200,000 đ', vnd: 200000, note: 'ボート体験' },
-  ]
+  const handlePresetVnd = (amount: number) => {
+    const formatted = amount.toLocaleString('en-US')
+    if (!isJpyTop) {
+      setTopVal(formatted)
+      recalculateFromTop(formatted, false, currentRate)
+    } else {
+      setBottomVal(formatted)
+      recalculateFromBottom(formatted, true, currentRate)
+    }
+  }
 
-  const topCurrencyLabel = isJpyTop ? '日本円 (JPY)' : 'ベトナムドン (VND)'
-  const topBadgeIcon = isJpyTop ? (
-    <span className="flex items-center gap-1 text-slate-700 font-bold bg-amber-100/70 px-2 py-0.5 rounded-md border border-amber-200">
-      <Coins className="w-3.5 h-3.5 text-amber-600" /> 円
-    </span>
-  ) : (
-    <span className="flex items-center gap-1 text-slate-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded-md border border-emerald-200">
-      <Banknote className="w-3.5 h-3.5 text-emerald-600" /> ドン
-    </span>
-  )
-
-  const bottomCurrencyLabel = isJpyTop ? 'ベトナムドン (VND)' : '日本円 (JPY)'
-  const bottomBadgeIcon = isJpyTop ? (
-    <span className="flex items-center gap-1 text-slate-700 font-bold bg-emerald-100/70 px-2 py-0.5 rounded-md border border-emerald-200">
-      <Banknote className="w-3.5 h-3.5 text-emerald-600" /> ドン
-    </span>
-  ) : (
-    <span className="flex items-center gap-1 text-slate-700 font-bold bg-amber-100/70 px-2 py-0.5 rounded-md border border-amber-200">
-      <Coins className="w-3.5 h-3.5 text-amber-600" /> 円
-    </span>
-  )
+  const handleSaveCustomRate = () => {
+    setIsEditingRate(false)
+    recalculateFromTop(topVal, isJpyTop, currentRate)
+  }
 
   return (
-    <div className="bg-white/95 backdrop-blur-xl border border-sky-100 rounded-3xl p-6 shadow-xl relative">
-      {/* Optional Close Button */}
-      {onClose && (
-        <button
-          onClick={onClose}
-          className="absolute top-4 right-4 w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
-        >
-          <X size={16} />
-        </button>
-      )}
-
+    <div className="bg-[#faf8f3] border border-[#e8e0d0] rounded-2xl shadow-xl p-5 font-sans relative">
       {/* Header */}
-      <div className="flex items-center justify-between mb-4 pr-6">
-        <div className="flex items-center gap-2.5">
-          <div className="w-9 h-9 rounded-xl bg-sky-100 flex items-center justify-center text-sky-600">
-            <ArrowRightLeft className="w-5 h-5" />
+      <div className="flex items-center justify-between mb-4 border-b border-[#e8e0d0] pb-3">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-lg bg-[#c8741a]/10 border border-[#c8741a]/30 text-[#c8741a] flex items-center justify-center">
+            <Coins size={18} />
           </div>
-          <h3 className="font-bold text-slate-800 text-lg">通貨両替計算機</h3>
+          <div>
+            <h3 className="font-serif text-lg font-normal text-[#1a1208]">ベトナムドン リアルタイム計算機</h3>
+            <p className="font-sans text-[10px] text-[#7a6447]">自動でリアルタイム為替レートを取得・現場で簡単入力</p>
+          </div>
+        </div>
+        {onClose && (
+          <button
+            onClick={onClose}
+            className="w-8 h-8 rounded-full bg-[#f5f1ea] hover:bg-[#e8e0d0] text-[#1a1208] flex items-center justify-center transition-colors cursor-pointer border border-[#e8e0d0]"
+          >
+            <X size={16} />
+          </button>
+        )}
+      </div>
+
+      {/* Exchange Rate Status & Edit Bar */}
+      <div className="mb-4 bg-[#f5f1ea] border border-[#e8e0d0] rounded-xl p-3 flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1 font-sans text-xs font-medium text-[#1a1208]">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            1 JPY = {currentRate.toFixed(2)} VND
+          </span>
+          <span className="font-sans text-[10px] text-[#7a6447]">
+            ({rateData.isLive ? `ライブ更新 ${rateData.lastUpdated}` : `参考レート`})
+          </span>
         </div>
 
-        {/* Live indicator & Refresh */}
         <div className="flex items-center gap-2">
+          <button
+            onClick={() => setIsEditingRate(!isEditingRate)}
+            className="font-sans text-xs text-[#c8741a] hover:underline flex items-center gap-1 cursor-pointer font-medium"
+          >
+            <Edit2 size={12} /> {isEditingRate ? '完了' : 'レート手動変更'}
+          </button>
           <button
             onClick={loadRates}
             disabled={loading}
-            className="flex items-center gap-1.5 text-xs text-slate-600 hover:text-sky-600 bg-slate-50 px-2.5 py-1 rounded-full border border-slate-200 transition-colors shadow-2xs"
-            title="レートを更新"
+            className="w-7 h-7 rounded-lg bg-[#faf8f3] border border-[#e8e0d0] text-[#7a6447] hover:text-[#1a1208] flex items-center justify-center transition-all cursor-pointer disabled:opacity-50"
+            title="最新レートを再取得"
           >
-            <RefreshCw size={12} className={loading ? 'animate-spin text-sky-500' : ''} />
-            <span className="flex items-center gap-1">
-              <span className={`w-2 h-2 rounded-full ${rateData.isLive ? 'bg-emerald-500 animate-pulse' : 'bg-amber-400'}`} />
-              {rateData.isLive ? 'リアルタイム' : 'キャッシュ'}
-            </span>
+            <RefreshCw size={12} className={loading ? 'animate-spin' : ''} />
           </button>
         </div>
       </div>
 
-      {/* Rate notice */}
-      <div className="flex items-center justify-between text-xs text-slate-500 bg-sky-50/70 border border-sky-100 px-3 py-2 rounded-2xl mb-4">
-        <div className="flex items-center gap-1.5">
-          <span className="font-semibold text-slate-700">1 JPY ≈ {rateData.rate.toFixed(2)} VND</span>
-          <span className="text-[10px] text-slate-400">({rateData.lastUpdated})</span>
-        </div>
-        <button
-          onClick={() => setIsEditingRate(!isEditingRate)}
-          className="text-sky-600 hover:underline flex items-center gap-1 font-medium"
-        >
-          <Edit2 size={11} /> レート変更
-        </button>
-      </div>
-
-      {/* Custom rate editor */}
+      {/* Manual Rate Editor Drawer */}
       {isEditingRate && (
-        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-3 mb-4 space-y-2 anim-in">
-          <div className="text-xs text-amber-800 font-semibold flex items-center gap-1">
-            <AlertCircle size={13} className="text-amber-600" /> 両替所の実際レートを手動入力
-          </div>
-          <div className="flex items-center gap-2">
-            <span className="text-xs text-slate-600">1 JPY =</span>
+        <div className="mb-4 p-3 bg-[#fffdf9] border-l-4 border-l-[#c8741a] border border-[#e8e0d0] rounded-xl flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2 flex-1">
+            <span className="font-sans text-xs text-[#1a1208] font-medium whitespace-nowrap">カスタムレート (1円=):</span>
             <input
               type="number"
               value={customRate}
               onChange={(e) => setCustomRate(e.target.value)}
-              className="w-24 px-2 py-1 bg-white border border-amber-300 rounded-lg text-sm font-bold text-slate-800 focus:outline-none focus:ring-1 focus:ring-amber-500"
+              className="w-24 bg-[#faf8f3] border border-[#e8e0d0] rounded-lg px-2.5 py-1 font-sans text-xs font-medium text-[#1a1208] focus:outline-none focus:border-[#c8741a]"
             />
-            <span className="text-xs text-slate-600">VND</span>
-            <button
-              onClick={handleApplyCustomRate}
-              className="px-3 py-1 bg-amber-500 text-white rounded-lg text-xs font-bold flex items-center gap-1 hover:bg-amber-600 transition-colors"
-            >
-              <Check size={12} /> 適用
-            </button>
+            <span className="font-sans text-xs text-[#7a6447]">VND</span>
           </div>
+          <button
+            onClick={handleSaveCustomRate}
+            className="px-3 py-1 bg-[#c8741a] text-white rounded-lg font-sans text-xs font-medium hover:bg-[#a85e12] transition-colors cursor-pointer"
+          >
+            保存
+          </button>
         </div>
       )}
 
-      {/* Input controls */}
+      {/* Inputs Area */}
       <div className="space-y-3">
-        {/* Top Field */}
-        <div className="bg-slate-50 border border-slate-200 focus-within:border-sky-400 focus-within:bg-white rounded-2xl p-3.5 transition-all">
-          <div className="text-xs text-slate-500 font-semibold mb-1 flex items-center justify-between">
-            <span>{topCurrencyLabel}</span>
-            {topBadgeIcon}
+        {/* Top Input Box */}
+        <div className="bg-[#f5f1ea] border border-[#e8e0d0] rounded-xl p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-serif text-lg">{isJpyTop ? '🇯🇵' : '🇻🇳'}</span>
+            <span className="font-serif text-sm font-medium text-[#1a1208]">{isJpyTop ? '日本円 (JPY)' : 'ベトナムドン (VND)'}</span>
           </div>
           <input
             type="text"
-            inputMode="numeric"
             value={topVal}
-            onChange={(e) => handleTopChange(e.target.value)}
+            onChange={handleTopChange}
             placeholder="0"
-            className="w-full bg-transparent text-xl font-bold text-slate-800 focus:outline-none"
+            className="text-right font-serif text-xl font-medium bg-transparent text-[#1a1208] focus:outline-none w-36"
           />
         </div>
 
-        {/* Switch direction button */}
+        {/* Swap Button */}
         <div className="flex justify-center -my-2 relative z-10">
           <button
             onClick={handleSwap}
-            className="w-10 h-10 bg-white border-2 border-sky-300 rounded-full flex items-center justify-center text-sky-600 shadow-md hover:bg-sky-50 hover:scale-110 active:scale-95 transition-all"
-            title="通貨と金額を入れ替え (Swap)"
+            className="w-9 h-9 rounded-full bg-[#c8741a] text-white shadow-md flex items-center justify-center transition-transform hover:scale-110 active:scale-95 cursor-pointer"
+            title="入れ替え"
           >
-            <ArrowRightLeft size={16} className="rotate-90 text-sky-500" />
+            <ArrowRightLeft size={16} className="rotate-90" />
           </button>
         </div>
 
-        {/* Bottom Field */}
-        <div className="bg-slate-50 border border-slate-200 focus-within:border-sky-400 focus-within:bg-white rounded-2xl p-3.5 transition-all">
-          <div className="text-xs text-slate-500 font-semibold mb-1 flex items-center justify-between">
-            <span>{bottomCurrencyLabel}</span>
-            {bottomBadgeIcon}
+        {/* Bottom Input Box */}
+        <div className="bg-[#f5f1ea] border border-[#e8e0d0] rounded-xl p-3 flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <span className="font-serif text-lg">{!isJpyTop ? '🇯🇵' : '🇻🇳'}</span>
+            <span className="font-serif text-sm font-medium text-[#1a1208]">{!isJpyTop ? '日本円 (JPY)' : 'ベトナムドン (VND)'}</span>
           </div>
           <input
             type="text"
-            inputMode="numeric"
             value={bottomVal}
-            onChange={(e) => handleBottomChange(e.target.value)}
+            onChange={handleBottomChange}
             placeholder="0"
-            className="w-full bg-transparent text-xl font-bold text-slate-800 focus:outline-none"
+            className="text-right font-serif text-xl font-medium bg-transparent text-[#c8741a] focus:outline-none w-44"
           />
         </div>
       </div>
 
-      {/* Quick preset buttons */}
-      <div className="mt-4 pt-3 border-t border-slate-100">
-        <div className="text-xs text-slate-400 font-medium mb-2">よく使う金額（タップで計算）:</div>
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-          {quickAmounts.map((q) => (
-            <button
-              key={q.vnd}
-              onClick={() => {
-                if (isJpyTop) {
-                  setBottomVal(q.vnd.toLocaleString('en-US'))
-                  recalculateFromBottom(q.vnd.toString(), true, rateData.rate)
-                } else {
-                  setTopVal(q.vnd.toLocaleString('en-US'))
-                  recalculateFromTop(q.vnd.toString(), false, rateData.rate)
-                }
-              }}
-              className="text-left bg-sky-50/70 hover:bg-sky-100 border border-sky-100 rounded-xl p-2 transition-all active:scale-95"
-            >
-              <div className="font-bold text-xs text-slate-800">{q.label}</div>
-              <div className="text-[10px]" style={{ color: sky[600] }}>
-                ≈ {Math.round(q.vnd / rateData.rate).toLocaleString()} JPY
-              </div>
-              <div className="text-[9px] text-slate-400 truncate mt-0.5">{q.note}</div>
-            </button>
-          ))}
+      {/* Quick Amount Presets */}
+      <div className="mt-4 pt-3 border-t border-[#e8e0d0]">
+        <div className="font-sans text-[11px] text-[#7a6447] font-medium mb-2">クイック選択（クリックで即計算）</div>
+
+        <div className="space-y-2">
+          {/* JPY Presets */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-sans text-[10px] text-[#7a6447] w-8">円:</span>
+            {[100, 500, 1000, 3000, 5000, 10000].map((amt) => (
+              <button
+                key={amt}
+                onClick={() => handlePresetJpy(amt)}
+                className="px-2.5 py-1 rounded-full font-sans text-xs font-medium bg-[#f5f1ea] text-[#1a1208] border border-[#e8e0d0] hover:bg-[#c8741a] hover:text-white transition-colors cursor-pointer"
+              >
+                ¥{amt.toLocaleString()}
+              </button>
+            ))}
+          </div>
+
+          {/* VND Presets */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-sans text-[10px] text-[#7a6447] w-8">ドン:</span>
+            {[20000, 50000, 100000, 200000, 500000].map((amt) => (
+              <button
+                key={amt}
+                onClick={() => handlePresetVnd(amt)}
+                className="px-2.5 py-1 rounded-full font-sans text-xs font-medium bg-[#f5f1ea] text-[#3d6b63] border border-[#e8e0d0] hover:bg-[#3d6b63] hover:text-white transition-colors cursor-pointer"
+              >
+                {(amt / 1000).toLocaleString()}k
+              </button>
+            ))}
+          </div>
         </div>
       </div>
     </div>

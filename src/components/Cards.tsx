@@ -16,20 +16,20 @@ export function PhraseCard({
 }) {
   return (
     <Card
-      className="anim-up p-5 hover:shadow-md hover:border-sky-200 transition-all"
+      className="anim-up p-5 hover:border-[#c8741a] transition-all bg-[#faf8f3]"
       style={{ animationDelay: `${delay}s` }}
     >
       <div className="flex items-start justify-between gap-4">
         <div className="flex-1">
-          <div className="text-xl font-bold text-slate-900">{vn}</div>
-          <div className="text-sm font-medium mt-0.5" style={{ color: sky[500] }}>
+          <div className="font-serif text-xl font-normal text-[#3d6b63]">{vn}</div>
+          <div className="font-sans text-xs font-medium mt-1 text-[#7a6447] tracking-[0.06em]">
             {reading}
           </div>
           <div className="mt-3 flex flex-wrap gap-2">
             {meanings.map((m) => (
               <span
                 key={m}
-                className="text-xs bg-sky-50 text-sky-700 px-3 py-1 rounded-full border border-sky-100"
+                className="font-sans text-xs bg-[#f5f1ea] text-[#1a1208] px-3 py-1 rounded-full border border-[#e8e0d0]"
               >
                 {m}
               </span>
@@ -59,19 +59,19 @@ export function AddressCard({
 }) {
   return (
     <div
-      className="anim-up flex items-center gap-4 rounded-2xl p-4 border border-sky-100 shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all cursor-pointer"
-      style={{ backgroundColor: bg, animationDelay: `${delay}s` } as React.CSSProperties}
+      className="anim-up flex items-center gap-4 rounded-2xl p-4 border border-[#e8e0d0] shadow-2xs hover:border-[#c8741a] transition-all cursor-pointer bg-[#faf8f3]"
+      style={{ animationDelay: `${delay}s` } as React.CSSProperties}
       onClick={() => speak(vn)}
     >
-      <div className="text-3xl w-12 h-12 flex items-center justify-center bg-white/70 rounded-xl flex-shrink-0">
+      <div className="text-2xl w-11 h-11 flex items-center justify-center bg-[#f5f1ea] rounded-xl flex-shrink-0 border border-[#e8e0d0]">
         {emoji}
       </div>
       <div className="flex-1">
-        <div className="text-lg font-bold text-slate-900">{vn}</div>
-        <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{reading}</div>
-        <div className="text-sm text-slate-500 mt-0.5">{jp}</div>
+        <div className="font-serif text-lg font-normal text-[#1a1208]">{vn}</div>
+        <div className="font-sans text-xs font-medium mt-0.5 text-[#3d6b63] tracking-[0.04em]">{reading}</div>
+        <div className="font-sans text-xs font-light text-[#7a6447] mt-0.5">{jp}</div>
       </div>
-      <Volume2 size={14} className="text-slate-400" />
+      <Volume2 size={14} className="text-[#7a6447]/60" />
     </div>
   )
 }
@@ -91,25 +91,24 @@ export function OrderCard({
 }) {
   return (
     <div
-      className="anim-up flex items-center bg-white rounded-2xl shadow-sm border border-sky-100 overflow-hidden hover:shadow-md hover:border-sky-200 transition-all cursor-pointer"
+      className="anim-up flex items-center bg-[#faf8f3] rounded-2xl shadow-2xs border border-[#e8e0d0] overflow-hidden hover:border-[#c8741a] transition-all cursor-pointer"
       style={{ animationDelay: `${delay}s` } as React.CSSProperties}
       onClick={() => speak(vn)}
     >
       <div
-        className="w-16 h-16 flex items-center justify-center flex-shrink-0"
-        style={{ background: `linear-gradient(135deg, ${sky[500]}, ${sky[400]})` }}
+        className="w-14 h-14 flex items-center justify-center flex-shrink-0 bg-[#c8741a]"
       >
-        <span className="text-2xl font-bold text-white">{num}</span>
+        <span className="font-serif text-xl font-medium text-white">{num}</span>
       </div>
       <div className="flex-1 px-4 py-3">
-        <div className="font-bold text-slate-900">{vn}</div>
-        <div className="text-xs mt-0.5 font-medium" style={{ color: sky[500] }}>
+        <div className="font-serif text-base font-normal text-[#1a1208]">{vn}</div>
+        <div className="font-sans text-xs mt-0.5 font-medium text-[#c8741a]">
           {reading}
         </div>
       </div>
       <div className="pr-4 flex items-center gap-2">
-        <span className="text-sm text-slate-400">{count}</span>
-        <Volume2 size={14} className="text-slate-300" />
+        <span className="font-sans text-xs text-[#7a6447]">{count}</span>
+        <Volume2 size={14} className="text-[#7a6447]/40" />
       </div>
     </div>
   )
@@ -130,25 +129,25 @@ export function ExpressionCard({
 }) {
   return (
     <Card
-      className="anim-up p-5 hover:shadow-md hover:border-sky-200 transition-all"
+      className="anim-up p-5 hover:border-[#c8741a] transition-all bg-[#faf8f3]"
       style={{ animationDelay: `${delay}s` }}
     >
       <div className="flex items-start justify-between gap-3">
         <div className="flex-1">
-          <div className="text-lg font-bold text-slate-900">{vn}</div>
-          <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{reading}</div>
-          <div className="text-sm text-slate-500 mt-1">{jp}</div>
+          <div className="font-serif text-lg font-normal text-[#1a1208]">{vn}</div>
+          <div className="font-sans text-xs font-medium mt-0.5 text-[#3d6b63]">{reading}</div>
+          <div className="font-sans text-xs font-light text-[#7a6447] mt-1">{jp}</div>
         </div>
         <SpeakButton text={vn} size={14} />
       </div>
       {sub && (
-        <div className="mt-4 pt-4 border-t border-sky-50 flex flex-wrap gap-2 items-center">
-          <span className="text-xs bg-sky-50 text-sky-700 px-2.5 py-1 rounded-full border border-sky-100">
+        <div className="mt-4 pt-3 border-t border-[#e8e0d0] flex flex-wrap gap-2 items-center">
+          <span className="font-sans text-xs bg-[#f5f1ea] text-[#3d6b63] px-2.5 py-1 rounded-full border border-[#e8e0d0]">
             {sub.vn} = {sub.jp}
           </span>
-          <ChevronRight size={12} className="text-sky-400" />
-          <span className="text-sm font-medium text-slate-700">{sub.example}</span>
-          <span className="text-xs text-slate-400">{sub.exJp}</span>
+          <ChevronRight size={12} className="text-[#c8741a]" />
+          <span className="font-sans text-xs font-medium text-[#1a1208]">{sub.example}</span>
+          <span className="font-sans text-xs text-[#7a6447]">{sub.exJp}</span>
         </div>
       )}
     </Card>
@@ -170,27 +169,27 @@ export function FoodCard({
 }) {
   return (
     <Card
-      className="anim-up overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all cursor-pointer group"
+      className="anim-up overflow-hidden hover:border-[#c8741a] hover:-translate-y-1 transition-all cursor-pointer group bg-[#faf8f3]"
       style={{ animationDelay: `${delay}s` }}
     >
-      <div className="relative h-52 bg-sky-100 overflow-hidden">
+      <div className="relative h-48 bg-[#e8e0d0] overflow-hidden">
         <img
           src={img}
           alt={name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/50 to-transparent" />
-        <span className="absolute bottom-3 left-3 text-xs font-bold text-white bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1208]/70 via-transparent to-transparent" />
+        <span className="absolute bottom-3 left-3 font-sans text-xs font-medium text-white bg-[#1a1208]/50 backdrop-blur-sm px-3 py-1 rounded-full border border-white/20">
           {num}
         </span>
       </div>
       <div className="p-5">
         <div className="flex items-center justify-between mb-2">
-          <div className="text-xl font-bold text-slate-900">{name}</div>
+          <div className="font-serif text-lg font-normal text-[#1a1208]">{name}</div>
           <SpeakButton text={name} size={14} />
         </div>
-        <p className="text-sm text-slate-500 leading-relaxed">{desc}</p>
+        <p className="font-sans text-xs font-light text-[#7a6447] leading-relaxed">{desc}</p>
       </div>
     </Card>
   )
@@ -219,43 +218,42 @@ export function SpotCard({
 }) {
   return (
     <Card
-      className="anim-up overflow-hidden hover:shadow-lg hover:-translate-y-1 transition-all group"
+      className="anim-up overflow-hidden hover:border-[#c8741a] hover:-translate-y-1 transition-all group bg-[#faf8f3]"
       style={{ animationDelay: `${delay}s` }}
     >
-      <div className="relative h-48 bg-sky-100 overflow-hidden">
+      <div className="relative h-48 bg-[#e8e0d0] overflow-hidden">
         <img
           src={img}
           alt={name}
           className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
           loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
-        <span className="absolute top-3 left-3 text-xs font-bold text-white bg-black/30 backdrop-blur-sm px-2.5 py-1 rounded-full flex items-center gap-1">
+        <div className="absolute inset-0 bg-gradient-to-t from-[#1a1208]/80 via-[#1a1208]/20 to-transparent" />
+        <span className="absolute top-3 left-3 font-sans text-[10px] font-medium text-white bg-[#1a1208]/50 backdrop-blur-sm px-2.5 py-1 rounded-full border border-white/20 uppercase tracking-wider flex items-center gap-1">
           <MapPin size={10} /> {area}
         </span>
         <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
           <div>
-            <div className="text-white font-bold text-base leading-tight">{nameJp}</div>
-            <div className="text-white/70 text-xs">{name}</div>
+            <div className="font-serif text-white font-normal text-lg leading-tight">{nameJp}</div>
+            <div className="font-sans text-white/70 text-xs font-light">{name}</div>
           </div>
-          <div className="flex items-center gap-1 bg-amber-400 text-white text-xs font-bold px-2 py-0.5 rounded-full">
+          <div className="flex items-center gap-1 bg-[#c8741a] text-white text-xs font-medium px-2 py-0.5 rounded-full">
             <Star size={10} fill="white" /> {rating}
           </div>
         </div>
       </div>
       <div className="p-5">
-        <div className="flex items-center gap-3 mb-3 text-xs text-slate-500">
+        <div className="flex items-center gap-3 mb-3 font-sans text-xs text-[#7a6447]">
           <span className="flex items-center gap-1">
             <Clock size={11} /> {time}
           </span>
         </div>
-        <p className="text-sm text-slate-600 leading-relaxed mb-4">{desc}</p>
+        <p className="font-sans text-xs font-light text-[#7a6447] leading-relaxed mb-4">{desc}</p>
         <a
           href={mapUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 text-xs font-semibold px-4 py-2 rounded-full transition-all hover:shadow-md"
-          style={{ backgroundColor: sky[50], color: sky[600], border: `1px solid ${sky[200]}` }}
+          className="inline-flex items-center gap-2 font-sans text-xs font-medium px-4 py-2 rounded-full transition-all hover:bg-[#c8741a] hover:text-white bg-[#f5f1ea] text-[#c8741a] border border-[#e8e0d0]"
           onClick={(e) => e.stopPropagation()}
         >
           <Navigation size={12} /> Google Mapsで開く
@@ -264,3 +262,4 @@ export function SpotCard({
     </Card>
   )
 }
+

@@ -1,30 +1,65 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500;600;700&family=Noto+Serif+JP:wght@300;400;500;600&family=Caveat:wght@400;500&family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&family=Caveat:wght@400;500&family=Inter:ital,opsz,wght@0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap');
 @import 'tailwindcss';
 
 @theme inline {
-  --font-sans: 'Inter', 'Noto Sans JP', sans-serif;
+  --color-background: #faf8f3;
+  --color-foreground: #1a1208;
+  --color-card: #f5f1ea;
+  --color-card-foreground: #2c1e0f;
+  --color-primary: #c8741a;
+  --color-primary-foreground: #faf8f3;
+  --color-secondary: #3d6b63;
+  --color-secondary-foreground: #faf8f3;
+  --color-muted: #e8e0d0;
+  --color-muted-foreground: #7a6447;
+  --color-accent: #d4960a;
+  --color-accent-foreground: #1a1208;
+  --color-border: #ddd5c0;
+  --color-ring: #c8741a;
+  --radius: 4px;
+
+  --font-sans: 'Noto Sans JP', 'Inter', sans-serif;
   --font-serif: 'Noto Serif JP', 'Hiragino Mincho ProN', 'Yu Mincho', serif;
   --font-hand: 'Caveat', cursive;
 }
 
 * {
   -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
 html {
-  font-family: 'Inter', 'Noto Sans JP', sans-serif;
+  font-family: 'Noto Sans JP', 'Inter', sans-serif;
   -webkit-font-smoothing: antialiased;
   scroll-behavior: smooth;
 }
 
 body {
-  background-color: #0a1628;
+  background-color: #faf8f3;
   min-height: 100dvh;
+  color: #1a1208;
   color-scheme: light;
 }
 
-/* Overlay for video background — đủ đậm để đọc được chữ */
-body::before {
+.font-serif {
+  font-family: 'Noto Serif JP', serif;
+}
+
+.font-sans {
+  font-family: 'Noto Sans JP', sans-serif;
+}
+
+/* Helper utilities for responsive navbar */
+@media (max-width: 768px) {
+  .hidden-mobile { display: none !important; }
+  .show-mobile { display: flex !important; }
+}
+@media (min-width: 769px) {
+  .show-mobile { display: none !important; }
+}
+
+/* Overlay for video background when on other tabs */
+body.bg-video-active::before {
   content: '';
   position: fixed;
   inset: 0;
@@ -51,7 +86,6 @@ body::before {
   opacity: 0.65;
 }
 
-/* Soft sky blue blob — top right */
 .bg-blobs::before {
   width: 550px;
   height: 550px;
@@ -61,7 +95,6 @@ body::before {
   animation: blobFloat1 14s ease-in-out infinite;
 }
 
-/* White / very light blue blob — top left */
 .bg-blobs::after {
   width: 500px;
   height: 500px;
@@ -134,7 +167,6 @@ body::before {
   75%       { transform: translate3d(40px, 50px, 0) scale(0.94); }
 }
 
-/* Mobile Performance Optimization: Disable heavy animated blur loops on low-power mobile GPUs */
 @media (max-width: 768px) {
   .bg-blobs::before,
   .bg-blobs::after,
@@ -144,7 +176,6 @@ body::before {
     transform: translate3d(0, 0, 0);
   }
 }
-
 
 ::-webkit-scrollbar {
   width: 4px;
@@ -227,7 +258,7 @@ body::before {
   animation: glow-pulse 3s ease-in-out infinite;
 }
 
-/* ── Fireflies Overlay (Đom đóm rực rỡ) ── */
+/* ── Fireflies Overlay ── */
 @keyframes firefly-float {
   0% {
     transform: translate3d(0, 0, 0) scale(0.6);
@@ -263,5 +294,6 @@ body::before {
   animation: firefly-float 14s ease-in-out infinite;
   z-index: 1;
 }
+
 
 

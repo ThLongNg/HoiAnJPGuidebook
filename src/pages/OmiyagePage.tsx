@@ -1,30 +1,11 @@
 import { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import {
-  Heart,
-  MapPin,
-  Clock,
-  ShoppingBag,
-  Store,
-  Lightbulb,
-  Sparkles,
-  Star,
-  ChevronRight,
-  Filter,
-  Wallet,
-  Package,
-  Plane,
-  Shirt,
-  FlaskConical,
-  UtensilsCrossed,
-  Gem,
-  Tag,
-  ExternalLink,
-  Moon,
-  X,
-  Layers,
+  Heart, MapPin, Clock, ShoppingBag, Store, Lightbulb, Sparkles, Star,
+  ChevronRight, Filter, Package, Plane, Shirt, FlaskConical, Gem, Tag,
+  ExternalLink, Moon, X, Layers, UtensilsCrossed,
 } from 'lucide-react'
-import { sky, type FavoriteItem } from '@/types'
+import { type FavoriteItem } from '@/types'
 import { SectionHeading } from '@/components/Atoms'
 
 type Category = 'すべて' | '中秋節月餅' | 'お菓子・食品' | '美容・コスメ' | '雑貨・工芸' | 'ファッション'
@@ -435,7 +416,7 @@ const SHOPS: Shop[] = [
     hours: '08:30 — 20:00',
     note: '障がいを持つ職人さんが手作りするフェアトレードショップ。手刺繍巾着・真鍮アクセ・バッチャン焼きが並びます。静寂なティールームも併設。',
     icon: <Sparkles size={20} />,
-    accentColor: '#0ea5e9',
+    accentColor: '#c8741a',
     mapUrl: 'https://maps.google.com/?q=Reaching+Out+Arts+Crafts+Hoi+An',
   },
   {
@@ -445,7 +426,7 @@ const SHOPS: Shop[] = [
     hours: '08:00 — 19:00',
     note: 'フランス仕込みのベトナム産クラフトチョコ店。カラフルな箱を選んで18種類の味をカスタム詰め合わせ。保冷バッグ付きで安心。',
     icon: <ShoppingBag size={20} />,
-    accentColor: '#ec4899',
+    accentColor: '#3d6b63',
     mapUrl: 'https://maps.google.com/?q=Pheva+Chocolate+Da+Nang',
   },
   {
@@ -455,7 +436,7 @@ const SHOPS: Shop[] = [
     hours: '07:00 — 21:00',
     note: 'オーガニックにこだわったレトロナチュラルなお店。自家製フルーツジャム、ココナッツオイル、ハーブティー、カカオニブが美しい。',
     icon: <Store size={20} />,
-    accentColor: '#f59e0b',
+    accentColor: '#8b5e3c',
     mapUrl: 'https://maps.google.com/?q=Cocobox+Hoi+An',
   },
   {
@@ -465,7 +446,7 @@ const SHOPS: Shop[] = [
     hours: '06:00 — 19:00',
     note: 'プラかごバッグ・ドライマンゴー・カシューナッツの宝庫。2階にプラかごが並びます。「Bớt giá được không? (安くして)」と笑顔で交渉しよう！',
     icon: <Tag size={20} />,
-    accentColor: '#10b981',
+    accentColor: '#c8741a',
     mapUrl: 'https://maps.google.com/?q=Han+Market+Da+Nang',
   },
   {
@@ -475,7 +456,7 @@ const SHOPS: Shop[] = [
     hours: '17:00 — 22:00',
     note: 'アンホイ島で毎夜開催される賑やかな夜市。カラフルなミニランタン、木彫り細工、アジアンアクセサリーを露店で楽しく選べます。',
     icon: <Star size={20} />,
-    accentColor: '#8b5cf6',
+    accentColor: '#3d6b63',
     mapUrl: 'https://maps.google.com/?q=Hoi+An+Night+Market',
   },
   {
@@ -485,20 +466,20 @@ const SHOPS: Shop[] = [
     hours: '08:30 — 21:30',
     note: 'フランス人デザイナーが手掛けるハイエンドシルクブランド。オーガニックシルク100%のスカーフやドレスは特別な自分へのご褒美に。',
     icon: <Gem size={20} />,
-    accentColor: '#0284c7',
+    accentColor: '#8b5e3c',
     mapUrl: 'https://maps.google.com/?q=Metiseko+Hoi+An',
   },
 ]
 
 const TIPS = [
-  { icon: <Package size={22} />, tip: '値段交渉は笑顔でスマートに', detail: 'ハン市場や夜市では「Bớt giá được không? (安くして)」と笑顔で交渉するのが買い物のコツ！', color: '#ec4899' },
-  { icon: <FlaskConical size={22} />, tip: '100ml超の液体類は受託手荷物へ', detail: 'ココナッツオイルやジャム、ハチミツは機内持ち込み不可です。必ずスーツケースへ！', color: '#f59e0b' },
-  { icon: <Plane size={22} />, tip: '生の果物は日本持ち込みNG', detail: 'マンゴーなど生の果物は日本への持ち込み禁止。個包装のドライマンゴーがおすすめ！', color: '#10b981' },
+  { icon: <Package size={22} />, tip: '値段交渉は笑顔でスマートに', detail: 'ハン市場や夜市では「Bớt giá được không? (安くして)」と笑顔で交渉するのが買い物のコツ！', color: '#c8741a' },
+  { icon: <FlaskConical size={22} />, tip: '100ml超の液体類は受託手荷物へ', detail: 'ココナッツオイルやジャム、ハチミツは機内持ち込み不可です。必ずスーツケースへ！', color: '#3d6b63' },
+  { icon: <Plane size={22} />, tip: '生の果物は日本持ち込みNG', detail: 'マンゴーなど生の果物は日本への持ち込み禁止。個包装のドライマンゴーがおすすめ！', color: '#8b5e3c' },
 ]
 
 const CATEGORY_ICONS: Record<Category, React.ReactNode> = {
   'すべて': <Filter size={14} />,
-  '中秋節月餅': <Moon size={14} className="text-amber-500 fill-amber-400" />,
+  '中秋節月餅': <Moon size={14} className="text-[#c8741a] fill-[#c8741a]/30" />,
   'お菓子・食品': <UtensilsCrossed size={14} />,
   '美容・コスメ': <Sparkles size={14} />,
   '雑貨・工芸': <Gem size={14} />,
@@ -561,64 +542,43 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
     ? MOONCAKE_ITEMS
     : MOONCAKE_ITEMS.filter((m) => m.typeGroup === mooncakeGroup)
 
-  function toggleHeart(id: number) {
-    setLocalHearts((prev) => ({ ...prev, [id]: !prev[id] }))
-  }
-
   return (
-    <div className="space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 py-6 font-sans">
       {/* Page Header */}
-      <div className="flex items-center justify-between pb-2 border-b border-sky-100">
-        <div>
-          <SectionHeading sub="旅する女性のために選んだ絶対喜ばれるベストコレクション">
-            🛍️ お土産ガイド
-          </SectionHeading>
-        </div>
+      <div className="flex items-center justify-between pb-4 border-b border-[#e8e0d0] mb-8">
+        <SectionHeading tag="SOUVENIR GUIDE" sub="ベトナム・ホイアンで選ぶ、センス溢れるお土産セレクション">
+          お土産・買い物ガイド
+        </SectionHeading>
 
         {/* Wishlist Heart Counter Badge */}
         <div
-          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border transition-all shadow-2xs ${wishCount > 0
-            ? 'bg-rose-50 border-rose-200 text-rose-700 font-bold scale-105'
-            : 'bg-white/80 border-sky-100 text-slate-400 font-semibold'
+          className={`flex items-center gap-1.5 px-4 py-2 rounded-full border transition-all shadow-2xs ${wishCount > 0
+            ? 'bg-[#fffdf9] border-[#c8741a] text-[#c8741a] font-medium'
+            : 'bg-[#faf8f3] border-[#e8e0d0] text-[#7a6447]'
             }`}
         >
-          <Heart size={14} className={wishCount > 0 ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
-          <span className="text-xs">{wishCount}</span>
+          <Heart size={14} className={wishCount > 0 ? 'fill-[#c8741a] text-[#c8741a]' : 'text-[#7a6447]'} />
+          <span className="font-sans text-xs">{wishCount}</span>
         </div>
       </div>
 
-      {/* Hero Banner matching app sky theme */}
-      <div className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-pink-300 via-sky-400 to-sky-500 p-6 sm:p-8 text-white shadow-md">
-        <div className="relative z-10 max-w-2xl">
-          <div className="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm rounded-full px-3 py-1   text-xs font-bold mb-3 border border-white/30">
-            <Sparkles className="w-3.5 h-3.5 text-amber-200" /> TRAVEL SOUVENIR GUIDE
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold leading-tight">
-            センスいいね！って褒められる<br />ベトナム・ホイアンのお土産セレクション
-          </h2>
-          <p className="text-xs sm:text-sm text-white/90 mt-2 leading-relaxed font-medium">
-            ベトナムを旅する日本人女性向けに、現地で絶対に買って帰りたいお土産をまとめました。自分へのご褒美に、大切な人へのプレゼントに。
-          </p>
-        </div>
-      </div>
-
-      {/* Main Tab bar: おすすめ商品 vs お土産ショップ */}
-      <div className="bg-white/80 backdrop-blur-md rounded-2xl border border-sky-100 p-1 flex shadow-2xs">
+      {/* Main Tab bar */}
+      <div className="bg-[#f5f1ea] border border-[#e8e0d0] rounded-2xl p-1.5 flex mb-8">
         {[
-          { key: 'items', IconComp: ShoppingBag, label: 'おすすめ商品' },
-          { key: 'shops', IconComp: MapPin, label: 'お土産ショップ' },
+          { key: 'items', IconComp: ShoppingBag, label: 'おすすめお土産' },
+          { key: 'shops', IconComp: MapPin, label: 'お土産ショップ・市場' },
         ].map(({ key, IconComp, label }) => {
           const active = activeTab === key
           return (
             <button
               key={key}
               onClick={() => setActiveTab(key as 'items' | 'shops')}
-              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs sm:text-sm font-bold transition-all ${active
-                ? 'bg-sky-500 text-white shadow-xs'
-                : 'text-slate-500 hover:text-sky-600 hover:bg-sky-50/50'
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl font-sans text-xs sm:text-sm font-medium transition-all cursor-pointer ${active
+                ? 'bg-[#c8741a] text-white shadow-2xs'
+                : 'text-[#7a6447] hover:text-[#1a1208]'
                 }`}
             >
-              <IconComp size={16} />
+              <IconComp size={15} />
               {label}
             </button>
           )
@@ -627,9 +587,9 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
 
       {/* Sub-Tab 1: Recommended Items */}
       {activeTab === 'items' && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           {/* Category pills */}
-          <div className="flex gap-2 flex-wrap">
+          <div className="flex gap-2 flex-wrap border-b border-[#e8e0d0] pb-4">
             {CATEGORIES.map((c) => (
               <button
                 key={c}
@@ -639,10 +599,12 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
                     setIsMooncakeModalOpen(true)
                   }
                 }}
-                className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold transition-all shadow-2xs ${activeCategory === c
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'bg-white/80 text-slate-600 border border-sky-100 hover:bg-sky-50'
-                  }`}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full font-sans text-xs font-medium transition-all cursor-pointer"
+                style={
+                  activeCategory === c
+                    ? { background: '#c8741a', color: 'white', border: '1px solid #c8741a' }
+                    : { backgroundColor: '#faf8f3', color: '#7a6447', border: '1px solid #e8e0d0' }
+                }
               >
                 {CATEGORY_ICONS[c]}
                 {c}
@@ -651,22 +613,22 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
           </div>
 
           {/* Items Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {filtered.map((item) => (
               item.isCollection ? (
                 <div
                   key={item.id}
                   onClick={() => setIsMooncakeModalOpen(true)}
-                  className="bg-white/90 backdrop-blur-sm rounded-3xl border-2 border-amber-400/80 overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between cursor-pointer group relative"
+                  className="bg-[#faf8f3] rounded-2xl border-2 border-[#c8741a] overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between cursor-pointer group relative"
                 >
                   <div>
                     {/* Image & Badges */}
-                    <div className="relative h-48 bg-slate-100 overflow-hidden">
+                    <div className="relative h-48 bg-[#d4c8b0] overflow-hidden">
                       <img src={item.img} alt={item.alt} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1208]/70 via-transparent to-transparent" />
 
                       {/* Tag badge */}
-                      <div className="absolute top-3 left-3 bg-amber-500 text-white font-bold text-[11px] px-2.5 py-1 rounded-full shadow-2xs flex items-center gap-1 border border-white/40">
+                      <div className="absolute top-3 left-3 bg-[#c8741a] text-white font-sans font-medium text-[10px] px-3 py-1 rounded-full shadow-2xs flex items-center gap-1">
                         <Moon size={11} className="fill-amber-200 text-amber-200" />
                         {item.tag}
                       </div>
@@ -674,13 +636,13 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
                       {/* Heart button */}
                       <button
                         onClick={(e) => { e.stopPropagation(); handleToggleFav(item) }}
-                        className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
+                        className="absolute top-3 right-3 w-8 h-8 bg-[#faf8f3]/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-2xs border border-[#e8e0d0] active:scale-90 transition-all cursor-pointer"
                       >
-                        <Heart size={16} className={checkFav(item.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
+                        <Heart size={14} className={checkFav(item.id) ? 'fill-rose-500 text-rose-500' : 'text-[#7a6447]'} />
                       </button>
 
                       {/* Category name bottom */}
-                      <div className="absolute bottom-3 left-3 text-[11px] font-semibold text-white bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
+                      <div className="absolute bottom-3 left-3 text-[10px] font-sans font-medium text-white bg-[#1a1208]/60 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
                         {item.category}
                       </div>
                     </div>
@@ -688,56 +650,56 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
                     {/* Body Info */}
                     <div className="p-5">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h3 className="font-bold text-slate-900 text-sm leading-snug group-hover:text-amber-600 transition-colors">{item.name}</h3>
+                        <h3 className="font-serif text-lg font-normal text-[#1a1208] leading-tight group-hover:text-[#c8741a] transition-colors">{item.name}</h3>
                         <div className="text-right flex-shrink-0">
-                          <span className="font-bold text-amber-600 text-sm">{item.priceJpy}</span>
-                          <div className="text-[10px] text-slate-400 font-semibold">{item.priceVnd}</div>
+                          <span className="font-sans font-medium text-[#c8741a] text-sm">{item.priceJpy}</span>
+                          <div className="text-[10px] text-[#7a6447] font-light">{item.priceVnd}</div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1 text-[11px] text-amber-600 font-medium italic mb-2.5">
+                      <div className="flex items-center gap-1 text-[11px] text-[#3d6b63] font-sans font-medium italic mb-2.5">
                         <ChevronRight size={12} />
                         <span>{item.nameVi}</span>
                       </div>
 
-                      <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                      <p className="font-sans text-xs font-light text-[#7a6447] leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
 
                   <div className="px-5 pb-5 pt-0">
-                    <div className="w-full bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs py-2.5 px-4 rounded-xl flex items-center justify-center gap-1.5 shadow-2xs transition-all">
+                    <div className="w-full bg-[#c8741a] hover:bg-[#a85e12] text-white font-sans font-medium text-xs py-3 px-4 rounded-full flex items-center justify-center gap-2 shadow-2xs transition-all">
                       <Layers size={15} />
-                      <span>全14種類の月餅コレクションを開く</span>
+                      <span>全14種類の月餅コレクションを見る</span>
                     </div>
                   </div>
                 </div>
               ) : (
                 <div
                   key={item.id}
-                  className="bg-white/90 backdrop-blur-sm rounded-3xl border border-sky-100 overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between"
+                  className="bg-[#faf8f3] rounded-2xl border border-[#e8e0d0] overflow-hidden shadow-2xs hover:border-[#c8741a] hover:-translate-y-1 transition-all flex flex-col justify-between"
                 >
                   <div>
                     {/* Image & Badges */}
-                    <div className="relative h-48 bg-slate-100 overflow-hidden">
+                    <div className="relative h-48 bg-[#d4c8b0] overflow-hidden">
                       <img src={item.img} alt={item.alt} className="w-full h-full object-cover hover:scale-105 transition-transform duration-500" />
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
+                      <div className="absolute inset-0 bg-gradient-to-t from-[#1a1208]/70 via-transparent to-transparent" />
 
                       {/* Tag badge */}
-                      <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-md px-2.5 py-1 rounded-full text-[11px] font-bold text-sky-700 shadow-2xs flex items-center gap-1 border border-white/40">
-                        <Star size={11} className="fill-amber-400 text-amber-400" />
+                      <div className="absolute top-3 left-3 bg-[#f5f1ea] backdrop-blur-md px-2.5 py-1 rounded-full text-[10px] font-sans font-medium text-[#c8741a] border border-[#e8e0d0] flex items-center gap-1">
+                        <Star size={10} fill="#c8741a" />
                         {item.tag}
                       </div>
 
                       {/* Heart button */}
                       <button
                         onClick={() => handleToggleFav(item)}
-                        className="absolute top-3 right-3 w-9 h-9 bg-white/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-xs border border-white/40 active:scale-90 transition-all"
+                        className="absolute top-3 right-3 w-8 h-8 bg-[#faf8f3]/90 backdrop-blur-md rounded-full flex items-center justify-center shadow-2xs border border-[#e8e0d0] active:scale-90 transition-all cursor-pointer"
                       >
-                        <Heart size={16} className={checkFav(item.id) ? 'fill-rose-500 text-rose-500' : 'text-slate-400'} />
+                        <Heart size={14} className={checkFav(item.id) ? 'fill-rose-500 text-rose-500' : 'text-[#7a6447]'} />
                       </button>
 
                       {/* Category name bottom */}
-                      <div className="absolute bottom-3 left-3 text-[11px] font-semibold text-white bg-black/40 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
+                      <div className="absolute bottom-3 left-3 text-[10px] font-sans font-medium text-white bg-[#1a1208]/60 backdrop-blur-xs px-2.5 py-0.5 rounded-full border border-white/20">
                         {item.category}
                       </div>
                     </div>
@@ -745,19 +707,19 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
                     {/* Body Info */}
                     <div className="p-5">
                       <div className="flex items-start justify-between gap-2 mb-1">
-                        <h3 className="font-bold text-slate-900 text-sm leading-snug">{item.name}</h3>
+                        <h3 className="font-serif text-lg font-normal text-[#1a1208] leading-tight">{item.name}</h3>
                         <div className="text-right flex-shrink-0">
-                          <span className="font-bold text-sky-600 text-sm">{item.priceJpy}</span>
-                          <div className="text-[10px] text-slate-400 font-semibold">{item.priceVnd}</div>
+                          <span className="font-sans font-medium text-[#c8741a] text-sm">{item.priceJpy}</span>
+                          <div className="text-[10px] text-[#7a6447] font-light">{item.priceVnd}</div>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1 text-[11px] text-sky-500 font-medium italic mb-2.5">
+                      <div className="flex items-center gap-1 text-[11px] text-[#3d6b63] font-sans font-medium italic mb-2.5">
                         <ChevronRight size={12} />
                         <span>{item.nameVi}</span>
                       </div>
 
-                      <p className="text-xs text-slate-600 leading-relaxed">{item.desc}</p>
+                      <p className="font-sans text-xs font-light text-[#7a6447] leading-relaxed">{item.desc}</p>
                     </div>
                   </div>
                 </div>
@@ -769,40 +731,42 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
 
       {/* Mooncake Full Collection Gallery Modal */}
       {isMooncakeModalOpen && createPortal(
-        <div className="fixed inset-0 z-[9999] p-3 sm:p-6 bg-slate-900/75 backdrop-blur-md overflow-y-auto flex items-start justify-center">
-          <div className="bg-white/95 backdrop-blur-2xl border border-amber-300/60 rounded-3xl max-w-4xl w-full shadow-2xl overflow-hidden text-slate-800 relative my-4 sm:my-8">
+        <div className="fixed inset-0 z-[9999] p-3 sm:p-6 bg-[#1a1208]/70 backdrop-blur-sm overflow-y-auto flex items-start justify-center">
+          <div className="bg-[#faf8f3] border border-[#e8e0d0] rounded-3xl max-w-4xl w-full shadow-2xl overflow-hidden text-[#1a1208] relative my-4 sm:my-8">
             {/* Modal Header */}
-            <div className="bg-gradient-to-r from-amber-500 via-orange-500 to-rose-500 p-4 sm:p-6 flex items-start justify-between relative text-white border-b border-amber-300/40">
+            <div className="bg-[#1e1408] p-5 sm:p-6 flex items-start justify-between relative text-white border-b border-[#c8741a]/30">
               <div className="pr-4">
-                <div className="inline-flex items-center gap-1.5 bg-black/20 backdrop-blur-md px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold text-amber-100 mb-2 border border-white/20">
-                  <Moon size={13} className="fill-amber-200 text-amber-200" />
+                <div className="inline-flex items-center gap-1.5 bg-[#c8741a]/20 px-3 py-1 rounded-full text-[11px] font-sans font-medium text-[#c8741a] mb-2 border border-[#c8741a]/40">
+                  <Moon size={13} fill="#c8741a" />
                   中秋節（Tết Trung Thu）限定月餅
                 </div>
-                <h2 className="text-lg sm:text-2xl font-black text-white leading-snug">
+                <h2 className="font-serif text-xl sm:text-2xl font-normal text-white leading-snug">
                   🥮 ベトナム伝統 Kinh Đô 月餅コレクション 14選
                 </h2>
-                <p className="text-[11px] sm:text-xs text-white/90 mt-1 leading-relaxed">
+                <p className="font-sans text-xs font-light text-white/70 mt-1">
                   伝統焼き月餅からとろける流心Lava、モチモチ白餅、ヘルシー精進餡まで全種類一覧
                 </p>
               </div>
               <button
                 onClick={() => setIsMooncakeModalOpen(false)}
-                className="w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/30 hover:bg-black/50 text-white flex items-center justify-center transition-all border border-white/20 flex-shrink-0"
+                className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/20 cursor-pointer flex-shrink-0"
               >
                 <X size={18} />
               </button>
             </div>
 
             {/* Group Sub-Filter Pills */}
-            <div className="p-3 sm:p-4 bg-amber-50/80 border-b border-amber-100 flex gap-2 overflow-x-auto scrollbar-none sticky top-0 z-20 backdrop-blur-md">
+            <div className="p-3 sm:p-4 bg-[#f5f1ea] border-b border-[#e8e0d0] flex gap-2 overflow-x-auto scrollbar-none sticky top-0 z-20">
               {(['すべて', '高級ギフト', 'Lava流心', '伝統焼き月餅', '伝統モチ白餅', 'ヘルシー＆キッズ'] as const).map((group) => (
                 <button
                   key={group}
                   onClick={() => setMooncakeGroup(group)}
-                  className={`px-3 py-1.5 rounded-full text-[11px] sm:text-xs font-bold whitespace-nowrap transition-all ${mooncakeGroup === group
-                    ? 'bg-amber-500 text-white shadow-xs scale-105'
-                    : 'bg-white text-slate-600 border border-amber-200/80 hover:bg-amber-100/60'
-                    }`}
+                  className="px-4 py-1.5 rounded-full text-xs font-sans font-medium whitespace-nowrap transition-all cursor-pointer"
+                  style={
+                    mooncakeGroup === group
+                      ? { background: '#c8741a', color: 'white', border: '1px solid #c8741a' }
+                      : { backgroundColor: '#faf8f3', color: '#7a6447', border: '1px solid #e8e0d0' }
+                  }
                 >
                   {group === 'すべて' ? `すべて (14)` : group}
                 </button>
@@ -810,15 +774,15 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
             </div>
 
             {/* Modal Items Grid */}
-            <div className="p-3.5 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-slate-50/60">
+            <div className="p-4 sm:p-6 grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#faf8f3]">
               {filteredMooncakes.map((mc) => (
                 <div
                   key={mc.id}
-                  className="bg-white/95 backdrop-blur-sm rounded-2xl p-3.5 sm:p-4 border border-amber-200/70 flex flex-col gap-3 hover:border-amber-400 hover:shadow-md transition-all shadow-2xs relative overflow-hidden"
+                  className="bg-[#f5f1ea] rounded-2xl p-4 border border-[#e8e0d0] flex flex-col gap-3 hover:border-[#c8741a] transition-all shadow-2xs"
                 >
-                  <div className="w-full h-44 sm:h-36 rounded-xl overflow-hidden flex-shrink-0 bg-slate-100 relative">
+                  <div className="w-full h-40 rounded-xl overflow-hidden flex-shrink-0 bg-[#d4c8b0] relative">
                     <img src={mc.img} alt={mc.name} className="w-full h-full object-cover" />
-                    <div className="absolute top-2 left-2 bg-amber-500/90 backdrop-blur-xs text-white px-2 py-0.5 rounded text-[10px] font-black shadow-2xs border border-white/30 z-10">
+                    <div className="absolute top-2 left-2 bg-[#1a1208]/70 backdrop-blur-xs text-white px-2.5 py-0.5 rounded font-sans text-[10px] font-medium border border-white/20 z-10">
                       Mã {mc.code}
                     </div>
                   </div>
@@ -826,21 +790,21 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
                   <div className="flex-1 flex flex-col justify-between min-w-0">
                     <div>
                       <div className="flex items-center gap-1.5 mb-1 flex-wrap">
-                        <span className="bg-amber-50 text-amber-700 border border-amber-200/80 text-[10px] font-bold px-2 py-0.5 rounded-full">
+                        <span className="bg-[#faf8f3] text-[#c8741a] border border-[#e8e0d0] text-[10px] font-sans font-medium px-2.5 py-0.5 rounded-full">
                           {mc.tag}
                         </span>
                       </div>
-                      <h4 className="font-bold text-slate-900 text-sm leading-snug break-words">{mc.name}</h4>
-                      <p className="text-[11px] text-amber-600 font-medium italic mt-0.5 break-words">{mc.nameVi}</p>
-                      <p className="text-[11px] text-slate-600 mt-2 leading-relaxed bg-amber-50/60 p-2.5 rounded-xl border border-amber-100/80">
-                        <strong className="text-amber-800 font-semibold">【主な原材料】:</strong> {mc.ingredients}
+                      <h4 className="font-serif text-base font-normal text-[#1a1208] leading-snug">{mc.name}</h4>
+                      <p className="font-sans text-xs text-[#3d6b63] font-medium italic mt-0.5">{mc.nameVi}</p>
+                      <p className="font-sans text-xs font-light text-[#7a6447] mt-2 leading-relaxed bg-[#faf8f3] p-3 rounded-xl border border-[#e8e0d0]">
+                        <strong className="text-[#1a1208] font-medium">【主な原材料】:</strong> {mc.ingredients}
                       </p>
                     </div>
 
-                    <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between">
+                    <div className="mt-3 pt-2 border-t border-[#e8e0d0] flex items-center justify-between">
                       <div>
-                        <span className="text-amber-600 font-extrabold text-sm sm:text-base">{mc.priceJpy}</span>
-                        <span className="text-[10px] sm:text-xs text-slate-400 font-semibold ml-1.5">({mc.priceVnd})</span>
+                        <span className="text-[#c8741a] font-sans font-medium text-base">{mc.priceJpy}</span>
+                        <span className="text-xs text-[#7a6447] font-light ml-1.5">({mc.priceVnd})</span>
                       </div>
                     </div>
                   </div>
@@ -849,11 +813,11 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
             </div>
 
             {/* Modal Footer */}
-            <div className="p-3.5 sm:p-4 bg-white border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-              <span className="truncate pr-2">🥮 Kinh Đô 月餅コレクション</span>
+            <div className="p-4 bg-[#f5f1ea] border-t border-[#e8e0d0] flex items-center justify-between font-sans text-xs text-[#7a6447]">
+              <span>🥮 Kinh Đô 月餅コレクション</span>
               <button
                 onClick={() => setIsMooncakeModalOpen(false)}
-                className="bg-slate-900 hover:bg-slate-800 text-white font-bold px-5 py-2 rounded-full transition-all flex-shrink-0"
+                className="bg-[#c8741a] hover:bg-[#a85e12] text-white font-medium px-6 py-2 rounded-full transition-all cursor-pointer"
               >
                 閉じる
               </button>
@@ -865,35 +829,35 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
 
       {/* Sub-Tab 2: Souvenir Shops */}
       {activeTab === 'shops' && (
-        <div className="space-y-6">
+        <div className="space-y-8">
           <div>
-            <h3 className="font-bold text-slate-900 text-lg">おすすめお土産スポット</h3>
-            <p className="text-xs text-slate-500 mt-0.5">ホイアン・ダナンの主要買い物スポットをピックアップ。現地のコツと一緒にご紹介します。</p>
+            <h3 className="font-serif text-xl font-normal text-[#1a1208]">おすすめお土産スポット＆市場</h3>
+            <p className="font-sans text-xs font-light text-[#7a6447] mt-1">ホイアン・ダナンの主要買い物スポット。買い物のコツと一緒にご紹介します。</p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {SHOPS.map((shop) => (
               <div
                 key={shop.name}
-                className="bg-white/90 backdrop-blur-sm rounded-3xl border border-sky-100 overflow-hidden shadow-2xs hover:shadow-md hover:-translate-y-1 transition-all flex flex-col justify-between"
+                className="bg-[#faf8f3] rounded-2xl border border-[#e8e0d0] overflow-hidden shadow-2xs hover:border-[#c8741a] transition-all flex flex-col justify-between"
               >
                 <div style={{ height: 4, background: shop.accentColor }} />
-                <div className="p-5 flex-1 flex flex-col justify-between">
+                <div className="p-6 flex-1 flex flex-col justify-between">
                   <div>
-                    <div className="flex items-start gap-3 mb-3">
+                    <div className="flex items-start gap-3.5 mb-3">
                       <div
-                        className="w-10 h-10 rounded-2xl flex items-center justify-center flex-shrink-0 shadow-2xs"
-                        style={{ backgroundColor: `${shop.accentColor}20`, color: shop.accentColor }}
+                        className="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border border-[#e8e0d0]"
+                        style={{ backgroundColor: `${shop.accentColor}15`, color: shop.accentColor }}
                       >
                         {shop.icon}
                       </div>
                       <div className="flex-1">
-                        <h4 className="font-bold text-slate-900 text-base leading-tight">{shop.name}</h4>
-                        <p className="text-xs text-sky-600 font-semibold mt-0.5">{shop.nameJp}</p>
+                        <h4 className="font-serif text-lg font-normal text-[#1a1208] leading-tight">{shop.name}</h4>
+                        <p className="font-sans text-xs font-medium text-[#3d6b63] mt-0.5">{shop.nameJp}</p>
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-4 text-xs text-slate-500 mb-3 flex-wrap">
+                    <div className="flex items-center gap-4 font-sans text-xs text-[#7a6447] mb-4 flex-wrap">
                       <span className="flex items-center gap-1">
                         <MapPin size={13} style={{ color: shop.accentColor }} />
                         {shop.area}
@@ -906,22 +870,22 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
 
                     {/* Note Box */}
                     <div
-                      className="bg-slate-50 rounded-2xl p-3.5 border-l-4 text-xs text-slate-700 leading-relaxed"
+                      className="bg-[#f5f1ea] rounded-xl p-4 border-l-4 text-xs font-sans font-light text-[#7a6447] leading-relaxed border-[#e8e0d0]"
                       style={{ borderLeftColor: shop.accentColor }}
                     >
-                      <div className="flex items-start gap-1.5">
-                        <Lightbulb size={14} style={{ color: shop.accentColor }} className="flex-shrink-0 mt-0.5" />
+                      <div className="flex items-start gap-2">
+                        <Lightbulb size={15} style={{ color: shop.accentColor }} className="flex-shrink-0 mt-0.5" />
                         <p>{shop.note}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-end">
+                  <div className="mt-4 pt-3 border-t border-[#e8e0d0] flex items-center justify-end">
                     <a
                       href={shop.mapUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="flex items-center gap-1 text-xs font-bold text-sky-600 bg-sky-50 hover:bg-sky-100 px-3 py-1.5 rounded-full transition-colors"
+                      className="flex items-center gap-1 font-sans text-xs font-medium text-white bg-[#c8741a] hover:bg-[#a85e12] px-4 py-1.5 rounded-full transition-colors"
                     >
                       Google Map <ExternalLink size={12} />
                     </a>
@@ -931,27 +895,27 @@ export default function OmiyagePage({ isFavorite, toggleFavorite }: OmiyagePageP
             ))}
           </div>
 
-          {/* Shopping Tips Section matching template */}
-          <div className="bg-gradient-to-r from-sky-50 via-sky-100/60 to-amber-50 rounded-3xl p-6 sm:p-8 border border-sky-100">
-            <div className="flex items-center gap-2 mb-5">
-              <Sparkles className="w-5 h-5 text-amber-500" />
-              <h3 className="font-bold text-slate-900 text-base sm:text-lg">買い物上手になるコツ</h3>
+          {/* Shopping Tips Section */}
+          <div className="bg-[#f5f1ea] rounded-2xl p-6 sm:p-8 border border-[#e8e0d0]">
+            <div className="flex items-center gap-2 mb-6">
+              <Sparkles className="w-5 h-5 text-[#c8741a]" />
+              <h3 className="font-serif text-lg font-normal text-[#1a1208]">買い物上手になる旅のコツ</h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {TIPS.map(({ icon, tip, detail, color }) => (
                 <div
                   key={tip}
-                  className="bg-white/90 backdrop-blur-sm rounded-2xl p-4 shadow-2xs border border-white/80 hover:-translate-y-1 transition-all"
+                  className="bg-[#faf8f3] rounded-xl p-5 border border-[#e8e0d0] hover:-translate-y-1 transition-all"
                 >
                   <div
-                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 shadow-2xs"
-                    style={{ backgroundColor: `${color}20`, color }}
+                    className="w-10 h-10 rounded-xl flex items-center justify-center mb-3 border border-[#e8e0d0]"
+                    style={{ backgroundColor: `${color}15`, color }}
                   >
                     {icon}
                   </div>
-                  <h4 className="font-bold text-slate-900 text-xs sm:text-sm mb-1">{tip}</h4>
-                  <p className="text-xs text-slate-600 leading-relaxed">{detail}</p>
+                  <h4 className="font-serif text-base font-normal text-[#1a1208] mb-1.5">{tip}</h4>
+                  <p className="font-sans text-xs font-light text-[#7a6447] leading-relaxed">{detail}</p>
                 </div>
               ))}
             </div>

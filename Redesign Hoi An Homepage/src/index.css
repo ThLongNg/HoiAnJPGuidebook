@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+JP:wght@300;400;500;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap');
+@import 'tailwindcss';
+
+@theme inline {
+  --color-background: #faf8f3;
+  --color-foreground: #1a1208;
+  --color-card: #f5f1ea;
+  --color-card-foreground: #2c1e0f;
+  --color-primary: #c8741a;
+  --color-primary-foreground: #faf8f3;
+  --color-secondary: #3d6b63;
+  --color-secondary-foreground: #faf8f3;
+  --color-muted: #e8e0d0;
+  --color-muted-foreground: #7a6447;
+  --color-accent: #d4960a;
+  --color-accent-foreground: #1a1208;
+  --color-border: #ddd5c0;
+  --color-ring: #c8741a;
+  --radius: 4px;
+
+  --font-sans: 'Noto Sans JP', sans-serif;
+  --font-serif: 'Noto Serif JP', serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Noto Sans JP', sans-serif;
+  background-color: #faf8f3;
+  color: #1a1208;
+  -webkit-font-smoothing: antialiased;
+  scrollbar-width: none;
+}
+
+body::-webkit-scrollbar {
+  display: none;
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  scrollbar-width: none;
+}
+
+.font-serif {
+  font-family: 'Noto Serif JP', serif;
+}
+
+.font-sans {
+  font-family: 'Noto Sans JP', sans-serif;
+}

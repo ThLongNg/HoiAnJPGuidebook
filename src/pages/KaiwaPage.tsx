@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { AlertTriangle, Lightbulb, Languages, Sparkles } from 'lucide-react'
-import { sky } from '@/types'
 import { SectionHeading, Card, SpeakButton, TipBox } from '@/components/Atoms'
 import { PhraseCard, AddressCard, OrderCard, ExpressionCard } from '@/components/Cards'
 import TranslatorModal from '@/components/TranslatorModal'
@@ -51,38 +50,41 @@ export default function KaiwaPage() {
   ] as const
 
   return (
-    <div>
-      <SectionHeading sub="ベトナム語の基本フレーズと即時通訳">💬 会話フレーズ</SectionHeading>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6 font-sans">
+      <SectionHeading tag="VIETNAMESE PHRASES" sub="旅でそのまま使える、かんたんベトナム語会話">
+        ベトナム語フレーズ集
+      </SectionHeading>
 
       {/* Realtime Translator Banner */}
-      <div className="mb-6 bg-gradient-to-r from-amber-500 to-amber-600 rounded-3xl p-5 text-white shadow-md flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <div className="w-12 h-12 rounded-2xl bg-white/20 backdrop-blur-sm flex items-center justify-center text-white flex-shrink-0">
-            <Languages className="w-7 h-7" />
+      <div className="mb-8 bg-[#1e1408] border border-[#c8741a]/30 rounded-2xl p-6 text-white shadow-sm flex flex-col sm:flex-row items-center justify-between gap-5">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl bg-[#c8741a]/20 border border-[#c8741a]/40 flex items-center justify-center text-[#c8741a] flex-shrink-0">
+            <Languages className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="font-bold text-base sm:text-lg leading-tight">日越 リアルタイム音声・文字翻訳</h3>
-            <p className="text-xs text-white/80 mt-0.5">日本語を入力/話すとベトナム語に変換 ➔ 店員に全画面表示！</p>
+            <h3 className="font-serif text-lg font-normal text-white leading-tight">日越 リアルタイム音声・文字翻訳</h3>
+            <p className="font-sans text-xs font-light text-white/70 mt-1">日本語を入力/話すとベトナム語に変換 ➔ 店員に全画面表示！</p>
           </div>
         </div>
         <button
           onClick={() => setShowTranslator(true)}
-          className="w-full sm:w-auto px-5 py-2.5 rounded-full bg-white text-slate-900 font-extrabold text-xs transition-all hover:bg-amber-100 active:scale-95 flex items-center justify-center gap-2 shadow-sm flex-shrink-0"
+          className="w-full sm:w-auto px-6 py-3 rounded-full bg-[#c8741a] text-white font-sans font-medium text-xs tracking-wider transition-all hover:bg-[#a85e12] active:scale-95 flex items-center justify-center gap-2 shadow-xs flex-shrink-0 cursor-pointer"
         >
-          <Sparkles className="w-4 h-4 text-amber-600" /> 翻訳ツールを開く
+          <Sparkles className="w-4 h-4 text-white/90" /> 翻訳ツールを開く
         </button>
       </div>
 
-      <div className="flex gap-2 flex-wrap mb-8">
+      {/* Section Tabs */}
+      <div className="flex gap-2 flex-wrap mb-8 border-b border-[#e8e0d0] pb-4">
         {sections.map((s) => (
           <button
             key={s.id}
             onClick={() => setSection(s.id)}
-            className="px-5 py-2 rounded-full text-sm font-medium transition-all"
+            className="px-5 py-2 rounded-full text-xs font-medium tracking-wide transition-all cursor-pointer"
             style={
               section === s.id
-                ? { background: `linear-gradient(135deg, ${sky[500]}, ${sky[400]})`, color: 'white', boxShadow: `0 4px 12px ${sky[200]}` }
-                : { backgroundColor: 'white', color: '#64748b', border: `1px solid ${sky[100]}` }
+                ? { background: '#c8741a', color: 'white', border: '1px solid #c8741a' }
+                : { backgroundColor: '#faf8f3', color: '#7a6447', border: '1px solid #e8e0d0' }
             }
           >
             {s.label}
@@ -98,7 +100,7 @@ export default function KaiwaPage() {
             <PhraseCard vn="Xin lỗi" reading="シン ロイ" meanings={['すみません', 'ごめんなさい']} delay={0.07} />
             <PhraseCard vn="Cảm ơn" reading="カム オン" meanings={['ありがとうございます']} delay={0.14} />
             <PhraseCard vn="Không có gì" reading="コン コー ジー" meanings={['どういたしまして']} delay={0.21} />
-            <PhraseCard vn="Xin lỗi, tôi không biết tiếng Việt" reading="シン ロイ トイ コン ビエウ ティン ベトナム" meanings={['すみません。ベトナム語わかりません。']} delay={0.28} />
+            <PhraseCard vn="Xin lỗi, tôi không biết tiếng Việt" reading="シン ロイ、トイ コン ビエット ティエン ヴェット" meanings={['すみません。ベトナム語わかりません。']} delay={0.28} />
 
             <div className="md:col-span-2 xl:col-span-3"><TipBox /></div>
           </div>
@@ -107,13 +109,13 @@ export default function KaiwaPage() {
         {/* ─── 呼び方 ─── */}
         {section === 'address' && (
           <>
-            <p className="text-sm text-slate-500 mb-5">相手の年齢に合わせて呼び方を変えましょう</p>
+            <p className="font-sans text-xs text-[#7a6447] mb-5">相手の年齢に合わせて呼び方を変えましょう</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
-              <AddressCard emoji="👨" vn="Anh ơi" reading="アン オイ" jp="年上くらいの男性" bg={sky[50]} delay={0} />
-              <AddressCard emoji="👨‍🦳" vn="Chú ơi" reading="チュ オイ" jp="父親くらいの男性" bg="#eef2ff" delay={0.07} />
-              <AddressCard emoji="👩" vn="Chị ơi" reading="チ オイ" jp="年上のお姉さんくらいの女性" bg="#fff7ed" delay={0.14} />
-              <AddressCard emoji="👩‍🦰" vn="Cô ơi" reading="コー オイ" jp="母親くらいの女性" bg="#fff1f2" delay={0.21} />
-              <AddressCard emoji="👵" vn="Bà ơi" reading="バー オイ" jp="おばあさんくらいの女性" bg="#f5f3ff" delay={0.28} />
+              <AddressCard emoji="👨" vn="Anh ơi" reading="アン オイ" jp="年上くらいの男性" bg="#faf8f3" delay={0} />
+              <AddressCard emoji="👨‍🦳" vn="Chú ơi" reading="チュ オイ" jp="父親くらいの男性" bg="#faf8f3" delay={0.07} />
+              <AddressCard emoji="👩" vn="Chị ơi" reading="チ オイ" jp="年上のお姉さんくらいの女性" bg="#faf8f3" delay={0.14} />
+              <AddressCard emoji="👩‍🦰" vn="Cô ơi" reading="コー オイ" jp="母親くらいの女性" bg="#faf8f3" delay={0.21} />
+              <AddressCard emoji="👵" vn="Bà ơi" reading="バー オイ" jp="おばあさんくらいの女性" bg="#faf8f3" delay={0.28} />
             </div>
             <div className="mt-6">
               <TipBox>
@@ -126,8 +128,8 @@ export default function KaiwaPage() {
         {/* ─── 注文するとき ─── */}
         {section === 'order' && (
           <>
-            <p className="text-sm text-slate-500 mb-5">
-              <span className="font-semibold text-slate-700">phần（ファン）</span> = 人前 / 一皿
+            <p className="font-sans text-xs text-[#7a6447] mb-5">
+              <span className="font-medium text-[#1a1208]">phần（ファン）</span> = 人前 / 一皿
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
               {[
@@ -139,15 +141,15 @@ export default function KaiwaPage() {
                 { num: 6, vn: 'Sáu phần', reading: 'サウ ファン', count: '６人前' },
               ].map((o, i) => <OrderCard key={o.num} {...o} delay={i * 0.06} />)}
             </div>
-            <div className="mt-6 bg-sky-50 border border-sky-200 rounded-2xl p-5">
-              <p className="text-sm font-bold text-sky-700 mb-3">よく使う注文フレーズ</p>
+            <div className="mt-6 bg-[#fffdf9] border border-[#e8e0d0] rounded-2xl p-5 border-l-4 border-l-[#c8741a]">
+              <p className="font-serif text-sm font-medium text-[#1a1208] mb-3">よく使う注文フレーズ</p>
               <div className="space-y-3">
                 {orderPhrases.map((p) => (
-                  <div key={p.vn} className="flex items-center justify-between gap-3 bg-white rounded-xl px-4 py-3 border border-sky-100">
+                  <div key={p.vn} className="flex items-center justify-between gap-3 bg-[#faf8f3] rounded-xl px-4 py-3 border border-[#e8e0d0]">
                     <div>
-                      <div className="font-bold text-slate-800 text-sm">{p.vn}</div>
-                      <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{p.reading}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">{p.jp}</div>
+                      <div className="font-serif text-base font-normal text-[#1a1208]">{p.vn}</div>
+                      <div className="font-sans text-xs font-medium mt-0.5 text-[#c8741a]">{p.reading}</div>
+                      <div className="font-sans text-xs font-light text-[#7a6447] mt-0.5">{p.jp}</div>
                     </div>
                     <SpeakButton text={p.vn} size={14} />
                   </div>
@@ -174,23 +176,23 @@ export default function KaiwaPage() {
         {/* ─── 値切り・買物 ─── */}
         {section === 'bargain' && (
           <div className="space-y-6">
-            <div className="bg-amber-50 border border-amber-200 rounded-2xl p-5">
+            <div className="bg-[#fffdf9] border-l-4 border-l-[#c8741a] border border-[#e8e0d0] rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-2">
-                <Lightbulb size={16} className="text-amber-500" />
-                <span className="font-bold text-amber-700 text-sm">値切り交渉のコツ</span>
+                <Lightbulb size={16} className="text-[#c8741a]" />
+                <span className="font-serif font-medium text-[#1a1208] text-sm">値切り交渉のコツ</span>
               </div>
-              <p className="text-sm text-amber-800 leading-relaxed">
+              <p className="font-sans text-xs sm:text-sm font-light text-[#7a6447] leading-relaxed">
                 市場やお土産屋では値引き交渉が普通です。笑顔で明るく交渉しましょう！相場の50〜70%から始めるのがコツです。
               </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {bargainPhrases.map((p) => (
-                <Card key={p.vn} className="anim-up p-5 hover:shadow-md hover:border-sky-200 transition-all" style={{ animationDelay: `${p.delay}s` }}>
+                <Card key={p.vn} className="anim-up p-5 hover:border-[#c8741a] transition-all bg-[#faf8f3]" style={{ animationDelay: `${p.delay}s` }}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
-                      <div className="text-lg font-bold text-slate-900">{p.vn}</div>
-                      <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{p.reading}</div>
-                      <div className="text-sm text-slate-500 mt-1">{p.jp}</div>
+                      <div className="font-serif text-lg font-normal text-[#1a1208]">{p.vn}</div>
+                      <div className="font-sans text-xs font-medium mt-0.5 text-[#3d6b63]">{p.reading}</div>
+                      <div className="font-sans text-xs font-light text-[#7a6447] mt-1">{p.jp}</div>
                     </div>
                     <SpeakButton text={p.vn} size={14} />
                   </div>
@@ -203,16 +205,16 @@ export default function KaiwaPage() {
         {/* ─── 緊急・その他 ─── */}
         {section === 'emergency' && (
           <div className="space-y-6">
-            <div className="bg-red-50 border border-red-200 rounded-2xl p-5">
+            <div className="bg-[#fffdf9] border-l-4 border-l-rose-500 border border-[#e8e0d0] rounded-2xl p-5">
               <div className="flex items-center gap-2 mb-2">
-                <AlertTriangle size={16} className="text-red-500" />
-                <span className="font-bold text-red-700 text-sm">緊急連絡先（ベトナム）</span>
+                <AlertTriangle size={16} className="text-rose-500" />
+                <span className="font-serif font-medium text-[#1a1208] text-sm">緊急連絡先（ベトナム）</span>
               </div>
               <div className="grid grid-cols-3 gap-3 mt-3">
                 {[{ label: '警察', num: '113' }, { label: '救急', num: '115' }, { label: '消防', num: '114' }].map((e) => (
-                  <div key={e.label} className="bg-white rounded-xl p-3 text-center border border-red-100">
-                    <div className="text-xs text-slate-500">{e.label}</div>
-                    <div className="text-2xl font-bold text-red-600 mt-1">{e.num}</div>
+                  <div key={e.label} className="bg-[#faf8f3] rounded-xl p-3 text-center border border-[#e8e0d0]">
+                    <div className="font-sans text-xs text-[#7a6447]">{e.label}</div>
+                    <div className="font-serif text-2xl font-bold text-rose-600 mt-1">{e.num}</div>
                   </div>
                 ))}
               </div>
@@ -220,12 +222,12 @@ export default function KaiwaPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {emergencyPhrases.map((p) => (
-                <Card key={p.vn} className="anim-up p-5 hover:shadow-md hover:border-sky-200 transition-all" style={{ animationDelay: `${p.delay}s` }}>
+                <Card key={p.vn} className="anim-up p-5 hover:border-[#c8741a] transition-all bg-[#faf8f3]" style={{ animationDelay: `${p.delay}s` }}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex-1">
-                      <div className="text-lg font-bold text-slate-900">{p.vn}</div>
-                      <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{p.reading}</div>
-                      <div className="text-sm text-slate-500 mt-1">{p.jp}</div>
+                      <div className="font-serif text-lg font-normal text-[#1a1208]">{p.vn}</div>
+                      <div className="font-sans text-xs font-medium mt-0.5 text-[#3d6b63]">{p.reading}</div>
+                      <div className="font-sans text-xs font-light text-[#7a6447] mt-1">{p.jp}</div>
                     </div>
                     <SpeakButton text={p.vn} size={14} />
                   </div>
@@ -233,15 +235,15 @@ export default function KaiwaPage() {
               ))}
             </div>
 
-            <Card className="p-5">
-              <p className="text-sm font-bold text-slate-700 mb-3">🌤️ 天気に関する表現</p>
+            <Card className="p-5 bg-[#faf8f3]">
+              <p className="font-serif text-sm font-medium text-[#1a1208] mb-3">🌤️ 天気に関する表現</p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {weatherPhrases.map((p) => (
-                  <div key={p.vn} className="flex items-center justify-between gap-3 bg-sky-50 rounded-xl px-4 py-3 border border-sky-100">
+                  <div key={p.vn} className="flex items-center justify-between gap-3 bg-[#f5f1ea] rounded-xl px-4 py-3 border border-[#e8e0d0]">
                     <div>
-                      <div className="font-bold text-slate-800 text-sm">{p.vn}</div>
-                      <div className="text-xs font-medium mt-0.5" style={{ color: sky[500] }}>{p.reading}</div>
-                      <div className="text-xs text-slate-400 mt-0.5">{p.jp}</div>
+                      <div className="font-serif text-base font-normal text-[#1a1208]">{p.vn}</div>
+                      <div className="font-sans text-xs font-medium mt-0.5 text-[#3d6b63]">{p.reading}</div>
+                      <div className="font-sans text-xs font-light text-[#7a6447] mt-0.5">{p.jp}</div>
                     </div>
                     <SpeakButton text={p.vn} size={14} />
                   </div>

@@ -1,0 +1,10 @@
+{
+  "description": "This digital travel guide inspires Japanese travelers visiting Hoi An with rich storytelling, stunning visuals, and practical tips for an authentic experience.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

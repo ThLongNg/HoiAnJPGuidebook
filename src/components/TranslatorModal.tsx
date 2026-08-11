@@ -1,9 +1,8 @@
 import { useState, useEffect, useRef } from 'react'
+import { createPortal } from 'react-dom'
 import { Volume2, Maximize2, Mic, MicOff, Copy, Check, X, Send, Sparkles, RefreshCw, Languages } from 'lucide-react'
 import { speak } from '@/utils/tts'
-import { sky } from '@/types'
 
-// Pre-defined quick tourist phrases for 1-tap translation (using polite Vietnamese pronouns & particles)
 const PRESET_PHRASES = [
   { ja: 'これをお願いします', vi: 'Cho em xin cái này ạ' },
   { ja: 'いくらですか？', vi: 'Cho em hỏi cái này bao nhiêu tiền ạ?' },
@@ -19,19 +18,16 @@ export function softenVietnameseTranslation(rawViText: string, jaText: string): 
   if (!rawViText) return ''
   let text = rawViText.trim()
 
-  // 1. Replace rigid pronoun "Tôi" with polite "Em" for tourist-to-merchant context
   text = text.replace(/^Tôi /i, 'Em ')
   text = text.replace(/ tôi /gi, ' em ')
   text = text.replace(/ cho tôi/gi, ' cho em')
   text = text.replace(/^Cho tôi /i, 'Cho em ')
 
-  // 2. Refine common verbs
   text = text.replace(/^Cho em cái này/i, 'Cho em xin cái này')
   if (text.toLowerCase().includes('tính tiền') && !text.toLowerCase().includes('giúp em')) {
     text = text.replace(/tính tiền/i, 'tính tiền giúp em')
   }
 
-  // 3. Add polite particle "ạ" if Japanese sentence has polite form
   const isPoliteJa = /[です|ます|ください|おねがい|お願いします|ですか]/i.test(jaText)
   const hasAlreadyPoliteVi = /[ạ|ạ\?|nhé ạ|với ạ|hả ạ]$/i.test(text)
 
@@ -51,11 +47,9 @@ export function softenVietnameseTranslation(rawViText: string, jaText: string): 
 
 export async function translateJaToVi(text: string): Promise<string> {
   if (!text.trim()) return ''
-  // 1. Check preset phrases first
   const foundPreset = PRESET_PHRASES.find((p) => p.ja === text.trim())
   if (foundPreset) return foundPreset.vi
 
-  // 2. Fetch Google Translate GTX endpoint (Free & No API key needed)
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=ja&tl=vi&dt=t&q=${encodeURIComponent(text.trim())}`
     const res = await fetch(url)
@@ -86,7 +80,6 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
 
   const debounceTimeout = useRef<NodeJS.Timeout | null>(null)
 
-  // Handle translation on text change with debounce
   useEffect(() => {
     if (!jaText.trim()) {
       setViText('')
@@ -106,51 +99,28 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
     }
   }, [jaText])
 
-  // Speech Recognition (Web Speech API)
-  const handleToggleListening = () => {
+  const handleVoiceInput = () => {
     const SpeechRecognition =
-      (window as unknown as { SpeechRecognition?: any; webkitSpeechRecognition?: any }).SpeechRecognition ||
-      (window as unknown as { SpeechRecognition?: any; webkitSpeechRecognition?: any }).webkitSpeechRecognition
-
+      (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition
     if (!SpeechRecognition) {
-      alert('ご使用のブラウザは音声認識に対応していません。（Safari / Chrome をお試しください）')
+      alert('お使いのブラウザは音声認識に対応していません。テキスト入力をご利用ください。')
       return
     }
 
-    if (isListening) {
-      setIsListening(false)
-      return
+    const recognition = new SpeechRecognition()
+    recognition.lang = 'ja-JP'
+    recognition.interimResults = false
+
+    recognition.onstart = () => setIsListening(true)
+    recognition.onend = () => setIsListening(false)
+    recognition.onerror = () => setIsListening(false)
+
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript
+      setJaText(transcript)
     }
 
-    try {
-      const recognition = new SpeechRecognition()
-      recognition.lang = 'ja-JP'
-      recognition.continuous = false
-      recognition.interimResults = false
-
-      recognition.onstart = () => {
-        setIsListening(true)
-      }
-
-      recognition.onresult = (event: any) => {
-        const transcript = event.results[0][0].transcript
-        setJaText(transcript)
-        setIsListening(false)
-      }
-
-      recognition.onerror = () => {
-        setIsListening(false)
-      }
-
-      recognition.onend = () => {
-        setIsListening(false)
-      }
-
-      recognition.start()
-    } catch (e) {
-      console.error(e)
-      setIsListening(false)
-    }
+    recognition.start()
   }
 
   const handleCopy = () => {
@@ -160,188 +130,174 @@ export default function TranslatorModal({ onClose }: TranslatorModalProps) {
     setTimeout(() => setCopied(false), 2000)
   }
 
-  return (
-    <>
-      {/* ─── Standard Translator Modal ─── */}
-      {!fullScreenMode && (
-        <div
-          className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 bg-black/60 backdrop-blur-md anim-in overscroll-none"
-          onClick={onClose}
-        >
-          <div
-            className="bg-white rounded-3xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col max-h-[90vh]"
-            onClick={(e) => e.stopPropagation()}
+  return createPortal(
+    <div className="fixed inset-0 z-[99999] flex items-center justify-center p-4 sm:p-6 overscroll-none">
+      <div className="absolute inset-0 bg-[#1a1208]/70 backdrop-blur-sm" onClick={onClose} />
+
+      {/* Fullscreen Display Mode for Merchants */}
+      {fullScreenMode ? (
+        <div className="relative z-10 w-full h-full bg-[#1a1208] text-white p-6 flex flex-col justify-between items-center text-center rounded-3xl animate-in fade-in zoom-in-95 duration-200">
+          <button
+            onClick={() => setFullScreenMode(false)}
+            className="absolute top-6 right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-colors cursor-pointer"
           >
-            {/* Modal Header */}
-            <div className="flex items-center justify-between px-6 pt-5 pb-4 border-b border-slate-100 bg-sky-50/50">
-              <div className="flex items-center gap-2.5">
-                <div className="w-10 h-10 rounded-2xl bg-sky-500 text-white flex items-center justify-center shadow-md">
-                  <Languages className="w-6 h-6" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-slate-800 text-lg leading-tight">日越 リアルタイム翻訳</h3>
-                  <p className="text-xs text-slate-400">日本語 ➔ ベトナム語 即時翻訳</p>
-                </div>
+            <X size={24} />
+          </button>
+
+          <div className="flex items-center gap-2 text-white/60 font-sans text-sm mt-4">
+            <Sparkles size={16} className="text-[#c8741a]" />
+            店員に見せる拡大画面
+          </div>
+
+          <div className="my-auto px-4 max-w-2xl">
+            <p className="font-serif text-3xl sm:text-5xl font-normal leading-relaxed text-white text-balance tracking-wide">
+              {viText}
+            </p>
+            {jaText && (
+              <p className="font-sans text-base sm:text-lg text-white/60 font-light mt-6 border-t border-white/10 pt-4">
+                日本語: {jaText}
+              </p>
+            )}
+          </div>
+
+          <div className="flex gap-4 mb-6">
+            <button
+              onClick={() => speak(viText)}
+              className="px-6 py-3 rounded-full bg-[#c8741a] hover:bg-[#a85e12] text-white font-sans text-sm font-medium flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              <Volume2 size={18} /> ベトナム語で発音
+            </button>
+            <button
+              onClick={handleCopy}
+              className="px-6 py-3 rounded-full bg-white/10 hover:bg-white/20 text-white font-sans text-sm font-medium flex items-center gap-2 transition-colors cursor-pointer"
+            >
+              {copied ? <Check size={18} className="text-emerald-400" /> : <Copy size={18} />}
+              {copied ? 'コピー完了' : 'テキストをコピー'}
+            </button>
+          </div>
+        </div>
+      ) : (
+        /* Normal Modal Mode */
+        <div className="relative z-10 bg-[#faf8f3] border border-[#e8e0d0] rounded-3xl max-w-xl w-full shadow-2xl overflow-hidden text-[#1a1208] animate-in fade-in zoom-in-95 duration-200 my-auto">
+          {/* Header */}
+          <div className="bg-[#1e1408] p-5 flex items-center justify-between text-white border-b border-[#c8741a]/30">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-2xl bg-[#c8741a]/20 border border-[#c8741a]/40 flex items-center justify-center text-[#c8741a]">
+                <Languages size={20} />
               </div>
-              <button
-                onClick={onClose}
-                className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-slate-500 hover:bg-slate-200 transition-colors"
-              >
-                <X size={18} />
-              </button>
+              <div>
+                <h3 className="font-serif text-lg font-normal text-white flex items-center gap-2">
+                  日越リアルタイム翻訳
+                </h3>
+                <p className="font-sans text-xs text-white/60 font-light">
+                  日本語を入力・音声発話するとベトナム語に変換されます
+                </p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white flex items-center justify-center transition-all border border-white/20 cursor-pointer"
+            >
+              <X size={18} />
+            </button>
+          </div>
+
+          <div className="p-5 space-y-4 max-h-[80vh] overflow-y-auto">
+            {/* Input Box */}
+            <div className="relative">
+              <textarea
+                value={jaText}
+                onChange={(e) => setJaText(e.target.value)}
+                placeholder="日本語で伝えたい言葉を入力..."
+                rows={3}
+                className="w-full bg-[#f5f1ea] border border-[#e8e0d0] rounded-2xl p-4 text-sm font-sans text-[#1a1208] placeholder-[#7a6447]/60 focus:outline-none focus:border-[#c8741a] transition-all resize-none"
+              />
+              <div className="absolute right-3 bottom-3 flex items-center gap-2">
+                <button
+                  onClick={handleVoiceInput}
+                  className={`p-2 rounded-full transition-all cursor-pointer ${
+                    isListening
+                      ? 'bg-rose-500 text-white animate-pulse'
+                      : 'bg-[#faf8f3] text-[#7a6447] border border-[#e8e0d0] hover:text-[#c8741a]'
+                  }`}
+                  title="音声で日本語を入力"
+                >
+                  {isListening ? <MicOff size={16} /> : <Mic size={16} />}
+                </button>
+              </div>
             </div>
 
-            {/* Content Area */}
-            <div className="p-6 space-y-5 overflow-y-auto flex-1">
-              {/* Quick Presets */}
-              <div>
-                <div className="text-xs font-semibold text-slate-400 mb-2 flex items-center gap-1">
-                  <Sparkles size={12} className="text-sky-500" /> よく使う旅行フレーズ:
-                </div>
-                <div className="flex flex-wrap gap-1.5">
-                  {PRESET_PHRASES.slice(0, 6).map((p) => (
-                    <button
-                      key={p.ja}
-                      onClick={() => setJaText(p.ja)}
-                      className="text-xs px-3 py-1.5 rounded-full bg-slate-100 hover:bg-sky-100 hover:text-sky-700 text-slate-700 transition-colors font-medium"
-                    >
-                      {p.ja}
-                    </button>
-                  ))}
-                </div>
+            {/* Presets */}
+            <div>
+              <div className="font-sans text-[11px] font-medium text-[#7a6447] mb-2 flex items-center gap-1">
+                <Sparkles size={12} className="text-[#c8741a]" /> よく使う日常フレーズ
               </div>
-
-              {/* Japanese Input Area */}
-              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 focus-within:border-sky-400 focus-within:bg-white transition-all relative">
-                <div className="flex items-center justify-between text-xs text-slate-500 font-semibold mb-2">
-                  <span>🇯🇵 日本語を入力 / 音声入力</span>
-                  {jaText && (
-                    <button onClick={() => setJaText('')} className="text-slate-400 hover:text-slate-600">
-                      クリア
-                    </button>
-                  )}
-                </div>
-                <textarea
-                  rows={3}
-                  value={jaText}
-                  onChange={(e) => setJaText(e.target.value)}
-                  placeholder="例: 「こんにちは」「これを一つください」「辛くしないでください」"
-                  className="w-full bg-transparent text-base text-slate-800 placeholder-slate-400 focus:outline-none resize-none"
-                />
-
-                {/* Voice Input Button */}
-                <div className="flex justify-end pt-1">
+              <div className="flex flex-wrap gap-1.5">
+                {PRESET_PHRASES.map((preset) => (
                   <button
-                    onClick={handleToggleListening}
-                    className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold transition-all shadow-xs ${isListening
-                      ? 'bg-red-500 text-white animate-pulse'
-                      : 'bg-white border border-slate-200 text-slate-700 hover:bg-sky-50 hover:text-sky-600'
-                      }`}
+                    key={preset.ja}
+                    onClick={() => {
+                      setJaText(preset.ja)
+                      setViText(preset.vi)
+                    }}
+                    className="px-3 py-1.5 rounded-full bg-[#f5f1ea] border border-[#e8e0d0] text-xs font-sans text-[#4a3728] hover:border-[#c8741a] hover:text-[#c8741a] transition-all cursor-pointer"
                   >
-                    {isListening ? (
-                      <>
-                        <MicOff size={14} /> 音声聞き取り中...
-                      </>
-                    ) : (
-                      <>
-                        <Mic className="w-4 h-4 text-sky-500" /> 音声で入力
-                      </>
-                    )}
+                    {preset.ja}
                   </button>
-                </div>
+                ))}
               </div>
+            </div>
 
-              {/* Translation Output Area */}
-              <div className="bg-gradient-to-br from-sky-500 to-sky-600 text-white rounded-2xl p-5 shadow-lg space-y-3 relative overflow-hidden">
-                <div className="flex items-center justify-between text-xs font-medium text-white/80">
-                  <span>🇻🇳 ベトナム語訳結果</span>
-                  {loading && (
-                    <span className="flex items-center gap-1 text-[11px]">
-                      <RefreshCw size={12} className="animate-spin" /> 翻訳中...
-                    </span>
-                  )}
-                </div>
-
-                <div className="min-h-[60px] flex items-center">
-                  <p className="text-xl font-bold leading-relaxed break-words">
-                    {viText || (jaText ? '...' : 'ここにベトナム語訳が表示されます')}
-                  </p>
-                </div>
-
-                {/* Actions: Full Screen Showcase & Audio & Copy */}
+            {/* Translation Output Box */}
+            <div className="bg-[#fffdf9] border-2 border-[#c8741a]/30 rounded-2xl p-4 space-y-3 relative">
+              <div className="flex items-center justify-between">
+                <span className="font-sans text-[11px] font-medium text-[#c8741a] uppercase tracking-wider flex items-center gap-1">
+                  🇻🇳 ベトナム語訳
+                  {loading && <RefreshCw size={12} className="animate-spin text-[#c8741a]" />}
+                </span>
                 {viText && (
-                  <div className="flex items-center justify-between pt-3 border-t border-white/20">
+                  <div className="flex items-center gap-1">
                     <button
                       onClick={() => speak(viText)}
-                      className="flex items-center gap-1.5 text-xs font-bold bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-full transition-colors"
+                      className="p-1.5 rounded-lg bg-[#3d6b63]/10 text-[#3d6b63] hover:bg-[#3d6b63] hover:text-white transition-colors cursor-pointer"
+                      title="読み上げ"
                     >
-                      <Volume2 className="w-4 h-4 text-white" /> 音声で再生
+                      <Volume2 size={15} />
                     </button>
-
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={handleCopy}
-                        className="p-2 rounded-full bg-white/20 hover:bg-white/30 transition-colors"
-                        title="コピー"
-                      >
-                        {copied ? <Check size={16} /> : <Copy size={16} />}
-                      </button>
-
-                      {/* 🔍 HUGE FULL SCREEN SHOWCASE BUTTON */}
-                      <button
-                        onClick={() => setFullScreenMode(true)}
-                        className="flex items-center gap-1.5 text-xs font-extrabold bg-amber-400 text-slate-900 hover:bg-amber-300 px-4 py-2 rounded-full shadow-md transition-all active:scale-95"
-                      >
-                        <Maximize2 size={14} /> 店員に見せる (全画面)
-                      </button>
-                    </div>
+                    <button
+                      onClick={handleCopy}
+                      className="p-1.5 rounded-lg bg-[#c8741a]/10 text-[#c8741a] hover:bg-[#c8741a] hover:text-white transition-colors cursor-pointer"
+                      title="コピー"
+                    >
+                      {copied ? <Check size={15} className="text-emerald-600" /> : <Copy size={15} />}
+                    </button>
                   </div>
                 )}
               </div>
+
+              <div className="font-serif text-xl sm:text-2xl font-normal text-[#1a1208] min-h-[50px] flex items-center leading-relaxed">
+                {viText || (
+                  <span className="text-sm font-sans text-[#7a6447]/50 font-light italic">
+                    日本語を入力すると翻訳がここに表示されます
+                  </span>
+                )}
+              </div>
+
+              {viText && (
+                <div className="pt-2 border-t border-[#e8e0d0] flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => setFullScreenMode(true)}
+                    className="px-4 py-2 rounded-full bg-[#c8741a] hover:bg-[#a85e12] text-white font-sans text-xs font-medium flex items-center gap-1.5 transition-colors cursor-pointer"
+                  >
+                    <Maximize2 size={14} /> 全画面で店員に見せる
+                  </button>
+                </div>
+              )}
             </div>
           </div>
         </div>
       )}
-
-      {/* ─── Full-Screen Merchant Showcase Mode ─── */}
-      {fullScreenMode && (
-        <div className="fixed inset-0 z-[110] bg-amber-400 text-slate-950 flex flex-col justify-between p-6 sm:p-10 select-none anim-in overscroll-none pt-[calc(1.5rem+env(safe-area-inset-top))] pb-[calc(1.5rem+env(safe-area-inset-bottom))]">
-          {/* Top Header */}
-          <div className="flex items-center justify-between">
-            <button
-              onClick={() => setFullScreenMode(false)}
-              className="flex items-center gap-2 bg-slate-950 text-white font-bold text-sm px-4 py-2.5 rounded-full shadow-lg hover:bg-slate-800 active:scale-95 transition-all"
-            >
-              <X size={18} /> 閉じる (戻る)
-            </button>
-
-            <button
-              onClick={() => speak(viText)}
-              className="flex items-center gap-2 bg-slate-950 text-white font-bold text-sm px-5 py-2.5 rounded-full shadow-lg hover:bg-slate-800 active:scale-95 transition-all"
-            >
-              <Volume2 className="w-5 h-5 text-amber-400" /> 音声再生 🔊
-            </button>
-          </div>
-
-          {/* Huge Main Vietnamese Text */}
-          <div className="flex-1 flex flex-col justify-center items-center text-center px-4 my-auto">
-            <span className="text-sm font-black uppercase tracking-widest text-slate-800 bg-amber-300/80 px-4 py-1 rounded-full mb-6 border border-slate-900/20">
-              VUI LÒNG ĐỌC CÂU NÀY
-            </span>
-            <h1 className="text-4xl sm:text-6xl md:text-7xl font-black leading-tight tracking-tight text-slate-950 drop-shadow-xs max-w-4xl">
-              {viText}
-            </h1>
-            <p className="text-slate-800 text-lg sm:text-xl font-bold mt-6 opacity-80">
-              {jaText}
-            </p>
-          </div>
-
-          {/* Bottom Hint */}
-          <div className="text-center text-xs sm:text-sm font-bold text-slate-800 opacity-70">
-            ベトナム人の店員・ドライバーに見せてください 🏮
-          </div>
-        </div>
-      )}
-    </>
+    </div>,
+    document.body
   )
 }

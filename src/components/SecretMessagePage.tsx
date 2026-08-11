@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
+import { createPortal } from 'react-dom'
 import FirefliesOverlay from '@/components/FirefliesOverlay'
 import { signatureData } from '@/assets/signatureData'
 
@@ -765,7 +766,7 @@ export function SecretCard({ onBack, userName }: { onBack: () => void; userName?
                 marginBottom: 3,
               }}
             >
-              9.19 — Hoi An
+              9月19 — ホイアン
             </p>
             <p
               style={{
@@ -776,7 +777,7 @@ export function SecretCard({ onBack, userName }: { onBack: () => void; userName?
                 fontStyle: 'italic',
               }}
             >
-              A little guide for your trip.
+              楽しんでください.
             </p>
           </div>
         </div>
@@ -844,12 +845,12 @@ export default function SecretMessagePage({
     }, 1200)
   }, [])
 
-  return (
+  return createPortal(
     <div
       style={{
         position: 'fixed',
         inset: 0,
-        zIndex: 200,
+        zIndex: 99999,
         minHeight: '100dvh',
         overflowY: 'auto',
         backgroundColor: '#070c18',
@@ -879,6 +880,7 @@ export default function SecretMessagePage({
       {phase === 'revealed' && (
         <SecretCard onBack={onBack} userName={enteredName} />
       )}
-    </div>
+    </div>,
+    document.body
   )
 }
